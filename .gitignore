@@ -1,0 +1,20 @@
+bin/
+target/
+obj/
+.gwt/
+gwt-unitCache/
+war/
+gen/
+
+*.class
+/build/
+<<<<<<< HEAD
+*.jar
+=======
+*.iml
+build/
+.settings/
+.classpath*
+.project*
+.gradle/
+>>>>>>> branch 'master' of https://github.com/MaksimDragun/TheGame.git
