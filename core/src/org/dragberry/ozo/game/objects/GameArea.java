@@ -23,7 +23,10 @@ public class GameArea extends AbstractGameObject {
 		units = new Unit[settings.height][settings.width];
 		for (int row = 0; row < settings.height; row++) {
 			for (int column = 0; column < settings.width; column++) {
-				units[row][column] = new Unit(column, row);
+				Unit unit = new Unit(column, row);
+				unit.position.x = column - settings.width / 2;
+				unit.position.y = row - settings.height / 2;
+				units[row][column] = unit;
 			}
 		}
 	}
