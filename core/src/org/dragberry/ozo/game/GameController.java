@@ -1,22 +1,26 @@
 package org.dragberry.ozo.game;
 
+import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 
 public class GameController extends InputAdapter {
 
 	private static final String TAG = GameController.class.getName();
 	
-	public float gameWidth;
-	public float gameHeight;
+	public int gameWidth;
+	public int gameHeight;
+	
+	public Unit[][] units;
 	
 	public CameraHelper cameraHelper;
 	
-	public GameController(float gameWidth, float gameHeight) {
+	public GameController(int gameWidth, int gameHeight) {
 		this.gameWidth = gameWidth;
 		this.gameHeight = gameHeight;
 		init();
@@ -25,6 +29,16 @@ public class GameController extends InputAdapter {
 	public void init() {
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
+		units = new Unit[gameWidth][gameHeight];
+		for (int x = 0; x < gameWidth; x++) {
+			for (int y = 0; y < gameHeight; y++) {
+				units[x][y] = new Unit(getRandomValue(), x, y, gameWidth, gameHeight);
+			}
+		}
+	}
+
+	public static int getRandomValue() {
+		return MathUtils.random(-1, 1);
 	}
 	
     public void update(float deltaTime) {

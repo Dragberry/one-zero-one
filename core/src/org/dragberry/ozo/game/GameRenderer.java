@@ -30,7 +30,7 @@ public class GameRenderer implements Disposable {
 	public void init() {
 		batch = new SpriteBatch();
         camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-        camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -Constants.VIEWPORT_HEIGHT / 2 ,0);
+        camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -Constants.VIEWPORT_HEIGHT / 2, 0);
         camera.update();
         
         cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
@@ -63,11 +63,16 @@ public class GameRenderer implements Disposable {
 		shapeRenderer.begin();
 		shapeRenderer.set(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLACK);
-		for (float x = 0; x < gameController.gameWidth; x += 1.0f) {
-			shapeRenderer.line(x, 0, x, gameController.gameHeight);
+		float factorX = Constants.VIEWPORT_WIDTH / gameController.gameWidth;
+		float factorY = Constants.VIEWPORT_HEIGHT / gameController.gameHeight;
+		
+		for (int x = 0; x < gameController.gameWidth; x++) {
+			float xCoord = x * factorX;
+			shapeRenderer.line(xCoord, 0, xCoord, Constants.VIEWPORT_HEIGHT);
 		}
-		for (float y = 0; y < gameController.gameHeight; y += 1.0f) {
-			shapeRenderer.line(0, y, gameController.gameWidth, y);
+		for (int y = 0; y < gameController.gameHeight; y++) {
+			float yCoord = y * factorY;
+			shapeRenderer.line(0, yCoord, Constants.VIEWPORT_WIDTH, yCoord);
 		}
 		shapeRenderer.end();
 	}
@@ -76,13 +81,16 @@ public class GameRenderer implements Disposable {
 		gameController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		new Unit().render(batch);
-		new Unit(3, 1).render(batch);
+		for (Unit[] row : gameController.units) {
+			for (Unit unit : row) {
+				unit.render(batch);
+			}
+		}
 		batch.end();
 	}
 	
 	public void resize(int width, int height) {
-        camera.viewportWidth = (gameController.gameHeight / height) * width;
+        camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width;
         camera.update();
     }
 

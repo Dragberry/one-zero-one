@@ -8,8 +8,11 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Disposable;
 
 public class Assets implements Disposable, AssetErrorListener {
@@ -21,6 +24,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	private AssetManager assetManager;
 	
 	public AssetUnit unit;
+	public AssetFonts fonts;
 	
 	private Assets() {}
 	
@@ -41,6 +45,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 		unit = new AssetUnit(atlas);
+		fonts = new AssetFonts();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -60,5 +65,27 @@ public class Assets implements Disposable, AssetErrorListener {
 		public AssetUnit(TextureAtlas atlas) {
 			ball = atlas.findRegion("ball");
 		}
+	}
+	
+	public class AssetFonts implements Disposable {
+		public BitmapFont normal;
+		
+		public AssetFonts() {
+			FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
+			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+			parameter.size = 26;
+			parameter.characters = "0123456789+-";
+			normal = generator.generateFont(parameter);
+			generator.dispose();
+			
+			normal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			
+		}
+
+		@Override
+		public void dispose() {
+			normal.dispose();
+		}
+		
 	}
 }
