@@ -1,7 +1,5 @@
 package org.dragberry.ozo.game;
 
-import org.dragberry.ozo.game.objects.GameArea;
-import org.dragberry.ozo.game.objects.GameArea.LevelSettings;
 import org.dragberry.ozo.game.util.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
@@ -13,18 +11,20 @@ public class GameController extends InputAdapter {
 
 	private static final String TAG = GameController.class.getName();
 	
+	public float gameWidth;
+	public float gameHeight;
+	
 	public CameraHelper cameraHelper;
 	
-	public GameArea gameArea;
-	
-	public GameController() {
+	public GameController(float gameWidth, float gameHeight) {
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
 		init();
 	}
 	
 	public void init() {
 		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
-		gameArea = new GameArea(LevelSettings.DEFAULT);
 	}
 	
     public void update(float deltaTime) {

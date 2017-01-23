@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game;
 
+import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +16,8 @@ public class GameRenderer implements Disposable {
     private SpriteBatch batch;
 	private GameController gameController;
 	
+	private OrthographicCamera cameraGUI;
+	
 	private ShapeRenderer shapeRenderer;
 	
 	private boolean debug = true;
@@ -27,9 +30,15 @@ public class GameRenderer implements Disposable {
 	public void init() {
 		batch = new SpriteBatch();
         camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-        initDebug();
-        camera.position.set(0, 0 ,0);
+        camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -Constants.VIEWPORT_HEIGHT / 2 ,0);
         camera.update();
+        
+        cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
+        cameraGUI.position.set(0, 0, 0);
+        cameraGUI.setToOrtho(true); // flip y-axis
+        cameraGUI.update();
+	
+        initDebug();
 	}
 	
 	private void initDebug() {
@@ -54,15 +63,11 @@ public class GameRenderer implements Disposable {
 		shapeRenderer.begin();
 		shapeRenderer.set(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLACK);
-		float leftBorder = -Constants.VIEWPORT_WIDTH;
-		float rightBorder = Constants.VIEWPORT_WIDTH;
-		float topBorder = Constants.VIEWPORT_HEIGHT;
-		float bottomBorder = -Constants.VIEWPORT_HEIGHT;
-		for (float x = leftBorder; x <= rightBorder; x += 1.0f) {
-			shapeRenderer.line(x, bottomBorder, x, topBorder);
+		for (float x = 0; x < gameController.gameWidth; x += 1.0f) {
+			shapeRenderer.line(x, 0, x, gameController.gameHeight);
 		}
-		for (float y = bottomBorder; y <= topBorder; y += 1.0f) {
-			shapeRenderer.line(leftBorder, y, rightBorder, y);
+		for (float y = 0; y < gameController.gameHeight; y += 1.0f) {
+			shapeRenderer.line(0, y, gameController.gameWidth, y);
 		}
 		shapeRenderer.end();
 	}
@@ -71,12 +76,13 @@ public class GameRenderer implements Disposable {
 		gameController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		gameController.gameArea.render(batch);
+		new Unit().render(batch);
+		new Unit(3, 1).render(batch);
 		batch.end();
 	}
 	
 	public void resize(int width, int height) {
-        camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) * width;
+        camera.viewportWidth = (gameController.gameHeight / height) * width;
         camera.update();
     }
 
