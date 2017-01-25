@@ -1,15 +1,17 @@
 package org.dragberry.ozo.game;
 
+import java.text.MessageFormat;
+
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
-public class GameController extends InputAdapter {
+public class GameController {
 
 	private static final String TAG = GameController.class.getName();
 	
@@ -27,12 +29,11 @@ public class GameController extends InputAdapter {
 	}
 	
 	public void init() {
-		Gdx.input.setInputProcessor(this);
 		cameraHelper = new CameraHelper();
 		units = new Unit[gameWidth][gameHeight];
 		for (int x = 0; x < gameWidth; x++) {
 			for (int y = 0; y < gameHeight; y++) {
-				units[x][y] = new Unit(getRandomValue(), x, y, gameWidth, gameHeight);
+				units[x][y] = new Unit(getRandomValue(), x, y);
 			}
 		}
 	}
@@ -51,8 +52,8 @@ public class GameController extends InputAdapter {
 			return;
 		}
 		
-		float camMoveSpeed = 5 * deltaTime;
-		float camMoveSpeedAccelerationFactor = 5;
+		float camMoveSpeed = 100 * deltaTime;
+		float camMoveSpeedAccelerationFactor = 100;
 		
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			camMoveSpeed *= camMoveSpeedAccelerationFactor;
@@ -81,9 +82,11 @@ public class GameController extends InputAdapter {
 		}
 		if (Gdx.input.isKeyPressed(Keys.COMMA)) {
 			cameraHelper.addZoom(camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", cameraHelper.getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.PERIOD)) {
 			cameraHelper.addZoom(-camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", cameraHelper.getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.SLASH)) {
 			cameraHelper.setZoom(1);
@@ -97,11 +100,46 @@ public class GameController extends InputAdapter {
     	cameraHelper.setPosition(x, y);
     }
     
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-    	Gdx.app.log(TAG, "x=" + screenX + " y=" + screenY);
-    	return false;
+    public void onScreenTouch(float xCoord, float yCoord) {
+    	Unit selectedUnit = null;
+    	for (int x = 0; x < gameWidth; x++) {
+			for (int y = 0; y < gameHeight; y++) {
+				if (units[x][y].bounds.contains(xCoord, yCoord)) {
+					selectedUnit = units[x][y];
+					if (isUnitOnBorder(selectedUnit)) {
+						selectedUnit = null;
+					}
+				} else {
+					units[x][y].selected = false;
+				}
+			}
+		}
+    	if (selectedUnit != null) {
+    		Array<Unit> neighbors = new Array<>(4);
+    		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY - 1]);
+    		neighbors.add(units[selectedUnit.gameX + 1][selectedUnit.gameY]);
+    		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY + 1]);
+    		neighbors.add(units[selectedUnit.gameX - 1][selectedUnit.gameY]);
+    		
+    		if (selectedUnit.selected) {
+    			for (Unit unit : neighbors) {
+    				selectedUnit.value += unit.value;
+    			}
+    		}
+    		
+    		selectedUnit.selected = !selectedUnit.selected;
+    		for (Unit unit : neighbors) {
+    			unit.selected = selectedUnit.selected;
+    		}
+    		
+	    }
     }
-	
+
+	private boolean isUnitOnBorder(Unit selectedUnit) {
+		return selectedUnit.gameX == 0 || selectedUnit.gameX == gameWidth - 1
+				|| selectedUnit.gameY == 0 || selectedUnit.gameY == gameHeight - 1;
+		
+	}
+    
 	
 }

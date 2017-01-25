@@ -12,27 +12,26 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Unit extends AbstractGameObject {
 
+	private static final float UINIT_SELECTED_SCALE = 1.2f;
+
 	private TextureRegion regBall;
 	
-	private final int gameWidth;
-	private final int gameHeight;
+	public int gameX;
+	public int gameY;
+	public int value;
 	
-	private int gameX;
-	private int gameY;
-	private int value;
+	public boolean selected;
 	
 	public Unit() {
-		this(0, 0, 0, 16, 9);
+		this(0, 0, 0);
 	}
 	
-	public Unit(int value, int x, int y, int gameWidth, int gameHeight) {
+	public Unit(int value, int x, int y) {
 		this.value = value;
-		this.gameWidth = gameWidth;
-		this.gameHeight = gameHeight;
 		this.gameX = x;
 		this.gameY = y;
-		this.position = new Vector2(x * Constants.VIEWPORT_WIDTH / gameWidth, y * Constants.VIEWPORT_HEIGHT / gameHeight);
-		this.dimension = new Vector2(Constants.VIEWPORT_WIDTH / gameWidth, Constants.VIEWPORT_HEIGHT / gameHeight);
+		this.position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
+		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		init();
 	}
 	
@@ -41,6 +40,7 @@ public class Unit extends AbstractGameObject {
 		regBall = Assets.instance.unit.ball;
 		origin.x = dimension.x / 2;
 		origin.y = dimension.y / 2;
+		bounds.set(position.x, position.y, dimension.x, dimension.y);
 	}
 	
 	@Override
@@ -51,17 +51,16 @@ public class Unit extends AbstractGameObject {
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
-				scale.x, scale.y,
+				selected ? scale.x * UINIT_SELECTED_SCALE : scale.x,
+				selected ? scale.y * UINIT_SELECTED_SCALE : scale.y,
 				rotation,
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
 		
 		BitmapFont font = Assets.instance.fonts.normal;
-		
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
-		
 		font.setColor(Color.BLACK);
 		font.draw(batch, 
 				layout,

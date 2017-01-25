@@ -19,7 +19,7 @@ public class CameraHelper {
 	private AbstractGameObject target;
 	
 	public CameraHelper() {
-		position = new Vector2(Constants.VIEWPORT_WIDTH / 2, Constants.VIEWPORT_HEIGHT / 2);
+		position = new Vector2(0, 0);
 		zoom = 1.0f;
 	}
 	

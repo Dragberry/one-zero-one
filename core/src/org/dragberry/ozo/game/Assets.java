@@ -73,7 +73,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public AssetFonts() {
 			FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
 			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-			parameter.size = 26;
+			parameter.size = 29;
 			parameter.characters = "0123456789+-";
 			normal = generator.generateFont(parameter);
 			generator.dispose();
