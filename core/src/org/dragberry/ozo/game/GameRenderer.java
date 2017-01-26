@@ -48,10 +48,10 @@ public class GameRenderer extends InputAdapter implements Disposable {
         float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
         float gameAspectRatio = gameController.gameWidth / gameController.gameHeight;
         float zoom = 0;
-        if (screenAspectRatio > gameAspectRatio) {
+        if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
         	zoom = gameController.gameHeight * Constants.UNIT_SIZE / camera.viewportHeight;
         } else {
-        	zoom = gameController.gameHeight * Constants.UNIT_SIZE / camera.viewportHeight;
+        	zoom = gameController.gameWidth * Constants.UNIT_SIZE / camera.viewportWidth;
         }
         gameController.cameraHelper.setZoom(zoom);
         

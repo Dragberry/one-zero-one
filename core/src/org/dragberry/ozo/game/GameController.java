@@ -106,6 +106,7 @@ public class GameController {
 			for (int y = 0; y < gameHeight; y++) {
 				if (units[x][y].bounds.contains(xCoord, yCoord)) {
 					selectedUnit = units[x][y];
+					Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
 					if (isUnitOnBorder(selectedUnit)) {
 						selectedUnit = null;
 					}
@@ -115,7 +116,7 @@ public class GameController {
 			}
 		}
     	if (selectedUnit != null) {
-    		Array<Unit> neighbors = new Array<>(4);
+    		Array<Unit> neighbors = new Array<Unit>(4);
     		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY - 1]);
     		neighbors.add(units[selectedUnit.gameX + 1][selectedUnit.gameY]);
     		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY + 1]);
@@ -125,6 +126,10 @@ public class GameController {
     			for (Unit unit : neighbors) {
     				selectedUnit.value += unit.value;
     			}
+    			shiftRightUnits(selectedUnit);
+    			shiftLeftUnits(selectedUnit);
+    			shiftTopUnits(selectedUnit);
+    			shiftBottomUnits(selectedUnit);
     		}
     		
     		selectedUnit.selected = !selectedUnit.selected;
@@ -134,11 +139,46 @@ public class GameController {
     		
 	    }
     }
+    
+    private void shiftBottomUnits(Unit selectedUnit) {
+		for (int y = selectedUnit.gameY - 1; y > 0; y--) {
+			Unit unitToMove = units[selectedUnit.gameX][y - 1];
+			units[selectedUnit.gameX][y] = unitToMove;
+			unitToMove.moveTo(selectedUnit.gameX, y);
+		}
+		units[selectedUnit.gameX][0] = new Unit(getRandomValue(), selectedUnit.gameX, 0);
+	}
+    
+    private void shiftTopUnits(Unit selectedUnit) {
+		for (int y = selectedUnit.gameY + 1; y < gameHeight - 1; y++) {
+			Unit unitToMove = units[selectedUnit.gameX][y + 1];
+			units[selectedUnit.gameX][y] = unitToMove;
+			unitToMove.moveTo(selectedUnit.gameX, y);
+		}
+		units[selectedUnit.gameX][gameHeight - 1] = new Unit(getRandomValue(), selectedUnit.gameX, gameHeight - 1);
+	}
+
+	private void shiftRightUnits(Unit selectedUnit) {
+		for (int x = selectedUnit.gameX + 1; x < gameWidth - 1; x++) {
+			Unit unitToMove = units[x + 1][selectedUnit.gameY];
+			units[x][selectedUnit.gameY] = unitToMove;
+			unitToMove.moveTo(x, selectedUnit.gameY);
+		}
+		units[gameWidth - 1][selectedUnit.gameY] = new Unit(getRandomValue(), gameWidth - 1, selectedUnit.gameY);
+	}
+
+	private void shiftLeftUnits(Unit selectedUnit) {
+		for (int x = selectedUnit.gameX - 1; x > 0; x--) {
+			Unit unitToMove = units[x - 1][selectedUnit.gameY];
+			units[x][selectedUnit.gameY] = unitToMove;
+			unitToMove.moveTo(x, selectedUnit.gameY);
+		}
+		units[0][selectedUnit.gameY] = new Unit(getRandomValue(), 0, selectedUnit.gameY);
+	}
 
 	private boolean isUnitOnBorder(Unit selectedUnit) {
 		return selectedUnit.gameX == 0 || selectedUnit.gameX == gameWidth - 1
 				|| selectedUnit.gameY == 0 || selectedUnit.gameY == gameHeight - 1;
-		
 	}
     
 	
