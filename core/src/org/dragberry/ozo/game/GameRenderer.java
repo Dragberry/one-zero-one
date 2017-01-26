@@ -1,12 +1,13 @@
 package org.dragberry.ozo.game;
 
-import org.dragberry.ozo.game.objects.Unit;
+import org.dragberry.ozo.game.render.GuiRenderer;
+import org.dragberry.ozo.game.render.LevelRenderer;
+import org.dragberry.ozo.game.render.Renderer;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -17,48 +18,25 @@ public class GameRenderer extends InputAdapter implements Disposable {
 	
 	private static final String TAG = GameRenderer.class.getName();
 	
-	private OrthographicCamera camera;
     private SpriteBatch batch;
 	private GameController gameController;
 	
-	private OrthographicCamera cameraGUI;
+	private Renderer levelRenderer;
+	private Renderer guiRenderer;
 	
 	private ShapeRenderer shapeRenderer;
-	
 	private boolean debug = false;
 
-	public GameRenderer(GameController gameController) {
-		this.gameController = gameController;
+	public GameRenderer(GameController controller) {
+		gameController = controller;
 		init();
 	}
 	
 	public void init() {
 		Gdx.input.setInputProcessor(this);
-		
 		batch = new SpriteBatch();
-		
-		float height = Gdx.graphics.getHeight() * (Constants.VIEWPORT_WIDTH / Gdx.graphics.getWidth());
-        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
-        camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -height / 2, 0);
-        camera.update();
-        
-        gameController.cameraHelper.setPosition(
-        		gameController.gameWidth * Constants.UNIT_SIZE / 2, 
-        		gameController.gameHeight * Constants.UNIT_SIZE / 2);
-        float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
-        float gameAspectRatio = gameController.gameWidth / gameController.gameHeight;
-        float zoom = 0;
-        if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
-        	zoom = gameController.gameHeight * Constants.UNIT_SIZE / camera.viewportHeight;
-        } else {
-        	zoom = gameController.gameWidth * Constants.UNIT_SIZE / camera.viewportWidth;
-        }
-        gameController.cameraHelper.setZoom(zoom);
-        
-        cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
-        cameraGUI.position.set(0, 0, 0);
-        cameraGUI.setToOrtho(true);
-        cameraGUI.update();
+		levelRenderer = new LevelRenderer(gameController);
+        guiRenderer = new GuiRenderer(gameController);
         initDebug();
 	}
 	
@@ -71,7 +49,8 @@ public class GameRenderer extends InputAdapter implements Disposable {
 	}
 
 	public void render() {
-		renderGame(batch);
+		levelRenderer.render(batch);
+		guiRenderer.render(batch);
 		renderDebugInfo(shapeRenderer);
 	}
 	
@@ -79,8 +58,8 @@ public class GameRenderer extends InputAdapter implements Disposable {
 		if (!debug) {
 			return;
 		}
-		gameController.cameraHelper.applyTo(camera);
-		shapeRenderer.setProjectionMatrix(camera.combined);
+		gameController.cameraHelper.applyTo(levelRenderer.getCamera());
+		shapeRenderer.setProjectionMatrix(levelRenderer.getCamera().combined);
 		shapeRenderer.begin();
 		shapeRenderer.set(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLACK);
@@ -98,21 +77,9 @@ public class GameRenderer extends InputAdapter implements Disposable {
 		shapeRenderer.end();
 	}
 
-	void renderGame(SpriteBatch batch) {
-		gameController.cameraHelper.applyTo(camera);
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		for (Unit[] row : gameController.units) {
-			for (Unit unit : row) {
-				unit.render(batch);
-			}
-		}
-		batch.end();
-	}
-	
 	public void resize(int width, int height) {
-        camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
-        camera.update();
+		levelRenderer.resize(width, height);
+		guiRenderer.resize(width, height);
     }
 
     @Override
@@ -122,9 +89,9 @@ public class GameRenderer extends InputAdapter implements Disposable {
     
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-    	Vector3 touchCoord = camera.unproject(new Vector3(screenX, screenY, 0));
+    	Vector3 touchCoord = levelRenderer.getCamera().unproject(new Vector3(screenX, screenY, 0));
     	gameController.onScreenTouch(touchCoord.x, touchCoord.y);
     	return false;
     }
-
+    
 }

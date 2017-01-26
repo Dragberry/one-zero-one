@@ -64,7 +64,7 @@ public class Unit extends AbstractGameObject {
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
 		
-		BitmapFont font = Assets.instance.fonts.normal;
+		BitmapFont font = Assets.instance.fonts._29;
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
 		font.setColor(Color.BLACK);

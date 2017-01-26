@@ -68,24 +68,30 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	public class AssetFonts implements Disposable {
-		public BitmapFont normal;
+		public BitmapFont _24;
+		public BitmapFont _29;
 		
 		public AssetFonts() {
-			FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
-			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-			parameter.size = 29;
-			parameter.characters = "0123456789+-";
-			normal = generator.generateFont(parameter);
-			generator.dispose();
-			
-			normal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			
-		}
-
-		@Override
-		public void dispose() {
-			normal.dispose();
+			_24 = createFont(24, true);
+			_29 = createFont(29, false);
 		}
 		
+		@Override
+		public void dispose() {
+			_24.dispose();
+			_29.dispose();
+		}
+	}
+	
+	private static BitmapFont createFont(int size, boolean flip) {
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = size;
+		parameter.flip = flip;
+		parameter.magFilter = TextureFilter.Linear;
+		parameter.minFilter = TextureFilter.Linear;
+		BitmapFont font = generator.generateFont(parameter);
+		generator.dispose();
+		return font;
 	}
 }

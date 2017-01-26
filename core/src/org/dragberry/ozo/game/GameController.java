@@ -18,6 +18,9 @@ public class GameController {
 	public int gameWidth;
 	public int gameHeight;
 	
+	public float time = 0;
+	public int steps = 0; 
+	
 	public Unit[][] units;
 	
 	public CameraHelper cameraHelper;
@@ -43,6 +46,7 @@ public class GameController {
 	}
 	
     public void update(float deltaTime) {
+    	time += deltaTime; 
     	handleDebugInput(deltaTime);
         cameraHelper.update(deltaTime);
     }
@@ -123,6 +127,7 @@ public class GameController {
     		neighbors.add(units[selectedUnit.gameX - 1][selectedUnit.gameY]);
     		
     		if (selectedUnit.selected) {
+    			steps++;
     			for (Unit unit : neighbors) {
     				selectedUnit.value += unit.value;
     			}
