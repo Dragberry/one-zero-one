@@ -64,13 +64,13 @@ public class GameRenderer extends InputAdapter implements Disposable {
 		shapeRenderer.set(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLACK);
 		
-		float width = gameController.gameWidth * Constants.UNIT_SIZE;
-		float height = gameController.gameHeight * Constants.UNIT_SIZE;
-		for (int x = 0; x <= gameController.gameWidth; x++) {
+		float width = gameController.level.width * Constants.UNIT_SIZE;
+		float height = gameController.level.height * Constants.UNIT_SIZE;
+		for (int x = 0; x <= gameController.level.width; x++) {
 			float xCoord = x * Constants.UNIT_SIZE;
 			shapeRenderer.line(xCoord, 0, xCoord, height);
 		}
-		for (int y = 0; y <= gameController.gameHeight; y++) {
+		for (int y = 0; y <= gameController.level.height; y++) {
 			float yCoord = y * Constants.UNIT_SIZE;
 			shapeRenderer.line(0, yCoord, width, yCoord);
 		}

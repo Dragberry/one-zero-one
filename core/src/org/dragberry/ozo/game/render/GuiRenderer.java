@@ -53,7 +53,7 @@ public class GuiRenderer implements Renderer {
 	private void renderGuiSteps(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
-		String stepsString = STEPS + getGameContoller().steps;
+		String stepsString = STEPS + getGameContoller().level.steps;
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
 		font.draw(batch, layout,
 				camera.viewportWidth - layout.width - 10, 15);
@@ -63,7 +63,7 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
 		font.draw(batch,
-				   TIME + timeToString((int) getGameContoller().time), 10, 15);
+				   TIME + timeToString((int) getGameContoller().level.time), 10, 15);
 	}
 	
 	private static String timeToString(int timeInSeconds) {

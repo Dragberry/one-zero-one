@@ -2,13 +2,16 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
+import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.MenuScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -21,31 +24,28 @@ public class GameController {
 		FIXED, IN_MOTION
 	}
 	
+	public CameraHelper cameraHelper;
+	
 	private State state = State.FIXED;
 	private float motionTime = 0;
 	private Unit selectedUnit = null;
 	
-	public int gameWidth;
-	public int gameHeight;
-	
-	public float time = 0;
-	public int steps = 0;
+	private Game game;
+	public Level level;
 	
 	public Unit[][] units;
 	
-	public CameraHelper cameraHelper;
-	
-	public GameController(int gameWidth, int gameHeight) {
-		this.gameWidth = gameWidth;
-		this.gameHeight = gameHeight;
+	public GameController(Game game, Level level) {
+		this.game = game;
+		this.level = level;
 		init();
 	}
 	
 	public void init() {
 		cameraHelper = new CameraHelper();
-		units = new Unit[gameWidth][gameHeight];
-		for (int x = 0; x < gameWidth; x++) {
-			for (int y = 0; y < gameHeight; y++) {
+		units = new Unit[level.width][level.height];
+		for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
 				units[x][y] = new Unit(getRandomValue(), x, y);
 			}
 		}
@@ -56,7 +56,7 @@ public class GameController {
 	}
 	
     public void update(float deltaTime) {
-    	time += deltaTime; 
+    	level.time += deltaTime; 
     	if (state == State.IN_MOTION) {
     		motionTime += deltaTime;
     		if (motionTime >= Constants.UNIT_MOTION_TIME) {
@@ -82,14 +82,14 @@ public class GameController {
     }
     
     private void shiftTopUnits(float step) {
-    	for (int y = selectedUnit.gameY + 1; y < gameHeight; y++) {
+    	for (int y = selectedUnit.gameY + 1; y < level.height; y++) {
 			Unit unitToMove = units[selectedUnit.gameX][y];
 			unitToMove.moveTo(Direction.SOUTH, step);
 		}
     }
     
     private void shiftRightUnits(float step) {
-    	for (int x = selectedUnit.gameX + 1; x < gameWidth; x++) {
+    	for (int x = selectedUnit.gameX + 1; x < level.width; x++) {
 			Unit unitToMove = units[x][selectedUnit.gameY];
 			unitToMove.moveTo(Direction.WEST, step);
 		}
@@ -122,7 +122,15 @@ public class GameController {
     	shiftLeftUnits(selectedUnit);
     	selectedUnit.selected = false;
     	selectedUnit = null;
-    	steps++;
+    	level.steps++;
+    	if (level.isLost(units)) {
+			backToMenu();
+			return;
+		} 
+		if (level.isWon(units)) {
+			backToMenu();
+			return;
+		}
     }
     
     private void shiftBottomUnits(Unit selectedUnit) {
@@ -135,21 +143,21 @@ public class GameController {
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
-		for (int y = selectedUnit.gameY + 1; y < gameHeight - 1; y++) {
+		for (int y = selectedUnit.gameY + 1; y < level.height - 1; y++) {
 			Unit unitToMove = units[selectedUnit.gameX][y + 1];
 			units[selectedUnit.gameX][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.gameX, y);
 		}
-		units[selectedUnit.gameX][gameHeight - 1] = new Unit(getRandomValue(), selectedUnit.gameX, gameHeight - 1);
+		units[selectedUnit.gameX][level.height - 1] = new Unit(getRandomValue(), selectedUnit.gameX, level.height - 1);
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
-		for (int x = selectedUnit.gameX + 1; x < gameWidth - 1; x++) {
+		for (int x = selectedUnit.gameX + 1; x < level.width - 1; x++) {
 			Unit unitToMove = units[x + 1][selectedUnit.gameY];
 			units[x][selectedUnit.gameY] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.gameY);
 		}
-		units[gameWidth - 1][selectedUnit.gameY] = new Unit(getRandomValue(), gameWidth - 1, selectedUnit.gameY);
+		units[level.width - 1][selectedUnit.gameY] = new Unit(getRandomValue(), level.width - 1, selectedUnit.gameY);
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
@@ -162,8 +170,8 @@ public class GameController {
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {
-    	for (int x = 0; x < gameWidth; x++) {
-			for (int y = 0; y < gameHeight; y++) {
+    	for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
 				if (units[x][y].bounds.contains(xCoord, yCoord)) {
 					Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
 					return units[x][y];
@@ -175,8 +183,8 @@ public class GameController {
     
     private void unselectAllUnits() {
     	selectedUnit = null;
-    	for (int x = 0; x < gameWidth; x++) {
-			for (int y = 0; y < gameHeight; y++) {
+    	for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
 				units[x][y].selected = false;
 				units[x][y].selectedNeighbor = false;
 			}
@@ -225,8 +233,12 @@ public class GameController {
     }
 
 	private boolean isBorderUnit(Unit selectedUnit) {
-		return selectedUnit.gameX == 0 || selectedUnit.gameX == gameWidth - 1
-				|| selectedUnit.gameY == 0 || selectedUnit.gameY == gameHeight - 1;
+		return selectedUnit.gameX == 0 || selectedUnit.gameX == level.width - 1
+				|| selectedUnit.gameY == 0 || selectedUnit.gameY == level.height - 1;
+	}
+	
+	private void backToMenu() {
+		game.setScreen(new MenuScreen(game));
 	}
 	
 	private void handleDebugInput(float deltaTime) {

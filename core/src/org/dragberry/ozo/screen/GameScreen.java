@@ -2,6 +2,7 @@ package org.dragberry.ozo.screen;
 
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.GameRenderer;
+import org.dragberry.ozo.game.level.DefaultLevel;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -35,7 +36,7 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		gameController = new GameController(6, 8);
+		gameController = new GameController(game, new DefaultLevel(6, 8));
 		gameRenderer = new GameRenderer(gameController);
 		Gdx.input.setCatchBackKey(true);
 	}

@@ -47,19 +47,19 @@ public class LevelRenderer implements Renderer {
         camera.update();
         
         gameController.cameraHelper.setPosition(
-        		gameController.gameWidth * Constants.UNIT_SIZE / 2, 
-        		gameController.gameHeight * Constants.UNIT_SIZE / 2);
+        		gameController.level.width * Constants.UNIT_SIZE / 2, 
+        		gameController.level.height * Constants.UNIT_SIZE / 2);
         setZoom();
 	}
 
 	private void setZoom() {
 		float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
-        float gameAspectRatio = gameController.gameWidth / gameController.gameHeight;
+        float gameAspectRatio = gameController.level.width / gameController.level.height;
         float zoom = 0;
         if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
-        	zoom = gameController.gameHeight * Constants.UNIT_SIZE / camera.viewportHeight;
+        	zoom = gameController.level.height * Constants.UNIT_SIZE / camera.viewportHeight;
         } else {
-        	zoom = gameController.gameWidth * Constants.UNIT_SIZE / camera.viewportWidth;
+        	zoom = gameController.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
         }
         gameController.cameraHelper.setZoom(zoom);
 	}
