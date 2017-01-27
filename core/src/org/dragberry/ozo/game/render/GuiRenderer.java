@@ -14,6 +14,8 @@ public class GuiRenderer implements Renderer {
 	
 	private static final String TIME = "Time: ";
 	private static final String STEPS = "Steps: ";
+	private static final String WIN = "Win: ";
+	private static final String LOSE = "Lose: ";
 	private static final int SECONDS_PER_MINUTE = 60;
 	private static final String EMPTY = "";
 	private static final String ZERO = "0";
@@ -40,17 +42,30 @@ public class GuiRenderer implements Renderer {
 	public void render(SpriteBatch batch) {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		renderGuiTime(batch);
-		renderGuiSteps(batch);
+		renderTime(batch);
+		renderSteps(batch);
+		renderCondition(batch);
 		batch.end();
 	}
 	
+	private void renderCondition(SpriteBatch batch) {
+		BitmapFont font = Assets.instance.fonts._24;
+		font.setColor(Color.BLACK);
+		GlyphLayout layout = null;
+		layout = new GlyphLayout(font, WIN + gameController.level.getWinConditionMsg()); 
+		font.draw(batch, layout,
+				camera.viewportWidth / 2 - layout.width / 2, 15);
+		layout = new GlyphLayout(font, LOSE + gameController.level.getLoseConditionMsg());
+		font.draw(batch, layout,
+				camera.viewportWidth / 2 - layout.width / 2, 45);
+	}
+
 	@Override
 	public GameController getGameContoller() {
 		return gameController;
 	}
 	
-	private void renderGuiSteps(SpriteBatch batch) {
+	private void renderSteps(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
 		String stepsString = STEPS + getGameContoller().level.steps;
@@ -59,7 +74,7 @@ public class GuiRenderer implements Renderer {
 				camera.viewportWidth - layout.width - 10, 15);
 	}
 	
-	private void renderGuiTime(SpriteBatch batch) {
+	private void renderTime(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
 		font.draw(batch,

@@ -85,6 +85,9 @@ public class GameRenderer extends InputAdapter implements Disposable {
     @Override
     public void dispose() {
         batch.dispose();
+        if (debug) {
+        	shapeRenderer.dispose();
+        }
     }
     
     @Override

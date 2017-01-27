@@ -59,13 +59,11 @@ public class GameController {
     	level.time += deltaTime; 
     	if (state == State.IN_MOTION) {
     		motionTime += deltaTime;
-    		if (motionTime >= Constants.UNIT_MOTION_TIME) {
-    			Gdx.app.debug(TAG, "Motion has been finished");
+    		if (motionTime >= Constants.UNIT_MOTION_TIME + 0.1) {
         		state = State.FIXED;
         		motionTime = 0;
         		finishStepExecution();
         	} else {
-        		Gdx.app.debug(TAG, "State in motion");
         		updateMotion(deltaTime);
         	}
     	}
@@ -75,10 +73,10 @@ public class GameController {
 
     private void updateMotion(float deltaTime) {
     	float step = deltaTime * Constants.UNIT_SPEED;
-    	shiftTopUnits(step);
-    	shiftRightUnits(step);
-    	shiftBottomUnits(step);
-    	shiftLeftUnits(step);
+		shiftTopUnits(step);
+		shiftRightUnits(step);
+		shiftBottomUnits(step);
+		shiftLeftUnits(step);
     }
     
     private void shiftTopUnits(float step) {
@@ -125,9 +123,11 @@ public class GameController {
     	level.steps++;
     	if (level.isLost(units)) {
 			backToMenu();
+			Gdx.app.debug(TAG, "Lost!");
 			return;
 		} 
 		if (level.isWon(units)) {
+			Gdx.app.debug(TAG, "Won!");
 			backToMenu();
 			return;
 		}
@@ -206,7 +206,7 @@ public class GameController {
     		return;
     	}
     	Unit currentSelectedUnit = getSelectedUnit(xCoord, yCoord);
-    	if (isBorderUnit(currentSelectedUnit)) {
+    	if (currentSelectedUnit == null || isBorderUnit(currentSelectedUnit)) {
     		// unit is border unit
     		unselectAllUnits();
     		return;
@@ -217,7 +217,7 @@ public class GameController {
     		state = State.IN_MOTION;
     		return;
     	}
-    	if (currentSelectedUnit == null  || selectedUnit != null && currentSelectedUnit != selectedUnit) {
+    	if (selectedUnit != null && currentSelectedUnit != selectedUnit) {
     		// unit is not selected or another unit is selected
 			unselectAllUnits();
 		} 

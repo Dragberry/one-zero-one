@@ -38,7 +38,7 @@ public class GameScreen extends AbstractGameScreen {
 	public void show() {
 		gameController = new GameController(game, new DefaultLevel(6, 8));
 		gameRenderer = new GameRenderer(gameController);
-		Gdx.input.setCatchBackKey(true);
+//		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override

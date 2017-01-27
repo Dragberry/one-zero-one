@@ -18,5 +18,9 @@ public abstract class Level {
 	public abstract boolean isLost(Unit[][] units);
 	
 	public abstract boolean isWon(Unit[][] units);
+	
+	public abstract String getWinConditionMsg();
+	
+	public abstract String getLoseConditionMsg();
 
 }
