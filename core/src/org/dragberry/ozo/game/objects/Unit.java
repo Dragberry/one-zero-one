@@ -12,6 +12,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Unit extends AbstractGameObject {
 
+	public enum Direction {
+		NORTH, SOUTH, EAST, WEST
+	}
+	
 	private static final float UINIT_SELECTED_SCALE = 1.2f;
 
 	private TextureRegion regBall;
@@ -21,6 +25,7 @@ public class Unit extends AbstractGameObject {
 	public int value;
 	
 	public boolean selected;
+	public boolean selectedNeighbor;
 	
 	public Unit() {
 		this(0, 0, 0);
@@ -31,6 +36,8 @@ public class Unit extends AbstractGameObject {
 		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		this.gameX = x;
 		this.gameY = y;
+		origin.x = dimension.x / 2;
+		origin.y = dimension.y / 2;
 		init();
 	}
 	
@@ -38,9 +45,43 @@ public class Unit extends AbstractGameObject {
 	protected void init() {
 		regBall = Assets.instance.unit.ball;
 		position = new Vector2(gameX * Constants.UNIT_SIZE, gameY * Constants.UNIT_SIZE);
-		origin.x = dimension.x / 2;
-		origin.y = dimension.y / 2;
 		bounds.set(position.x, position.y, dimension.x, dimension.y);
+	}
+	
+	public void moveTo(Direction direction, float step) {
+		float border;
+		switch (direction) {
+		case SOUTH:
+			border = (gameY - 1) * Constants.UNIT_SIZE;
+			position.y -= step;
+			if (position.y < border) {
+				position.y = border;
+			}
+			break;
+		case NORTH:
+			border = (gameY + 1) * Constants.UNIT_SIZE;
+			position.y += step;
+			if (position.y > border) {
+				position.y = border;
+			}
+			break;
+		case WEST:
+			border = (gameX - 1) * Constants.UNIT_SIZE;
+			position.x -= step;
+			if (position.x < border) {
+				position.x = border;
+			}
+			break;
+		case EAST:
+			border = (gameX + 1) * Constants.UNIT_SIZE;
+			position.x += step;
+			if (position.x > border) {
+				position.x = border;
+			}
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	public void moveTo(int gameX, int gameY) {
@@ -57,14 +98,15 @@ public class Unit extends AbstractGameObject {
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
-				selected ? scale.x * UINIT_SELECTED_SCALE : scale.x,
-				selected ? scale.y * UINIT_SELECTED_SCALE : scale.y,
+				selected || selectedNeighbor ? scale.x * UINIT_SELECTED_SCALE : scale.x,
+				selected || selectedNeighbor ? scale.y * UINIT_SELECTED_SCALE : scale.y,
 				rotation,
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
 		
-		BitmapFont font = Assets.instance.fonts._29;
+		BitmapFont font = selected || selectedNeighbor ? 
+				Assets.instance.fonts._34 : Assets.instance.fonts._29;
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
 		font.setColor(Color.BLACK);

@@ -10,5 +10,7 @@ public interface Constants {
     float VIEWPORT_GUI_HEIGHT = 800.0f;
 
     float UNIT_SIZE = 80.0f;
+    float UNIT_MOTION_TIME = 0.3f;
+    float UNIT_SPEED = UNIT_SIZE / UNIT_MOTION_TIME;
     
 }

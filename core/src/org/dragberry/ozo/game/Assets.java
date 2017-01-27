@@ -70,16 +70,19 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class AssetFonts implements Disposable {
 		public BitmapFont _24;
 		public BitmapFont _29;
+		public BitmapFont _34;
 		
 		public AssetFonts() {
 			_24 = createFont(24, true);
 			_29 = createFont(29, false);
+			_34 = createFont(34, false);
 		}
 		
 		@Override
 		public void dispose() {
 			_24.dispose();
 			_29.dispose();
+			_34.dispose();
 		}
 	}
 	

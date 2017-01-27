@@ -23,10 +23,18 @@ public class LevelRenderer implements Renderer {
 		gameController.cameraHelper.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		Unit selectedUnit = null;
 		for (Unit[] row : gameController.units) {
 			for (Unit unit : row) {
+				if (unit.selected) {
+					selectedUnit = unit;
+					continue;
+				}
 				unit.render(batch);
 			}
+		}
+		if (selectedUnit != null) {
+			selectedUnit.render(batch);
 		}
 		batch.end();
 	}
