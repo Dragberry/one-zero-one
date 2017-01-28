@@ -61,10 +61,14 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	public class AssetUnit {
-		public final AtlasRegion ball;
+		public final AtlasRegion redBall;
+		public final AtlasRegion greenBall;
+		public final AtlasRegion blueBall;
 		
 		public AssetUnit(TextureAtlas atlas) {
-			ball = atlas.findRegion("ball");
+			redBall = atlas.findRegion("red_ball");
+			greenBall = atlas.findRegion("green_ball");
+			blueBall = atlas.findRegion("blue_ball");
 		}
 	}
 	
@@ -74,9 +78,10 @@ public class Assets implements Disposable, AssetErrorListener {
 		public BitmapFont _34;
 		
 		public AssetFonts() {
-			_24 = createFont(24, true);
-			_29 = createFont(29, false);
-			_34 = createFont(34, false);
+			float factor = Gdx.graphics.getWidth() /  Constants.VIEWPORT_WIDTH;
+			_24 = createFont((int)(48 * factor), true);
+			_29 = createFont((int)(58 * factor), false);
+			_34 = createFont((int)(68 * factor), false);
 		}
 		
 		@Override

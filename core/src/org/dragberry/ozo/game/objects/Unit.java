@@ -16,7 +16,7 @@ public class Unit extends AbstractGameObject {
 		NORTH, SOUTH, EAST, WEST
 	}
 	
-	private static final float UINIT_SELECTED_SCALE = 1.2f;
+	private static final float UINIT_SELECTED_SCALE = 0.8f;
 
 	private TextureRegion regBall;
 	
@@ -43,7 +43,6 @@ public class Unit extends AbstractGameObject {
 	
 	@Override
 	protected void init() {
-		regBall = Assets.instance.unit.ball;
 		position = new Vector2(gameX * Constants.UNIT_SIZE, gameY * Constants.UNIT_SIZE);
 		bounds.set(position.x, position.y, dimension.x, dimension.y);
 	}
@@ -94,12 +93,23 @@ public class Unit extends AbstractGameObject {
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
 		batch.setColor(sign.color);
+		switch (sign) {
+			case MINUS:
+				regBall = Assets.instance.unit.redBall;
+				break;
+			case ZERO:
+				regBall = Assets.instance.unit.blueBall;
+				break;
+			case PLUS:
+				regBall = Assets.instance.unit.greenBall;
+				break;
+		}
 		batch.draw(regBall.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
-				selected || selectedNeighbor ? scale.x * UINIT_SELECTED_SCALE : scale.x,
-				selected || selectedNeighbor ? scale.y * UINIT_SELECTED_SCALE : scale.y,
+				!(selected || selectedNeighbor) ? scale.x * UINIT_SELECTED_SCALE : scale.x,
+				!(selected || selectedNeighbor) ? scale.y * UINIT_SELECTED_SCALE : scale.y,
 				rotation,
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),

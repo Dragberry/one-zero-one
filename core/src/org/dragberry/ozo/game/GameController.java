@@ -7,7 +7,7 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
-import org.dragberry.ozo.screen.MenuScreen;
+import org.dragberry.ozo.screen.MainMenuScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -237,10 +237,10 @@ public class GameController {
 				|| selectedUnit.gameY == 0 || selectedUnit.gameY == level.height - 1;
 	}
 	
-	private void backToMenu() {
-		game.setScreen(new MenuScreen(game));
+	public void backToMenu() {
+		game.setScreen(new MainMenuScreen(game));
 	}
-	
+
 	private void handleDebugInput(float deltaTime) {
 		if (Gdx.app.getType() != ApplicationType.Desktop) {
 			return;

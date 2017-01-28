@@ -6,6 +6,7 @@ import org.dragberry.ozo.game.render.Renderer;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -96,5 +97,15 @@ public class GameRenderer extends InputAdapter implements Disposable {
     	gameController.onScreenTouch(touchCoord.x, touchCoord.y);
     	return false;
     }
-    
+
+	@Override
+	public boolean keyUp(int keycode) {
+		switch (keycode) {
+			case Input.Keys.BACK:
+			case Input.Keys.ESCAPE:
+				gameController.backToMenu();
+				break;
+		}
+		return false;
+	}
 }

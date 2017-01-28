@@ -1,7 +1,7 @@
 package org.dragberry.ozo;
 
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.screen.MenuScreen;
+import org.dragberry.ozo.screen.MainMenuScreen;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
@@ -16,7 +16,7 @@ public class OneZeroOneGame extends Game {
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Assets.instance.init(new AssetManager());
-		setScreen(new MenuScreen(this));
+		setScreen(new MainMenuScreen(this));
 		Gdx.app.debug(TAG, "OneZeroOneGame has been created");
 	}
 	
