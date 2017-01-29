@@ -6,7 +6,7 @@ import org.dragberry.ozo.game.objects.Unit;
  * Created by maksim on 29.01.17.
  */
 
-public abstract class AbstractRichGoalLevel extends Level {
+public abstract class AbstractRichGoalLevel extends AbstractLevel {
 
     protected int goal;
     protected int loseCondition;
@@ -22,7 +22,7 @@ public abstract class AbstractRichGoalLevel extends Level {
         this.goal = goal;
         this.loseCondition = loseCondition;
         winConditionMsg = "get +" + goal;
-        loseConditionMsg = "get -" + loseCondition;
+        loseConditionMsg = "get less than" + loseCondition;
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class AbstractRichGoalLevel extends Level {
     public boolean isLost(Unit[][] units) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
-                if (unit.value == loseCondition) {
+                if (unit.value < loseCondition) {
                     return true;
                 }
             }
@@ -51,7 +51,7 @@ public abstract class AbstractRichGoalLevel extends Level {
     public boolean isWon(Unit[][] units) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
-                if (unit.value == goal) {
+                if (unit.value > goal) {
                     return true;
                 }
             }

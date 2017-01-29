@@ -138,4 +138,8 @@ public class Unit extends AbstractGameObject {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Unit[" + gameX + "][" + gameY + "]=" + value;
+	}
 }

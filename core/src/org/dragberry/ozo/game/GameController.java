@@ -2,7 +2,7 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
-import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.AbstractLevel;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
@@ -31,11 +31,11 @@ public class GameController {
 	private Unit selectedUnit = null;
 	
 	private Game game;
-	public Level level;
+	public AbstractLevel level;
 	
 	public Unit[][] units;
 	
-	public GameController(Game game, Level level) {
+	public GameController(Game game, AbstractLevel level) {
 		this.game = game;
 		this.level = level;
 		init();

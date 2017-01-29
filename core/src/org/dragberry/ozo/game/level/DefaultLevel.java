@@ -8,6 +8,6 @@ public class DefaultLevel extends AbstractRichGoalLevel {
 
 	@Override
 	public String getName() {
-		return "Default Level";
+		return "Default AbstractLevel";
 	}
 }

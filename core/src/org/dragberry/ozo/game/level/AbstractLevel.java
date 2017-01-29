@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 
 import org.dragberry.ozo.game.objects.Unit;
 
-public abstract class Level {
+public abstract class AbstractLevel {
 
 	protected final static int DEFAULT_WIDTH = 6;
 	protected final static int DEFAULT_HEIGHT = 8;
@@ -15,11 +15,11 @@ public abstract class Level {
 	public float time = 0;
 	public int steps = 0;
 
-	public Level() {
+	public AbstractLevel() {
 		this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 	
-	public Level(int width, int height) {
+	public AbstractLevel(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
@@ -33,7 +33,6 @@ public abstract class Level {
 	public abstract String getLoseConditionMsg();
 
 	public abstract String getName();
-
 
 	@Override
 	protected void finalize() throws Throwable {

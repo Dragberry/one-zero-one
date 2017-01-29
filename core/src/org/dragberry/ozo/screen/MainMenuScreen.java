@@ -117,9 +117,4 @@ public class MainMenuScreen extends AbstractGameScreen {
 		return btn;
 	}
 	
-	@Override
-	public void dispose() {
-		super.dispose();
-		stage.dispose();
-	}
 }

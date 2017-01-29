@@ -10,10 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import org.dragberry.ozo.game.level.AbstractLevel;
 import org.dragberry.ozo.game.level.DefaultLevel;
 import org.dragberry.ozo.game.level.DoubleFiveLevel;
 import org.dragberry.ozo.game.level.LetsStartLevel;
-import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.TripleFiveLevel;
 
 import java.lang.reflect.Constructor;
 
@@ -25,10 +26,10 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     private static final String TAG = SelectLevelMenuScreen.class.getName();
 
     private static class LevelInfo {
-        private Class<? extends Level> clazz;
+        private Class<? extends AbstractLevel> clazz;
         private Object[] params;
 
-        public LevelInfo(Class<? extends Level> clazz, Object... params) {
+        public LevelInfo(Class<? extends AbstractLevel> clazz, Object... params) {
             this.clazz = clazz;
             this.params = params;
         }
@@ -38,6 +39,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     static {
         levels.put("Let's start!", new LevelInfo(LetsStartLevel.class));
         levels.put("Double 5", new LevelInfo(DoubleFiveLevel.class));
+        levels.put("Triple 5", new LevelInfo(TripleFiveLevel.class));
         levels.put("Default level", new LevelInfo(DefaultLevel.class));
     }
 
@@ -80,7 +82,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
     @Override
     public void hide() {
-
+        stage.dispose();
     }
 
     @Override
@@ -101,8 +103,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                     for (int i = 0; i < levelInfo.params.length; i++) {
                         paramClasses[i] = levelInfo.params[i].getClass();
                     }
-                    Constructor<? extends Level> constructor = levelInfo.clazz.getConstructor(paramClasses);
-                    Level level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
+                    Constructor<? extends AbstractLevel> constructor = levelInfo.clazz.getConstructor(paramClasses);
+                    AbstractLevel level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
                     game.setScreen(new GameScreen(game, level));
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
@@ -112,9 +114,4 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         return btn;
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        stage.dispose();
-    }
 }
