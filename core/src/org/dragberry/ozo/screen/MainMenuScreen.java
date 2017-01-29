@@ -1,7 +1,7 @@
 package org.dragberry.ozo.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import org.dragberry.ozo.game.level.DefaultLevel;
+import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public class MainMenuScreen extends AbstractGameScreen {
 	
@@ -21,8 +22,13 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	private float buttonWidth;
 
-	public MainMenuScreen(Game game) {
+	public MainMenuScreen(DirectedGame game) {
 		super(game);
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return stage;
 	}
 
 	@Override
@@ -41,7 +47,6 @@ public class MainMenuScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 
 		buttonWidth = stage.getWidth() * 0.75f;
 
@@ -70,7 +75,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new SelectLevelMenuScreen(game));
+				game.setScreen(new SelectLevelMenuScreen(game), ScreenTransitionFade.init(0.25f));
 			}
 		});
 		return btn;

@@ -36,7 +36,7 @@ public abstract class AbstractRichGoalLevel extends AbstractLevel {
     }
 
     @Override
-    public boolean isLost(Unit[][] units) {
+    public boolean isLost(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
                 if (unit.value < loseCondition) {
@@ -48,10 +48,10 @@ public abstract class AbstractRichGoalLevel extends AbstractLevel {
     }
 
     @Override
-    public boolean isWon(Unit[][] units) {
+    public boolean isWon(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
-                if (unit.value > goal) {
+                if (unit.value == goal) {
                     return true;
                 }
             }

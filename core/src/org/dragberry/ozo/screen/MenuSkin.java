@@ -43,5 +43,8 @@ public class MenuSkin {
         return SKIN;
     }
 
-
+    public static void dispose() {
+        SKIN.dispose();
+        SKIN = null;
+    }
 }

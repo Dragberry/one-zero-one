@@ -7,16 +7,17 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MainMenuScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector3;
 
-public class GameController {
+public class GameController extends InputAdapter {
 
 	private static final String TAG = GameController.class.getName();
 	
@@ -24,37 +25,30 @@ public class GameController {
 		FIXED, IN_MOTION
 	}
 	
-	public CameraHelper cameraHelper;
-	
 	private State state = State.FIXED;
 	private float motionTime = 0;
 	private Unit selectedUnit = null;
 	
-	private Game game;
+	private DirectedGame game;
 	public AbstractLevel level;
 	
 	public Unit[][] units;
+	private Unit[] neighbors = new Unit[4];
 	
-	public GameController(Game game, AbstractLevel level) {
+	public GameController(DirectedGame game) {
 		this.game = game;
-		this.level = level;
-		init();
 	}
 	
-	public void init() {
-		cameraHelper = new CameraHelper();
+	public void init(AbstractLevel level) {
+		this.level = level;
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y] = new Unit(getRandomValue(), x, y);
+				units[x][y] = new Unit(level.generateValue(), x, y);
 			}
 		}
 	}
 
-	public static int getRandomValue() {
-		return MathUtils.random(-1, 1);
-	}
-	
     public void update(float deltaTime) {
     	level.time += deltaTime; 
     	if (state == State.IN_MOTION) {
@@ -63,13 +57,30 @@ public class GameController {
         		state = State.FIXED;
         		motionTime = 0;
         		finishStepExecution();
+				if (isGameFinished()) {
+					return;
+				}
         	} else {
         		updateMotion(deltaTime);
         	}
     	}
     	handleDebugInput(deltaTime);
-        cameraHelper.update(deltaTime);
+		CameraHelper.getInstance().update(deltaTime);
     }
+
+	private boolean isGameFinished() {
+		if (level.isLost(units, selectedUnit, neighbors)) {
+			Gdx.app.debug(TAG, "Lost!");
+			backToMenu();
+			return true;
+		}
+		if (level.isWon(units, selectedUnit, neighbors)) {
+			Gdx.app.debug(TAG, "Won!");
+			backToMenu();
+			return true;
+		}
+		return false;
+	}
 
     private void updateMotion(float deltaTime) {
     	float step = deltaTime * Constants.UNIT_SPEED;
@@ -109,7 +120,7 @@ public class GameController {
     
     private void finishStepExecution() {
     	// sum neighbors
-    	for (Unit neighbor : getNeighbors(selectedUnit)) {
+    	for (Unit neighbor : neighbors) {
     		selectedUnit.value +=neighbor.value;
     	}
     	// logical shift all units
@@ -121,16 +132,6 @@ public class GameController {
     	selectedUnit.selected = false;
     	selectedUnit = null;
     	level.steps++;
-    	if (level.isLost(units)) {
-			backToMenu();
-			Gdx.app.debug(TAG, "Lost!");
-			return;
-		} 
-		if (level.isWon(units)) {
-			Gdx.app.debug(TAG, "Won!");
-			backToMenu();
-			return;
-		}
     }
     
     private void shiftBottomUnits(Unit selectedUnit) {
@@ -139,7 +140,7 @@ public class GameController {
 			units[selectedUnit.gameX][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.gameX, y);
 		}
-		units[selectedUnit.gameX][0] = new Unit(getRandomValue(), selectedUnit.gameX, 0);
+		units[selectedUnit.gameX][0] = new Unit(level.generateValue(), selectedUnit.gameX, 0);
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
@@ -148,7 +149,7 @@ public class GameController {
 			units[selectedUnit.gameX][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.gameX, y);
 		}
-		units[selectedUnit.gameX][level.height - 1] = new Unit(getRandomValue(), selectedUnit.gameX, level.height - 1);
+		units[selectedUnit.gameX][level.height - 1] = new Unit(level.generateValue(), selectedUnit.gameX, level.height - 1);
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
@@ -157,7 +158,7 @@ public class GameController {
 			units[x][selectedUnit.gameY] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.gameY);
 		}
-		units[level.width - 1][selectedUnit.gameY] = new Unit(getRandomValue(), level.width - 1, selectedUnit.gameY);
+		units[level.width - 1][selectedUnit.gameY] = new Unit(level.generateValue(), level.width - 1, selectedUnit.gameY);
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
@@ -166,7 +167,7 @@ public class GameController {
 			units[x][selectedUnit.gameY] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.gameY);
 		}
-		units[0][selectedUnit.gameY] = new Unit(getRandomValue(), 0, selectedUnit.gameY);
+		units[0][selectedUnit.gameY] = new Unit(level.generateValue(), 0, selectedUnit.gameY);
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {
@@ -191,16 +192,14 @@ public class GameController {
     	}
     }
     
-    private Array<Unit> getNeighbors(Unit unit) {
-    	Array<Unit> neighbors = new Array<Unit>(4);
-		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY - 1]);
-		neighbors.add(units[selectedUnit.gameX + 1][selectedUnit.gameY]);
-		neighbors.add(units[selectedUnit.gameX][selectedUnit.gameY + 1]);
-		neighbors.add(units[selectedUnit.gameX - 1][selectedUnit.gameY]);
-		return neighbors;
+    private void getNeighbors(Unit unit) {
+		neighbors[0] = units[unit.gameX][unit.gameY - 1];
+		neighbors[1] = units[unit.gameX + 1][unit.gameY];
+		neighbors[2] = units[unit.gameX][unit.gameY + 1];
+		neighbors[3] = units[unit.gameX - 1][unit.gameY];
     }
     
-    public void onScreenTouch(float xCoord, float yCoord) {
+    private void onScreenTouch(float xCoord, float yCoord) {
     	if (state == State.IN_MOTION) {
     		// if game in motion, break control
     		return;
@@ -217,7 +216,7 @@ public class GameController {
     		state = State.IN_MOTION;
     		return;
     	}
-    	if (selectedUnit != null && currentSelectedUnit != selectedUnit) {
+    	if (selectedUnit != null) {
     		// unit is not selected or another unit is selected
 			unselectAllUnits();
 		} 
@@ -225,7 +224,7 @@ public class GameController {
     		// unit first selection
     		selectedUnit = currentSelectedUnit;
     		selectedUnit.selected = true;
-    		Array<Unit> neighbors = getNeighbors(selectedUnit);
+    		getNeighbors(selectedUnit);
     		for (Unit neighbor : neighbors) {
     			neighbor.selectedNeighbor = true;
 			}
@@ -237,7 +236,7 @@ public class GameController {
 				|| selectedUnit.gameY == 0 || selectedUnit.gameY == level.height - 1;
 	}
 	
-	public void backToMenu() {
+	private void backToMenu() {
 		game.setScreen(new MainMenuScreen(game));
 	}
 
@@ -245,10 +244,10 @@ public class GameController {
 		if (Gdx.app.getType() != ApplicationType.Desktop) {
 			return;
 		}
-		
+
 		float camMoveSpeed = 100 * deltaTime;
 		float camMoveSpeedAccelerationFactor = 100;
-		
+
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			camMoveSpeed *= camMoveSpeedAccelerationFactor;
 		}
@@ -265,34 +264,50 @@ public class GameController {
 			moveCamera(0, -camMoveSpeed);
 		}
 		if (Gdx.input.isKeyPressed(Keys.BACKSPACE)) {
-			cameraHelper.setPosition(0, 0);
+			CameraHelper.getInstance().setPosition(0, 0);
 		}
-		
+
 		float camZoomSpeed = 1 * deltaTime;
 		float camZoomSpeedAccelerationfactor = 5;
-		
+
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			camZoomSpeed *= camZoomSpeedAccelerationfactor;
 		}
 		if (Gdx.input.isKeyPressed(Keys.COMMA)) {
-			cameraHelper.addZoom(camZoomSpeed);
-			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", cameraHelper.getZoom()));
+			CameraHelper.getInstance().addZoom(camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.getInstance().getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.PERIOD)) {
-			cameraHelper.addZoom(-camZoomSpeed);
-			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", cameraHelper.getZoom()));
+			CameraHelper.getInstance().addZoom(-camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.getInstance().getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.SLASH)) {
-			cameraHelper.setZoom(1);
+			CameraHelper.getInstance().setZoom(1);
 		}
-		
+
 	}
-    
+
     private void moveCamera(float x, float y) {
-    	x += cameraHelper.getPosition().x;
-    	y += cameraHelper.getPosition().y;
-    	cameraHelper.setPosition(x, y);
+    	x += CameraHelper.getInstance().getPosition().x;
+    	y += CameraHelper.getInstance().getPosition().y;
+		CameraHelper.getInstance().setPosition(x, y);
     }
-    
-	
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		Vector3 touchCoord = CameraHelper.getInstance().getCamera().unproject(new Vector3(screenX, screenY, 0));
+		onScreenTouch(touchCoord.x, touchCoord.y);
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		switch (keycode) {
+			case Input.Keys.BACK:
+			case Input.Keys.ESCAPE:
+				backToMenu();
+				break;
+		}
+		return false;
+	}
 }

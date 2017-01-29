@@ -1,7 +1,5 @@
 package org.dragberry.ozo.game.level;
 
-import com.badlogic.gdx.utils.ArrayMap;
-
 import org.dragberry.ozo.game.objects.Unit;
 
 /**
@@ -49,7 +47,7 @@ public abstract class AbstractMultiGoalLevel extends AbstractLevel {
     }
 
     @Override
-    public boolean isLost(Unit[][] units) {
+    public boolean isLost(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
                 if (unit.value == loseCondition) {
@@ -61,7 +59,7 @@ public abstract class AbstractMultiGoalLevel extends AbstractLevel {
     }
 
     @Override
-    public boolean isWon(Unit[][] units) {
+    public boolean isWon(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
         clearGoals();
         for (Unit[] row : units) {
             unitLoop: for (Unit unit : row) {

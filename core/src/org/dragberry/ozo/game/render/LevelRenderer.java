@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.render;
 
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.objects.Unit;
+import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -20,7 +21,7 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		gameController.cameraHelper.applyTo(camera);
+		CameraHelper.getInstance().applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		Unit selectedUnit = null;
@@ -45,8 +46,8 @@ public class LevelRenderer implements Renderer {
         camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
         camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -height / 2, 0);
         camera.update();
-        
-        gameController.cameraHelper.setPosition(
+
+		CameraHelper.getInstance().setPosition(
         		gameController.level.width * Constants.UNIT_SIZE / 2, 
         		gameController.level.height * Constants.UNIT_SIZE / 2);
         setZoom();
@@ -61,7 +62,7 @@ public class LevelRenderer implements Renderer {
         } else {
         	zoom = gameController.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
         }
-        gameController.cameraHelper.setZoom(zoom);
+		CameraHelper.getInstance().setZoom(zoom);
 	}
 	
 	@Override

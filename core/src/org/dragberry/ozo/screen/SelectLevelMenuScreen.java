@@ -2,6 +2,7 @@ package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,8 @@ import org.dragberry.ozo.game.level.DefaultLevel;
 import org.dragberry.ozo.game.level.DoubleFiveLevel;
 import org.dragberry.ozo.game.level.LetsStartLevel;
 import org.dragberry.ozo.game.level.TripleFiveLevel;
+import org.dragberry.ozo.screen.transitions.ScreenTransition;
+import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import java.lang.reflect.Constructor;
 
@@ -48,8 +51,13 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     private float buttonWidth;
     private float buttonHeight;
 
-    public SelectLevelMenuScreen(Game game) {
+    public SelectLevelMenuScreen(DirectedGame game) {
         super(game);
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return stage;
     }
 
     @Override
@@ -68,7 +76,6 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         buttonWidth = Gdx.graphics.getWidth() * 0.75f;
         buttonHeight = Gdx.graphics.getHeight() / 10.0f;
@@ -77,7 +84,6 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         for (ObjectMap.Entry<String, LevelInfo> entry : levels.entries()) {
             stage.addActor(createLevelBtn(entry.key, entry.value, position++, topButtonPositionY));
         }
-
     }
 
     @Override
@@ -105,7 +111,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                     }
                     Constructor<? extends AbstractLevel> constructor = levelInfo.clazz.getConstructor(paramClasses);
                     AbstractLevel level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
-                    game.setScreen(new GameScreen(game, level));
+                    game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init(0.25f));
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
                 }

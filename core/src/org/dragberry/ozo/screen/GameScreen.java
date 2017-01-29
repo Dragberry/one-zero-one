@@ -4,8 +4,8 @@ import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.GameRenderer;
 import org.dragberry.ozo.game.level.AbstractLevel;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen extends AbstractGameScreen {
@@ -16,9 +16,14 @@ public class GameScreen extends AbstractGameScreen {
 	private GameController gameController;
 	private GameRenderer gameRenderer;
 
-	public GameScreen(Game game, AbstractLevel level) {
+	public GameScreen(DirectedGame game, AbstractLevel level) {
 		super(game);
 		this.level = level;
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return gameController;
 	}
 
 	@Override
@@ -38,7 +43,8 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		gameController = new GameController(game, level);
+		gameController = new GameController(game);
+		gameController.init(level);
 		gameRenderer = new GameRenderer(gameController);
 		Gdx.input.setCatchBackKey(true);
 	}

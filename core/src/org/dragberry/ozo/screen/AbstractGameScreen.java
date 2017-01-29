@@ -3,16 +3,19 @@ package org.dragberry.ozo.screen;
 import org.dragberry.ozo.game.Assets;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 
 public abstract class AbstractGameScreen implements Screen {
 	
-	protected Game game;
+	protected DirectedGame game;
 	
-	public AbstractGameScreen(Game game) {
+	public AbstractGameScreen(DirectedGame game) {
 		this.game = game;
 	}
+
+	public abstract InputProcessor getInputProcessor();
 	
 	@Override
 	public abstract void render(float deltaTime);

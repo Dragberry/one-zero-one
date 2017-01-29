@@ -1,21 +1,18 @@
 package org.dragberry.ozo.game;
 
-import org.dragberry.ozo.game.render.GuiRenderer;
-import org.dragberry.ozo.game.render.LevelRenderer;
-import org.dragberry.ozo.game.render.Renderer;
-import org.dragberry.ozo.game.util.Constants;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
-public class GameRenderer extends InputAdapter implements Disposable {
+import org.dragberry.ozo.game.render.GuiRenderer;
+import org.dragberry.ozo.game.render.LevelRenderer;
+import org.dragberry.ozo.game.render.Renderer;
+import org.dragberry.ozo.game.util.CameraHelper;
+import org.dragberry.ozo.game.util.Constants;
+
+public class GameRenderer implements Disposable {
 	
 	private static final String TAG = GameRenderer.class.getName();
 	
@@ -32,11 +29,11 @@ public class GameRenderer extends InputAdapter implements Disposable {
 		gameController = controller;
 		init();
 	}
-	
+
 	public void init() {
-		Gdx.input.setInputProcessor(this);
 		batch = new SpriteBatch();
 		levelRenderer = new LevelRenderer(gameController);
+		CameraHelper.getInstance().setCamera(levelRenderer.getCamera());
         guiRenderer = new GuiRenderer(gameController);
         initDebug();
 	}
@@ -59,7 +56,7 @@ public class GameRenderer extends InputAdapter implements Disposable {
 		if (!debug) {
 			return;
 		}
-		gameController.cameraHelper.applyTo(levelRenderer.getCamera());
+		CameraHelper.getInstance().applyTo(levelRenderer.getCamera());
 		shapeRenderer.setProjectionMatrix(levelRenderer.getCamera().combined);
 		shapeRenderer.begin();
 		shapeRenderer.set(ShapeType.Line);
@@ -90,22 +87,5 @@ public class GameRenderer extends InputAdapter implements Disposable {
         	shapeRenderer.dispose();
         }
     }
-    
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-    	Vector3 touchCoord = levelRenderer.getCamera().unproject(new Vector3(screenX, screenY, 0));
-    	gameController.onScreenTouch(touchCoord.x, touchCoord.y);
-    	return false;
-    }
 
-	@Override
-	public boolean keyUp(int keycode) {
-		switch (keycode) {
-			case Input.Keys.BACK:
-			case Input.Keys.ESCAPE:
-				gameController.backToMenu();
-				break;
-		}
-		return false;
-	}
 }

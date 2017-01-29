@@ -1,6 +1,7 @@
 package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 
 import org.dragberry.ozo.game.objects.Unit;
 
@@ -23,10 +24,14 @@ public abstract class AbstractLevel {
 		this.width = width;
 		this.height = height;
 	}
+
+	public int generateValue() {
+		return MathUtils.random(-1, 1);
+	}
+
+	public abstract boolean isLost(Unit[][] units, Unit selectedUnit, Unit[] neighbors);
 	
-	public abstract boolean isLost(Unit[][] units);
-	
-	public abstract boolean isWon(Unit[][] units);
+	public abstract boolean isWon(Unit[][] units, Unit selectedUnit, Unit[] neighbors);
 	
 	public abstract String getWinConditionMsg();
 	

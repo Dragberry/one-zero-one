@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.util;
 
 import org.dragberry.ozo.game.objects.AbstractGameObject;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -9,18 +10,34 @@ import com.badlogic.gdx.math.Vector2;
 public class CameraHelper {
 	
 	private static final String TAG = CameraHelper.class.getName();
+
+	private final static CameraHelper INSTANCE = new CameraHelper();
 	
 	private final float MAX_ZOOM_IN = 0.25f;
 	private final float MAX_ZOOM_OUT = 10.0f;
+
+	private Camera camera;
 
 	private Vector2 position;
 	private float zoom;
 	
 	private AbstractGameObject target;
 	
-	public CameraHelper() {
+	private CameraHelper() {
 		position = new Vector2(0, 0);
 		zoom = 1.0f;
+	}
+
+	public static CameraHelper getInstance() {
+		return INSTANCE;
+	}
+
+	public void setCamera(Camera camera) {
+		this.camera = camera;
+	}
+
+	public Camera getCamera() {
+		return camera;
 	}
 	
 	public void update(float deltaTime) {
