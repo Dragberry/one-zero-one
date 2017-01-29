@@ -2,7 +2,7 @@ package org.dragberry.ozo.screen;
 
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.GameRenderer;
-import org.dragberry.ozo.game.level.AbstractLevel;
+import org.dragberry.ozo.game.level.Level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen extends AbstractGameScreen {
 
-	private AbstractLevel level;
+	private Level level;
 	private boolean paused;
 	
 	private GameController gameController;
 	private GameRenderer gameRenderer;
 
-	public GameScreen(DirectedGame game, AbstractLevel level) {
+	public GameScreen(DirectedGame game, Level level) {
 		super(game);
 		this.level = level;
 	}

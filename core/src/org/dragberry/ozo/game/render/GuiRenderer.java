@@ -52,10 +52,10 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
 		GlyphLayout layout = null;
-		layout = new GlyphLayout(font, WIN + gameController.level.getWinConditionMsg()); 
+		layout = new GlyphLayout(font, WIN);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 15);
-		layout = new GlyphLayout(font, LOSE + gameController.level.getLoseConditionMsg());
+		layout = new GlyphLayout(font, LOSE);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 45);
 	}

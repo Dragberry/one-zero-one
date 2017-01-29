@@ -2,7 +2,7 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
-import org.dragberry.ozo.game.level.AbstractLevel;
+import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
@@ -30,7 +30,7 @@ public class GameController extends InputAdapter {
 	private Unit selectedUnit = null;
 	
 	private DirectedGame game;
-	public AbstractLevel level;
+	public Level level;
 	
 	public Unit[][] units;
 	private Unit[] neighbors = new Unit[4];
@@ -39,7 +39,7 @@ public class GameController extends InputAdapter {
 		this.game = game;
 	}
 	
-	public void init(AbstractLevel level) {
+	public void init(Level level) {
 		this.level = level;
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {

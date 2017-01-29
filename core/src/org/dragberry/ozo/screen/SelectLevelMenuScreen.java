@@ -1,6 +1,5 @@
 package org.dragberry.ozo.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,12 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import org.dragberry.ozo.game.level.AbstractLevel;
-import org.dragberry.ozo.game.level.DefaultLevel;
-import org.dragberry.ozo.game.level.DoubleFiveLevel;
-import org.dragberry.ozo.game.level.LetsStartLevel;
-import org.dragberry.ozo.game.level.TripleFiveLevel;
-import org.dragberry.ozo.screen.transitions.ScreenTransition;
+import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
+import org.dragberry.ozo.game.level.ReachTheGoalLevel;
+import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import java.lang.reflect.Constructor;
@@ -29,10 +26,10 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     private static final String TAG = SelectLevelMenuScreen.class.getName();
 
     private static class LevelInfo {
-        private Class<? extends AbstractLevel> clazz;
+        private Class<? extends Level> clazz;
         private Object[] params;
 
-        public LevelInfo(Class<? extends AbstractLevel> clazz, Object... params) {
+        public LevelInfo(Class<? extends Level> clazz, Object... params) {
             this.clazz = clazz;
             this.params = params;
         }
@@ -40,10 +37,10 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
     private static final ArrayMap<String, LevelInfo> levels = new ArrayMap<String, LevelInfo>(true, 1);
     static {
-        levels.put("Let's start!", new LevelInfo(LetsStartLevel.class));
-        levels.put("Double 5", new LevelInfo(DoubleFiveLevel.class));
-        levels.put("Triple 5", new LevelInfo(TripleFiveLevel.class));
-        levels.put("Default level", new LevelInfo(DefaultLevel.class));
+        levels.put("Let's start!", new LevelInfo(ReachTheGoalLevel.class, -10, 5, JustReachGoal.Operator.MORE));
+        levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, -5, 5));
+        levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, -10, 25));
+        levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 5, 5 }));
     }
 
     private Stage stage;
@@ -109,8 +106,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                     for (int i = 0; i < levelInfo.params.length; i++) {
                         paramClasses[i] = levelInfo.params[i].getClass();
                     }
-                    Constructor<? extends AbstractLevel> constructor = levelInfo.clazz.getConstructor(paramClasses);
-                    AbstractLevel level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
+                    Constructor<? extends Level> constructor = levelInfo.clazz.getConstructor(paramClasses);
+                    Level level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
                     game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init(0.25f));
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
