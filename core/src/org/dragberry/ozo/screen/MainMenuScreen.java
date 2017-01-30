@@ -75,7 +75,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new SelectLevelMenuScreen(game), ScreenTransitionFade.init(0.25f));
+				game.setScreen(new SelectLevelMenuScreen(game), ScreenTransitionFade.init());
 			}
 		});
 		return btn;

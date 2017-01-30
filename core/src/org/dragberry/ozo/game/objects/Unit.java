@@ -20,8 +20,8 @@ public class Unit extends AbstractGameObject {
 
 	private TextureRegion regBall;
 	
-	public int gameX;
-	public int gameY;
+	public int x;
+	public int y;
 	public int value;
 	public int previousValue;
 	
@@ -36,8 +36,8 @@ public class Unit extends AbstractGameObject {
 		this.value = value;
 		this.previousValue = value;
 		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
-		this.gameX = x;
-		this.gameY = y;
+		this.x = x;
+		this.y = y;
 		origin.x = dimension.x / 2;
 		origin.y = dimension.y / 2;
 		init();
@@ -45,7 +45,7 @@ public class Unit extends AbstractGameObject {
 	
 	@Override
 	protected void init() {
-		position = new Vector2(gameX * Constants.UNIT_SIZE, gameY * Constants.UNIT_SIZE);
+		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
 		bounds.set(position.x, position.y, dimension.x, dimension.y);
 	}
 	
@@ -53,28 +53,28 @@ public class Unit extends AbstractGameObject {
 		float border;
 		switch (direction) {
 		case SOUTH:
-			border = (gameY - 1) * Constants.UNIT_SIZE;
+			border = (y - 1) * Constants.UNIT_SIZE;
 			position.y -= step;
 			if (position.y < border) {
 				position.y = border;
 			}
 			break;
 		case NORTH:
-			border = (gameY + 1) * Constants.UNIT_SIZE;
+			border = (y + 1) * Constants.UNIT_SIZE;
 			position.y += step;
 			if (position.y > border) {
 				position.y = border;
 			}
 			break;
 		case WEST:
-			border = (gameX - 1) * Constants.UNIT_SIZE;
+			border = (x - 1) * Constants.UNIT_SIZE;
 			position.x -= step;
 			if (position.x < border) {
 				position.x = border;
 			}
 			break;
 		case EAST:
-			border = (gameX + 1) * Constants.UNIT_SIZE;
+			border = (x + 1) * Constants.UNIT_SIZE;
 			position.x += step;
 			if (position.x > border) {
 				position.x = border;
@@ -86,8 +86,8 @@ public class Unit extends AbstractGameObject {
 	}
 	
 	public void moveTo(int gameX, int gameY) {
-		this.gameX = gameX;
-		this.gameY = gameY;
+		this.x = gameX;
+		this.y = gameY;
 		init();
 	}
 	
@@ -142,6 +142,6 @@ public class Unit extends AbstractGameObject {
 
 	@Override
 	public String toString() {
-		return "Unit[" + gameX + "][" + gameY + "]=" + value;
+		return "Unit[" + x + "][" + y + "]=" + value;
 	}
 }

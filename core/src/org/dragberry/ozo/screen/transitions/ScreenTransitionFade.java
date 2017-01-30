@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Interpolation;
 
 public class ScreenTransitionFade implements ScreenTransition {
 
+    private static final float DEFAULT_TIME = 0.25f;
     private static final ScreenTransitionFade INSTANCE = new ScreenTransitionFade();
 
     private float duration;
@@ -19,6 +20,10 @@ public class ScreenTransitionFade implements ScreenTransition {
     public static ScreenTransitionFade init(float duration) {
         INSTANCE.duration = duration;
         return INSTANCE;
+    }
+
+    public static ScreenTransitionFade init() {
+        return init(DEFAULT_TIME);
     }
 
     @Override

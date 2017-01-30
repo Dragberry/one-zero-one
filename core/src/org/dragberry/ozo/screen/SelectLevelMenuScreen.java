@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationLevel;
 import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
 import org.dragberry.ozo.game.level.ReachTheGoalLevel;
@@ -48,6 +49,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 5, 5 }));
         levels.put("Casino Royale", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 7, 7, 7 }));
         levels.put("No annihilation (5)", new LevelInfo(NoAnnihilationLevel.class, 5, 10));
+        levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, -10, 25));
     }
 
     private Stage stage;
@@ -102,7 +104,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game), ScreenTransitionFade.init(0.25f));
+                game.setScreen(new MainMenuScreen(game), ScreenTransitionFade.init());
             }
         });
         table.add(backBtn);
@@ -132,7 +134,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                     }
                     Constructor<? extends Level> constructor = levelInfo.clazz.getConstructor(paramClasses);
                     Level level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
-                    game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init(0.25f));
+                    game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init());
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
                 }

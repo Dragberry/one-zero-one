@@ -44,7 +44,7 @@ public class GameController extends InputAdapter {
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y] = new Unit(level.generateValue(), x, y);
+				units[x][y] = new Unit(level.generateValue(x, y), x, y);
 			}
 		}
 	}
@@ -88,29 +88,29 @@ public class GameController extends InputAdapter {
     }
     
     private void shiftTopUnits(float step) {
-    	for (int y = selectedUnit.gameY + 1; y < level.height; y++) {
-			Unit unitToMove = units[selectedUnit.gameX][y];
+    	for (int y = selectedUnit.y + 1; y < level.height; y++) {
+			Unit unitToMove = units[selectedUnit.x][y];
 			unitToMove.moveTo(Direction.SOUTH, step);
 		}
     }
     
     private void shiftRightUnits(float step) {
-    	for (int x = selectedUnit.gameX + 1; x < level.width; x++) {
-			Unit unitToMove = units[x][selectedUnit.gameY];
+    	for (int x = selectedUnit.x + 1; x < level.width; x++) {
+			Unit unitToMove = units[x][selectedUnit.y];
 			unitToMove.moveTo(Direction.WEST, step);
 		}
     }
     
     private void shiftBottomUnits(float step) {
-    	for (int y = selectedUnit.gameY - 1; y >= 0; y--) {
-			Unit unitToMove = units[selectedUnit.gameX][y];
+    	for (int y = selectedUnit.y - 1; y >= 0; y--) {
+			Unit unitToMove = units[selectedUnit.x][y];
 			unitToMove.moveTo(Direction.NORTH, step);
 		}
     }
     
     private void shiftLeftUnits(float step) {
-    	for (int x = selectedUnit.gameX - 1; x >= 0; x--) {
-			Unit unitToMove = units[x][selectedUnit.gameY];
+    	for (int x = selectedUnit.x - 1; x >= 0; x--) {
+			Unit unitToMove = units[x][selectedUnit.y];
 			unitToMove.moveTo(Direction.EAST, step);
 		}
     }
@@ -136,39 +136,39 @@ public class GameController extends InputAdapter {
     }
     
     private void shiftBottomUnits(Unit selectedUnit) {
-		for (int y = selectedUnit.gameY - 1; y > 0; y--) {
-			Unit unitToMove = units[selectedUnit.gameX][y - 1];
-			units[selectedUnit.gameX][y] = unitToMove;
-			unitToMove.moveTo(selectedUnit.gameX, y);
+		for (int y = selectedUnit.y - 1; y > 0; y--) {
+			Unit unitToMove = units[selectedUnit.x][y - 1];
+			units[selectedUnit.x][y] = unitToMove;
+			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.gameX][0] = new Unit(level.generateValue(), selectedUnit.gameX, 0);
+		units[selectedUnit.x][0] = new Unit(level.generateValue(selectedUnit.x, 0), selectedUnit.x, 0);
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
-		for (int y = selectedUnit.gameY + 1; y < level.height - 1; y++) {
-			Unit unitToMove = units[selectedUnit.gameX][y + 1];
-			units[selectedUnit.gameX][y] = unitToMove;
-			unitToMove.moveTo(selectedUnit.gameX, y);
+		for (int y = selectedUnit.y + 1; y < level.height - 1; y++) {
+			Unit unitToMove = units[selectedUnit.x][y + 1];
+			units[selectedUnit.x][y] = unitToMove;
+			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.gameX][level.height - 1] = new Unit(level.generateValue(), selectedUnit.gameX, level.height - 1);
+		units[selectedUnit.x][level.height - 1] = new Unit(level.generateValue(selectedUnit.x, level.height - 1), selectedUnit.x, level.height - 1);
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
-		for (int x = selectedUnit.gameX + 1; x < level.width - 1; x++) {
-			Unit unitToMove = units[x + 1][selectedUnit.gameY];
-			units[x][selectedUnit.gameY] = unitToMove;
-			unitToMove.moveTo(x, selectedUnit.gameY);
+		for (int x = selectedUnit.x + 1; x < level.width - 1; x++) {
+			Unit unitToMove = units[x + 1][selectedUnit.y];
+			units[x][selectedUnit.y] = unitToMove;
+			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[level.width - 1][selectedUnit.gameY] = new Unit(level.generateValue(), level.width - 1, selectedUnit.gameY);
+		units[level.width - 1][selectedUnit.y] = new Unit(level.generateValue(level.width - 1, selectedUnit.y), level.width - 1, selectedUnit.y);
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
-		for (int x = selectedUnit.gameX - 1; x > 0; x--) {
-			Unit unitToMove = units[x - 1][selectedUnit.gameY];
-			units[x][selectedUnit.gameY] = unitToMove;
-			unitToMove.moveTo(x, selectedUnit.gameY);
+		for (int x = selectedUnit.x - 1; x > 0; x--) {
+			Unit unitToMove = units[x - 1][selectedUnit.y];
+			units[x][selectedUnit.y] = unitToMove;
+			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[0][selectedUnit.gameY] = new Unit(level.generateValue(), 0, selectedUnit.gameY);
+		units[0][selectedUnit.y] = new Unit(level.generateValue(0, selectedUnit.y), 0, selectedUnit.y);
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {
@@ -194,10 +194,10 @@ public class GameController extends InputAdapter {
     }
     
     private void getNeighbors(Unit unit) {
-		neighbors[0] = units[unit.gameX][unit.gameY - 1];
-		neighbors[1] = units[unit.gameX + 1][unit.gameY];
-		neighbors[2] = units[unit.gameX][unit.gameY + 1];
-		neighbors[3] = units[unit.gameX - 1][unit.gameY];
+		neighbors[0] = units[unit.x][unit.y - 1];
+		neighbors[1] = units[unit.x + 1][unit.y];
+		neighbors[2] = units[unit.x][unit.y + 1];
+		neighbors[3] = units[unit.x - 1][unit.y];
     }
     
     private void onScreenTouch(float xCoord, float yCoord) {
@@ -233,8 +233,8 @@ public class GameController extends InputAdapter {
     }
 
 	private boolean isBorderUnit(Unit selectedUnit) {
-		return selectedUnit.gameX == 0 || selectedUnit.gameX == level.width - 1
-				|| selectedUnit.gameY == 0 || selectedUnit.gameY == level.height - 1;
+		return selectedUnit.x == 0 || selectedUnit.x == level.width - 1
+				|| selectedUnit.y == 0 || selectedUnit.y == level.height - 1;
 	}
 	
 	private void backToMenu() {

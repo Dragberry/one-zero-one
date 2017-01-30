@@ -24,7 +24,7 @@ public abstract class Level {
     public float time = 0;
     public int steps = 0;
 
-    public int generateValue() {
+    public int generateValue(int x, int y) {
         return MathUtils.random(-1, 1);
     }
 
