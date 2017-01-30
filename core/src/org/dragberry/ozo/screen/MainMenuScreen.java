@@ -57,7 +57,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	@Override
 	public void hide() {
-
+		stage.dispose();
 	}
 
 	@Override

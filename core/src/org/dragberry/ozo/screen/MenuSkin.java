@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -15,6 +16,8 @@ import org.dragberry.ozo.game.Assets;
 public class MenuSkin {
 
     public static final Color BACKGROUND_COLOR = new Color(0xC3 / 255f, 0xD5 / 255f,  0xDB / 255f, 1);
+    public static final String DEFAULT = "default";
+    public static final String BACKGROUND = "background";
 
     private static Skin SKIN;
 
@@ -23,22 +26,28 @@ public class MenuSkin {
     public static Skin getSkin() {
         if (SKIN == null) {
             SKIN = new Skin();
-            SKIN.add("default", Assets.instance.fonts._34);
+            SKIN.add(DEFAULT, Assets.instance.fonts._34);
 
             // Create a texture
             Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
             pixmap.setColor(BACKGROUND_COLOR);
             pixmap.fill();
-            SKIN.add("background", new Texture(pixmap));
+            SKIN.add(BACKGROUND, new Texture(pixmap));
 
             // Create a button style
             TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-            textButtonStyle.up = SKIN.newDrawable("background", Color.GRAY);
-            textButtonStyle.down = SKIN.newDrawable("background", Color.DARK_GRAY);
-            textButtonStyle.checked = SKIN.newDrawable("background", Color.DARK_GRAY);
-            textButtonStyle.over = SKIN.newDrawable("background", Color.LIGHT_GRAY);
-            textButtonStyle.font = SKIN.getFont("default");
-            SKIN.add("default", textButtonStyle);
+            textButtonStyle.up = SKIN.newDrawable(BACKGROUND, Color.GRAY);
+            textButtonStyle.down = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
+            textButtonStyle.checked = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
+            textButtonStyle.over = SKIN.newDrawable(BACKGROUND, Color.LIGHT_GRAY);
+            textButtonStyle.font = SKIN.getFont(DEFAULT);
+            SKIN.add(DEFAULT, textButtonStyle);
+
+            // Create a label skin
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.background = SKIN.newDrawable(BACKGROUND, Color.GRAY);
+            labelStyle.font = SKIN.getFont(DEFAULT);
+            SKIN.add(DEFAULT, labelStyle);
         }
         return SKIN;
     }

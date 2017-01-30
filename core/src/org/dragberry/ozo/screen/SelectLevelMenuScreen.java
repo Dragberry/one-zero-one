@@ -5,8 +5,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -30,7 +34,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         private Class<? extends Level> clazz;
         private Object[] params;
 
-        public LevelInfo(Class<? extends Level> clazz, Object... params) {
+        LevelInfo(Class<? extends Level> clazz, Object... params) {
             this.clazz = clazz;
             this.params = params;
         }
@@ -48,10 +52,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
     private Stage stage;
 
-    private float buttonWidth;
-    private float buttonHeight;
-
-    public SelectLevelMenuScreen(DirectedGame game) {
+    SelectLevelMenuScreen(DirectedGame game) {
         super(game);
     }
 
@@ -76,15 +77,38 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         stage = new Stage();
-
-        buttonWidth = Gdx.graphics.getWidth() * 0.75f;
-        buttonHeight = Gdx.graphics.getHeight() / 10.0f;
-        float topButtonPositionY = Gdx.graphics.getHeight() - 1.2f * buttonHeight;
-        int position = 0;
-        for (ObjectMap.Entry<String, LevelInfo> entry : levels.entries()) {
-            stage.addActor(createLevelBtn(entry.key, entry.value, position++, topButtonPositionY));
-        }
+        rebuildStage();
     }
+
+    private void rebuildStage() {
+        Table table = new Table();
+        table.setFillParent(true);
+
+        Label label = new Label("Select Level", MenuSkin.getSkin());
+        label.setAlignment(Align.center);
+        table.add(label).fill().expand();
+        table.row();
+
+        Table scrollTable = new Table();
+        for (ObjectMap.Entry<String, LevelInfo> entry : levels.entries()) {
+            scrollTable.add(createLevelBtn(entry.key, entry.value)).fillX().expand(true, false);
+            scrollTable.row();
+        }
+        ScrollPane scroller = new ScrollPane(scrollTable);
+        table.add(scroller).fill().expand();
+        table.row().fill().expand();
+
+        TextButton backBtn = new TextButton("Back", MenuSkin.getSkin());
+        backBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game), ScreenTransitionFade.init(0.25f));
+            }
+        });
+        table.add(backBtn);
+        this.stage.addActor(table);
+    }
+
 
     @Override
     public void hide() {
@@ -93,13 +117,10 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
     @Override
     public void pause() {
-
     }
 
-    private TextButton createLevelBtn(String btnLabel, final LevelInfo levelInfo, int position, float topButtonPosition) {
+    private TextButton createLevelBtn(String btnLabel, final LevelInfo levelInfo) {
         TextButton btn = new TextButton(btnLabel, MenuSkin.getSkin());
-        btn.setWidth(buttonWidth);
-        btn.setPosition(Gdx.graphics.getWidth() / 2 - buttonWidth / 2, topButtonPosition - (buttonHeight * position * 1.2f)) ;
         btn.addListener(new ClickListener() {
 
             @Override
