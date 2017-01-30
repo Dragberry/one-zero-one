@@ -23,6 +23,7 @@ public class Unit extends AbstractGameObject {
 	public int gameX;
 	public int gameY;
 	public int value;
+	public int previousValue;
 	
 	public boolean selected;
 	public boolean selectedNeighbor;
@@ -33,6 +34,7 @@ public class Unit extends AbstractGameObject {
 	
 	public Unit(int value, int x, int y) {
 		this.value = value;
+		this.previousValue = value;
 		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		this.gameX = x;
 		this.gameY = y;

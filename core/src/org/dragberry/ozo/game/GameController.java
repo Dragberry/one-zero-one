@@ -57,9 +57,6 @@ public class GameController extends InputAdapter {
         		state = State.FIXED;
         		motionTime = 0;
         		finishStepExecution();
-				if (isGameFinished()) {
-					return;
-				}
         	} else {
         		updateMotion(deltaTime);
         	}
@@ -120,6 +117,7 @@ public class GameController extends InputAdapter {
     
     private void finishStepExecution() {
     	// sum neighbors
+    	selectedUnit.previousValue = selectedUnit.value;
     	for (Unit neighbor : neighbors) {
     		selectedUnit.value +=neighbor.value;
     	}
@@ -129,9 +127,12 @@ public class GameController extends InputAdapter {
     	shiftRightUnits(selectedUnit);
     	shiftBottomUnits(selectedUnit);
     	shiftLeftUnits(selectedUnit);
+    	level.steps++;
+    	if (isGameFinished()) {
+			return;
+		}
     	selectedUnit.selected = false;
     	selectedUnit = null;
-    	level.steps++;
     }
     
     private void shiftBottomUnits(Unit selectedUnit) {

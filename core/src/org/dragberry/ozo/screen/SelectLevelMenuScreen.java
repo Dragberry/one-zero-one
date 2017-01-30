@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.NoAnnihilationLevel;
 import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
 import org.dragberry.ozo.game.level.ReachTheGoalLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
@@ -41,6 +42,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, -5, 5));
         levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, -10, 25));
         levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 5, 5 }));
+        levels.put("Casino Royale", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 7, 7, 7 }));
+        levels.put("No annihilation (5)", new LevelInfo(NoAnnihilationLevel.class, 5, 10));
     }
 
     private Stage stage;
