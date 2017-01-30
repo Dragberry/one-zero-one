@@ -1,6 +1,5 @@
 package org.dragberry.ozo.game.level.goal;
 
-import org.dragberry.ozo.game.level.AbstractMultiGoalLevel;
 import org.dragberry.ozo.game.objects.Unit;
 
 /**
