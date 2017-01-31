@@ -6,7 +6,6 @@ import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +15,6 @@ public class GuiRenderer implements Renderer {
 	
 	private static final String TIME = "Time: ";
 	private static final String STEPS = "Steps: ";
-	private static final String LOSE = "Lose: ";
 	private static final int SECONDS_PER_MINUTE = 60;
 	private static final String EMPTY = "";
 	private static final String ZERO = "0";
@@ -42,15 +40,12 @@ public class GuiRenderer implements Renderer {
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.setColor(1, 1, 1, 1);
+		batch.setColor(Color.WHITE);
 		renderTime(batch);
 		renderLevelName(batch);
 		renderSteps(batch);
 		renderState(batch);
 		renderGoals(batch);
-		batch.setColor(1, 1, 1, 1);
-		batch.end();
 	}
 	
 	private void renderGoals(SpriteBatch batch) {
@@ -60,8 +55,7 @@ public class GuiRenderer implements Renderer {
 		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
 		font.draw(batch, layout,
 				Constants.VIEWPORT_GUI_WIDTH - layout.width - 10, 40);
-		Texture goals = getGameContoller().level.renderGoalsFbo(batch).getColorBufferTexture();
-		batch.draw(goals, 0, 0);
+		getGameContoller().level.renderGoals(batch);
 	}
 
 	private void renderLevelName(SpriteBatch batch) {

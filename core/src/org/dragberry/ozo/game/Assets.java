@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -73,12 +74,14 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	public class AssetFonts implements Disposable {
+		public BitmapFont _19;
 		public BitmapFont _24;
 		public BitmapFont _29;
 		public BitmapFont _34;
 		
 		public AssetFonts() {
 			float factor = Gdx.graphics.getWidth() /  Constants.VIEWPORT_WIDTH;
+			_19 = createFont((int)(38 * factor), true);
 			_24 = createFont((int)(48 * factor), true);
 			_29 = createFont((int)(58 * factor), false);
 			_34 = createFont((int)(68 * factor), false);
@@ -86,6 +89,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		@Override
 		public void dispose() {
+			_19.dispose();
 			_24.dispose();
 			_29.dispose();
 			_34.dispose();
@@ -95,6 +99,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	private static BitmapFont createFont(int size, boolean flip) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.color = Color.BLACK;
 		parameter.size = size;
 		parameter.flip = flip;
 		parameter.magFilter = TextureFilter.Linear;

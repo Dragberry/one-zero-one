@@ -1,14 +1,11 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.game.util.Constants;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 
 public abstract class AbstractUnit extends AbstractGameObject {
 
@@ -17,7 +14,6 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	
 	public AbstractUnit(int value) {
 		this.value = value;
-		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 	}
 	
 	@Override
@@ -35,6 +31,7 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				regBall = Assets.instance.unit.greenBall;
 				break;
 		}
+		
 		batch.draw(regBall.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,
@@ -44,14 +41,15 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
+		
 		BitmapFont font = getFont();
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
 		font.setColor(Color.BLACK);
 		font.draw(batch, 
 				layout,
-				(position.x + (dimension.x - layout.width) * 0.375f) * getScaleX(),
-				(position.y + dimension.y / 2 + layout.height / 2) * getScaleX());
+				position.x + (dimension.x - layout.width) * 0.375f,
+				position.y + dimension.y / 2 - layout.height / 2);
 	}
 	
 	protected abstract BitmapFont getFont();

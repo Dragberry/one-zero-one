@@ -23,7 +23,6 @@ public class LevelRenderer implements Renderer {
 	public void render(SpriteBatch batch) {
 		CameraHelper.getInstance().applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
 		Unit selectedUnit = null;
 		for (Unit[] row : gameController.units) {
 			for (Unit unit : row) {
@@ -37,7 +36,6 @@ public class LevelRenderer implements Renderer {
 		if (selectedUnit != null) {
 			selectedUnit.render(batch);
 		}
-		batch.end();
 	}
 
 	@Override

@@ -1,6 +1,10 @@
 package org.dragberry.ozo.game.level.goal;
 
+import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by maksim on 29.01.17.
@@ -43,12 +47,14 @@ public class JustReachGoal implements Goal {
         boolean execute(int goalValue, int valueToCheck);
     }
 
+    private GoalUnit unit;
     private int goal;
     private Operator operator;
 
     public JustReachGoal(int goal, Operator operator) {
         this.goal = goal;
         this.operator = operator;
+        this.unit = new GoalUnit(goal);
     }
 
     @Override
@@ -66,5 +72,16 @@ public class JustReachGoal implements Goal {
     @Override
     public String getMessage() {
         return operator.msg + goal;
+    }
+    
+    @Override
+    public void render(SpriteBatch batch, float x, float y) {
+    	unit.setPosition(x, y);
+    	unit.render(batch);
+    }
+    
+    @Override
+    public Vector2 getDimension() {
+    	return unit.dimension;
     }
 }

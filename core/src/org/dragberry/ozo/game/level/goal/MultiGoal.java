@@ -1,6 +1,10 @@
 package org.dragberry.ozo.game.level.goal;
 
+import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by maksim on 30.01.17.
@@ -11,9 +15,11 @@ public class MultiGoal implements Goal {
     private static class SimpleGoal {
         int goalValue;
         Unit goalUnit;
+        GoalUnit renderUnit;
 
         SimpleGoal(int goalValue) {
             this.goalValue = goalValue;
+            this.renderUnit = new GoalUnit(goalValue);
         }
 
         boolean isGoalReached() {
@@ -71,4 +77,18 @@ public class MultiGoal implements Goal {
             goal.goalUnit = null;
         }
     }
+
+	@Override
+	public void render(SpriteBatch batch, float x, float y) {
+		 for (SimpleGoal goal : goals) {
+			 goal.renderUnit.setPosition(x, y);
+			 goal.renderUnit.render(batch);
+			 x += goal.renderUnit.dimension.x;
+		 }
+	}
+
+	@Override
+	public Vector2 getDimension() {
+		return new Vector2(GoalUnit.SIZE * goals.length, GoalUnit.SIZE);
+	}
 }

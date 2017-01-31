@@ -2,7 +2,6 @@ package org.dragberry.ozo.screen;
 
 import org.dragberry.ozo.game.Assets;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;

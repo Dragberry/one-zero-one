@@ -1,11 +1,9 @@
 package org.dragberry.ozo.game.level;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.objects.Unit;
@@ -15,15 +13,13 @@ import org.dragberry.ozo.game.util.Constants;
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level implements Disposable {
+public abstract class Level {
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
 	
     private Array<Goal> goalsToWin = new Array<Goal>();
     private Array<Goal> goalsToLose = new Array<Goal>();
-
-    private FrameBuffer goalsFbo;
 
     public final int width;
     public final int height;
@@ -44,8 +40,6 @@ public abstract class Level implements Disposable {
         this.width = width;
         this.height = height;
         this.levelName = levelName;
-        this.goalsFbo = new FrameBuffer(Pixmap.Format.RGBA8888, 
-        		(int) Constants.VIEWPORT_GUI_WIDTH, (int) Constants.VIEWPORT_GUI_HEIGHT, false);
     }
 
     protected void addGoalToWin(Goal goalToWin) {
@@ -74,22 +68,17 @@ public abstract class Level implements Disposable {
         return reached;
     }
 
-    public FrameBuffer renderGoalsFbo(SpriteBatch batch) {
-    	goalsFbo.begin();
-    	batch.setColor(1, 1, 1, 1);
-    	renderGoals(batch);
-    	goalsFbo.end();
-    	return goalsFbo;
+    public void renderGoals(SpriteBatch batch) {
+    	Vector2 goalPosition = new Vector2(25.0f, 60.0f);
+		for (Goal goal : goalsToWin) {
+			goal.render(batch, goalPosition.x, goalPosition.y);
+			goalPosition.x += (goal.getDimension().x + 10);
+		}
+		goalPosition.x = Constants.VIEWPORT_GUI_WIDTH - 25.0f;
+		for (Goal goal : goalsToLose) {
+			goalPosition.x -= (goal.getDimension().x + 10);
+			goal.render(batch, goalPosition.x, goalPosition.y);
+		}
     }
 
-	protected void renderGoals(SpriteBatch batch) {
-		for (Goal goal : goalsToWin) {
-//			goal.render(batch);
-		}
-	}
-    
-    @Override
-    public void dispose() {
-    	goalsFbo.dispose();
-    }
 }

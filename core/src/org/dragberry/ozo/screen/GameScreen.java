@@ -52,7 +52,6 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void hide() {
 		gameRenderer.dispose();
-		level.dispose();
 		Gdx.input.setCatchBackKey(false);
 	}
 

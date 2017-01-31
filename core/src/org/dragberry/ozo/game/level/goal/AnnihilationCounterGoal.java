@@ -1,14 +1,29 @@
 package org.dragberry.ozo.game.level.goal;
 
+import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
+
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class AnnihilationCounterGoal implements Goal {
 	
 	private int annihilationCounter;
 	private int goal;
+	
+	private GoalUnit posUnit;
+	private GoalUnit negUnit;
+	private GlyphLayout layout;
+	private Vector2 dimension;
 
 	public AnnihilationCounterGoal(int goal) {
 		this.goal = goal;
+		this.posUnit = new GoalUnit(goal);
+		this.negUnit = new GoalUnit(-goal);
+		this.layout = new GlyphLayout(Assets.instance.fonts._19, "+");
+		this.dimension = new Vector2(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y); 
 	}
 	
 	@Override
@@ -36,6 +51,21 @@ public class AnnihilationCounterGoal implements Goal {
 	@Override
 	public String getMessage() {
 		return "Annihilate " + annihilationCounter;
+	}
+
+	@Override
+	public void render(SpriteBatch batch, float x, float y) {
+		posUnit.setPosition(x, y);
+		posUnit.render(batch);
+		Assets.instance.fonts._19.draw(batch, layout, 
+				x + posUnit.dimension.x, y + posUnit.dimension.y / 2 - layout.height / 2);
+		negUnit.setPosition(x + posUnit.dimension.x + layout.width, y);
+		negUnit.render(batch);
+	}
+
+	@Override
+	public Vector2 getDimension() {
+		return dimension;
 	}
 
 }
