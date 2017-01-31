@@ -9,8 +9,9 @@ import org.dragberry.ozo.game.level.goal.MultiGoal;
 
 public class ReachMultiGoalLevel extends Level {
 
-    public ReachMultiGoalLevel(Integer goalToLose, Integer... goals) {
-        addGoalToLose(new JustReachGoal(goalToLose, JustReachGoal.Operator.LESS));
+    public ReachMultiGoalLevel(String levelName, Integer goalToLose, Integer... goals) {
+        super(levelName);
+    	addGoalToLose(new JustReachGoal(goalToLose, JustReachGoal.Operator.LESS));
         addGoalToWin(new MultiGoal(goals));
     }
 

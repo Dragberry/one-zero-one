@@ -10,8 +10,8 @@ import java.text.MessageFormat;
 
 public class MashroomRainLevel extends ReachTheGoalLevel {
 
-    public MashroomRainLevel(Integer goalToLose, Integer goal) {
-        super(goalToLose, goal);
+    public MashroomRainLevel(String levelName, Integer goalToLose, Integer goal) {
+        super(levelName, goalToLose, goal);
     }
 
     @Override

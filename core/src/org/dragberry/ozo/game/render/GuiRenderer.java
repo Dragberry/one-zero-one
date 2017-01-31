@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class GuiRenderer implements Renderer {
 	
 	private static final String TIME = "Time: ";
 	private static final String STEPS = "Steps: ";
-	private static final String WIN = "Win: ";
 	private static final String LOSE = "Lose: ";
 	private static final int SECONDS_PER_MINUTE = 60;
 	private static final String EMPTY = "";
@@ -44,20 +44,40 @@ public class GuiRenderer implements Renderer {
 		batch.begin();
 		renderTime(batch);
 		renderSteps(batch);
-		renderCondition(batch);
+		renderLevelName(batch);
+		renderState(batch);
 		batch.end();
 	}
 	
-	private void renderCondition(SpriteBatch batch) {
+	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
 		GlyphLayout layout = null;
-		layout = new GlyphLayout(font, WIN);
+		layout = new GlyphLayout(font, getGameContoller().level.levelName);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 15);
 		layout = new GlyphLayout(font, LOSE);
-		font.draw(batch, layout,
-				camera.viewportWidth / 2 - layout.width / 2, 45);
+		batch.setColor(1, 1, 1, 1);
+	}
+
+	private void renderState(SpriteBatch batch) {
+		TextureRegion ball = null;
+		ball = Assets.instance.unit.redBall;
+		batch.setColor(1, 1, 1, 1);
+		batch.draw(ball,
+				10, camera.viewportHeight - 80,
+				0, 0, 
+				ball.getRegionWidth(), ball.getRegionHeight(), 
+				1, 1,
+				0);
+		ball = Assets.instance.unit.greenBall;
+		batch.draw(ball,
+				camera.viewportWidth - ball.getRegionWidth() - 10, camera.viewportHeight - 80,
+				0, 0, 
+				ball.getRegionWidth(), ball.getRegionHeight(), 
+				1, 1,
+				0);
+		batch.setColor(1, 1, 1, 1);
 	}
 
 	@Override
@@ -72,6 +92,7 @@ public class GuiRenderer implements Renderer {
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
 		font.draw(batch, layout,
 				camera.viewportWidth - layout.width - 10, 15);
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	private void renderTime(SpriteBatch batch) {
@@ -79,6 +100,7 @@ public class GuiRenderer implements Renderer {
 		font.setColor(Color.BLACK);
 		font.draw(batch,
 				   TIME + timeToString((int) getGameContoller().level.time), 10, 15);
+		batch.setColor(1, 1, 1, 1);
 	}
 	
 	private static String timeToString(int timeInSeconds) {

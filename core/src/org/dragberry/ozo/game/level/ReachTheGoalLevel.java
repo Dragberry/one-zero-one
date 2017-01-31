@@ -8,12 +8,13 @@ import org.dragberry.ozo.game.level.goal.JustReachGoal;
 
 public class ReachTheGoalLevel extends Level {
 
-    public ReachTheGoalLevel(Integer goalToLose, Integer goalToWin) {
-        this(goalToLose, goalToWin, JustReachGoal.Operator.EQUALS);
+    public ReachTheGoalLevel(String levelName, Integer goalToLose, Integer goalToWin) {
+    	this(levelName, goalToLose, goalToWin, JustReachGoal.Operator.EQUALS);
     }
 
-    public ReachTheGoalLevel(Integer goalToLose, Integer goalToWin, JustReachGoal.Operator operator) {
-        addGoalToWin(new JustReachGoal(goalToWin.intValue(), operator));
+    public ReachTheGoalLevel(String levelName, Integer goalToLose, Integer goalToWin, JustReachGoal.Operator operator) {
+        super(levelName);
+    	addGoalToWin(new JustReachGoal(goalToWin.intValue(), operator));
         addGoalToLose(new JustReachGoal(goalToLose.intValue(), JustReachGoal.Operator.LESS));
     }
 

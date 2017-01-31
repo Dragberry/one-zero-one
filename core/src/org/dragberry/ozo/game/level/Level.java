@@ -20,6 +20,7 @@ public abstract class Level {
 
     public final int width;
     public final int height;
+    public final String levelName;
 
     public float time = 0;
     public int steps = 0;
@@ -28,13 +29,14 @@ public abstract class Level {
         return MathUtils.random(-1, 1);
     }
 
-    public Level() {
-        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    public Level(String levelName) {
+        this(levelName, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public Level(int width, int height) {
+    public Level(String levelName, int width, int height) {
         this.width = width;
         this.height = height;
+        this.levelName = levelName;
     }
 
     protected void addGoalToWin(Goal goalToWin) {
@@ -62,4 +64,5 @@ public abstract class Level {
         }
         return reached;
     }
+
 }

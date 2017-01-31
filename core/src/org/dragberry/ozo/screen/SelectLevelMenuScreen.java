@@ -35,21 +35,23 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         private Class<? extends Level> clazz;
         private Object[] params;
 
-        LevelInfo(Class<? extends Level> clazz, Object... params) {
-            this.clazz = clazz;
-            this.params = params;
+        LevelInfo(Class<? extends Level> clazz, String name, Object... params) {
+        	this.clazz = clazz;
+            this.params = new Object[params.length + 1]; 
+            this.params[0] = name;
+            System.arraycopy(params, 0, this.params, 1, params.length);
         }
     }
 
     private static final ArrayMap<String, LevelInfo> levels = new ArrayMap<String, LevelInfo>(true, 1);
     static {
-        levels.put("Let's start!", new LevelInfo(ReachTheGoalLevel.class, -10, 5, JustReachGoal.Operator.MORE));
-        levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, -5, 5));
-        levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, -10, 25));
-        levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 5, 5 }));
-        levels.put("Casino Royale", new LevelInfo(ReachMultiGoalLevel.class, -10, new Integer[] { 7, 7, 7 }));
-        levels.put("No annihilation (5)", new LevelInfo(NoAnnihilationLevel.class, 5, 10));
-        levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, -10, 25));
+        levels.put("Let's start!", new LevelInfo(ReachTheGoalLevel.class, "Let's start!", -10, 5, JustReachGoal.Operator.MORE));
+        levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 5));
+        levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 25));
+        levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 }));
+        levels.put("Casino Royale", new LevelInfo(ReachMultiGoalLevel.class, "Casino Royale", -10, new Integer[] { 7, 7, 7 }));
+        levels.put("No annihilation (5)", new LevelInfo(NoAnnihilationLevel.class, "No annihilation (5)", 5, 10));
+        levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25));
     }
 
     private Stage stage;
@@ -133,7 +135,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                         paramClasses[i] = levelInfo.params[i].getClass();
                     }
                     Constructor<? extends Level> constructor = levelInfo.clazz.getConstructor(paramClasses);
-                    Level level = levelInfo.params.length == 0 ? constructor.newInstance() : constructor.newInstance(levelInfo.params);
+                    Level level = constructor.newInstance(levelInfo.params);
                     game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init());
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
