@@ -6,6 +6,7 @@ import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -42,13 +43,27 @@ public class GuiRenderer implements Renderer {
 	public void render(SpriteBatch batch) {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		batch.setColor(1, 1, 1, 1);
 		renderTime(batch);
-		renderSteps(batch);
 		renderLevelName(batch);
+		renderSteps(batch);
 		renderState(batch);
+		renderGoals(batch);
+		batch.setColor(1, 1, 1, 1);
 		batch.end();
 	}
 	
+	private void renderGoals(SpriteBatch batch) {
+		BitmapFont font = Assets.instance.fonts._24;
+		font.setColor(Color.BLACK);
+		font.draw(batch, "Goal to win:", 10, 40);
+		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
+		font.draw(batch, layout,
+				Constants.VIEWPORT_GUI_WIDTH - layout.width - 10, 40);
+		Texture goals = getGameContoller().level.renderGoalsFbo(batch).getColorBufferTexture();
+		batch.draw(goals, 0, 0);
+	}
+
 	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts._24;
 		font.setColor(Color.BLACK);
@@ -56,28 +71,6 @@ public class GuiRenderer implements Renderer {
 		layout = new GlyphLayout(font, getGameContoller().level.levelName);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 15);
-		layout = new GlyphLayout(font, LOSE);
-		batch.setColor(1, 1, 1, 1);
-	}
-
-	private void renderState(SpriteBatch batch) {
-		TextureRegion ball = null;
-		ball = Assets.instance.unit.redBall;
-		batch.setColor(1, 1, 1, 1);
-		batch.draw(ball,
-				10, camera.viewportHeight - 80,
-				0, 0, 
-				ball.getRegionWidth(), ball.getRegionHeight(), 
-				1, 1,
-				0);
-		ball = Assets.instance.unit.greenBall;
-		batch.draw(ball,
-				camera.viewportWidth - ball.getRegionWidth() - 10, camera.viewportHeight - 80,
-				0, 0, 
-				ball.getRegionWidth(), ball.getRegionHeight(), 
-				1, 1,
-				0);
-		batch.setColor(1, 1, 1, 1);
 	}
 
 	@Override
@@ -92,7 +85,6 @@ public class GuiRenderer implements Renderer {
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
 		font.draw(batch, layout,
 				camera.viewportWidth - layout.width - 10, 15);
-		batch.setColor(1, 1, 1, 1);
 	}
 	
 	private void renderTime(SpriteBatch batch) {
@@ -100,7 +92,24 @@ public class GuiRenderer implements Renderer {
 		font.setColor(Color.BLACK);
 		font.draw(batch,
 				   TIME + timeToString((int) getGameContoller().level.time), 10, 15);
-		batch.setColor(1, 1, 1, 1);
+	}
+	
+	private void renderState(SpriteBatch batch) {
+		TextureRegion ball = null;
+		ball = Assets.instance.unit.redBall;
+		batch.draw(ball,
+				10, camera.viewportHeight - 80,
+				0, 0, 
+				ball.getRegionWidth(), ball.getRegionHeight(), 
+				1, 1,
+				0);
+		ball = Assets.instance.unit.greenBall;
+		batch.draw(ball,
+				camera.viewportWidth - ball.getRegionWidth() - 10, camera.viewportHeight - 80,
+				0, 0, 
+				ball.getRegionWidth(), ball.getRegionHeight(), 
+				1, 1,
+				0);
 	}
 	
 	private static String timeToString(int timeInSeconds) {
