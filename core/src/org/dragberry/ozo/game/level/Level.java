@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.objects.Unit;
-import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.CameraHelper;
 
 /**
  * Created by maksim on 30.01.17.
@@ -69,12 +69,12 @@ public abstract class Level {
     }
 
     public void renderGoals(SpriteBatch batch) {
-    	Vector2 goalPosition = new Vector2(25.0f, 60.0f);
+    	Vector2 goalPosition = new Vector2(25.0f, 65.0f);
 		for (Goal goal : goalsToWin) {
 			goal.render(batch, goalPosition.x, goalPosition.y);
 			goalPosition.x += (goal.getDimension().x + 10);
 		}
-		goalPosition.x = Constants.VIEWPORT_GUI_WIDTH - 25.0f;
+		goalPosition.x = CameraHelper.INSTANCE.cameraGui.viewportWidth - 25.0f;
 		for (Goal goal : goalsToLose) {
 			goalPosition.x -= (goal.getDimension().x + 10);
 			goal.render(batch, goalPosition.x, goalPosition.y);

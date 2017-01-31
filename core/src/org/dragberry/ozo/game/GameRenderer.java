@@ -33,8 +33,9 @@ public class GameRenderer implements Disposable {
 	public void init() {
 		batch = new SpriteBatch();
 		levelRenderer = new LevelRenderer(gameController);
-		CameraHelper.getInstance().setCamera(levelRenderer.getCamera());
+		CameraHelper.INSTANCE.camera = levelRenderer.getCamera();
         guiRenderer = new GuiRenderer(gameController);
+		CameraHelper.INSTANCE.cameraGui = guiRenderer.getCamera();
         initDebug();
 	}
 	
@@ -58,7 +59,7 @@ public class GameRenderer implements Disposable {
 		if (!debug) {
 			return;
 		}
-		CameraHelper.getInstance().applyTo(levelRenderer.getCamera());
+		CameraHelper.INSTANCE.applyTo(levelRenderer.getCamera());
 		shapeRenderer.setProjectionMatrix(levelRenderer.getCamera().combined);
 		shapeRenderer.begin();
 		shapeRenderer.set(ShapeType.Line);

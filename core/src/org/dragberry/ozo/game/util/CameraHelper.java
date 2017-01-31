@@ -11,12 +11,13 @@ public class CameraHelper {
 	
 	private static final String TAG = CameraHelper.class.getName();
 
-	private final static CameraHelper INSTANCE = new CameraHelper();
+	public final static CameraHelper INSTANCE = new CameraHelper();
 	
 	private final float MAX_ZOOM_IN = 0.25f;
 	private final float MAX_ZOOM_OUT = 10.0f;
 
-	private Camera camera;
+	public Camera camera;
+	public Camera cameraGui;
 
 	private Vector2 position;
 	private float zoom;
@@ -28,18 +29,6 @@ public class CameraHelper {
 		zoom = 1.0f;
 	}
 
-	public static CameraHelper getInstance() {
-		return INSTANCE;
-	}
-
-	public void setCamera(Camera camera) {
-		this.camera = camera;
-	}
-
-	public Camera getCamera() {
-		return camera;
-	}
-	
 	public void update(float deltaTime) {
 		if (!hasTarget()) {
 			return;

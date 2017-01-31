@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level.goal;
 
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
+import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -89,6 +90,6 @@ public class MultiGoal implements Goal {
 
 	@Override
 	public Vector2 getDimension() {
-		return new Vector2(GoalUnit.SIZE * goals.length, GoalUnit.SIZE);
+		return new Vector2(Constants.UNIT_SIZE * goals.length, Constants.UNIT_SIZE);
 	}
 }

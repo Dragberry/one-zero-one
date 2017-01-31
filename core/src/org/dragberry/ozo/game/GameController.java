@@ -62,7 +62,7 @@ public class GameController extends InputAdapter {
         	}
     	}
     	handleDebugInput(deltaTime);
-		CameraHelper.getInstance().update(deltaTime);
+		CameraHelper.INSTANCE.update(deltaTime);
     }
 
 	private boolean isGameFinished() {
@@ -265,7 +265,7 @@ public class GameController extends InputAdapter {
 			moveCamera(0, -camMoveSpeed);
 		}
 		if (Gdx.input.isKeyPressed(Keys.BACKSPACE)) {
-			CameraHelper.getInstance().setPosition(0, 0);
+			CameraHelper.INSTANCE.setPosition(0, 0);
 		}
 
 		float camZoomSpeed = 1 * deltaTime;
@@ -275,28 +275,28 @@ public class GameController extends InputAdapter {
 			camZoomSpeed *= camZoomSpeedAccelerationfactor;
 		}
 		if (Gdx.input.isKeyPressed(Keys.COMMA)) {
-			CameraHelper.getInstance().addZoom(camZoomSpeed);
-			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.getInstance().getZoom()));
+			CameraHelper.INSTANCE.addZoom(camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.INSTANCE.getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.PERIOD)) {
-			CameraHelper.getInstance().addZoom(-camZoomSpeed);
-			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.getInstance().getZoom()));
+			CameraHelper.INSTANCE.addZoom(-camZoomSpeed);
+			Gdx.app.log(TAG, MessageFormat.format("Zoom={0}", CameraHelper.INSTANCE.getZoom()));
 		}
 		if (Gdx.input.isKeyPressed(Keys.SLASH)) {
-			CameraHelper.getInstance().setZoom(1);
+			CameraHelper.INSTANCE.setZoom(1);
 		}
 
 	}
 
     private void moveCamera(float x, float y) {
-    	x += CameraHelper.getInstance().getPosition().x;
-    	y += CameraHelper.getInstance().getPosition().y;
-		CameraHelper.getInstance().setPosition(x, y);
+    	x += CameraHelper.INSTANCE.getPosition().x;
+    	y += CameraHelper.INSTANCE.getPosition().y;
+		CameraHelper.INSTANCE.setPosition(x, y);
     }
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		Vector3 touchCoord = CameraHelper.getInstance().getCamera().unproject(new Vector3(screenX, screenY, 0));
+		Vector3 touchCoord = CameraHelper.INSTANCE.camera.unproject(new Vector3(screenX, screenY, 0));
 		onScreenTouch(touchCoord.x, touchCoord.y);
 		return false;
 	}

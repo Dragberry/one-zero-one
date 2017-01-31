@@ -49,20 +49,19 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderGoals(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts._24;
+		BitmapFont font = Assets.instance.fonts.gui_28;
 		font.setColor(Color.BLACK);
 		font.draw(batch, "Goal to win:", 10, 40);
 		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
 		font.draw(batch, layout,
-				Constants.VIEWPORT_GUI_WIDTH - layout.width - 10, 40);
+				camera.viewportWidth - layout.width - 10, 40);
 		getGameContoller().level.renderGoals(batch);
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts._24;
+		BitmapFont font = Assets.instance.fonts.gui_28;
 		font.setColor(Color.BLACK);
-		GlyphLayout layout = null;
-		layout = new GlyphLayout(font, getGameContoller().level.levelName);
+		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.levelName);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 15);
 	}
@@ -73,7 +72,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderSteps(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts._24;
+		BitmapFont font = Assets.instance.fonts.gui_28;
 		font.setColor(Color.BLACK);
 		String stepsString = STEPS + getGameContoller().level.steps;
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
@@ -82,7 +81,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderTime(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts._24;
+		BitmapFont font = Assets.instance.fonts.gui_28;
 		font.setColor(Color.BLACK);
 		font.draw(batch,
 				   TIME + timeToString((int) getGameContoller().level.time), 10, 15);
@@ -117,7 +116,6 @@ public class GuiRenderer implements Renderer {
 		camera.viewportHeight = Constants.VIEWPORT_GUI_HEIGHT;
         camera.viewportWidth = (Constants.VIEWPORT_GUI_HEIGHT / (float) height) * (float) width;
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        camera.setToOrtho(true);
         camera.update();
 	}
 	

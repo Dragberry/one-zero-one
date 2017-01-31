@@ -22,7 +22,7 @@ public class AnnihilationCounterGoal implements Goal {
 		this.goal = goal;
 		this.posUnit = new GoalUnit(goal);
 		this.negUnit = new GoalUnit(-goal);
-		this.layout = new GlyphLayout(Assets.instance.fonts._19, "+");
+		this.layout = new GlyphLayout(Assets.instance.fonts.gui_24, "+");
 		this.dimension = new Vector2(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y); 
 	}
 	
@@ -57,7 +57,7 @@ public class AnnihilationCounterGoal implements Goal {
 	public void render(SpriteBatch batch, float x, float y) {
 		posUnit.setPosition(x, y);
 		posUnit.render(batch);
-		Assets.instance.fonts._19.draw(batch, layout, 
+		Assets.instance.fonts.gui_24.draw(batch, layout,
 				x + posUnit.dimension.x, y + posUnit.dimension.y / 2 - layout.height / 2);
 		negUnit.setPosition(x + posUnit.dimension.x + layout.width, y);
 		negUnit.render(batch);

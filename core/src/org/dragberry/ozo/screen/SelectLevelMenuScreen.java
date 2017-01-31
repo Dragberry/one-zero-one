@@ -49,8 +49,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 10));
         levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 33));
         levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 }));
-        levels.put("Casino Royale", new LevelInfo(ReachMultiGoalLevel.class, "Casino Royale", -10, new Integer[] { 7, 7, 7 }));
-        levels.put("No annihilation (5)", new LevelInfo(NoAnnihilationLevel.class, "No annihilation (5)", 5, 10));
+        levels.put("Roulette", new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7, 7, 7, 7, 7, 7, 7, 7 }));
+        levels.put("Save us", new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10));
         levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25));
     }
 

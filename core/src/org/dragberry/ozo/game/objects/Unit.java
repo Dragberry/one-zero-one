@@ -118,7 +118,7 @@ public class Unit extends AbstractGameObject {
 				false, false);
 		
 		BitmapFont font = selected || selectedNeighbor ? 
-				Assets.instance.fonts._34 : Assets.instance.fonts._29;
+				Assets.instance.fonts.game_68 : Assets.instance.fonts.game_58;
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
 		font.setColor(Color.BLACK);

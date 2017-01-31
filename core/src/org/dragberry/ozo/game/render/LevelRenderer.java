@@ -21,7 +21,7 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		CameraHelper.getInstance().applyTo(camera);
+		CameraHelper.INSTANCE.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		Unit selectedUnit = null;
 		for (Unit[] row : gameController.units) {
@@ -45,7 +45,7 @@ public class LevelRenderer implements Renderer {
         camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -height / 2, 0);
         camera.update();
 
-		CameraHelper.getInstance().setPosition(
+		CameraHelper.INSTANCE.setPosition(
         		gameController.level.width * Constants.UNIT_SIZE / 2, 
         		gameController.level.height * Constants.UNIT_SIZE / 2);
         setZoom();
@@ -60,7 +60,7 @@ public class LevelRenderer implements Renderer {
         } else {
         	zoom = gameController.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
         }
-		CameraHelper.getInstance().setZoom(zoom);
+		CameraHelper.INSTANCE.setZoom(zoom);
 	}
 	
 	@Override

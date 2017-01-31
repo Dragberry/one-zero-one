@@ -8,13 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GoalUnit extends AbstractUnit {
 	
-	public final static float SIZE = Constants.UNIT_SIZE * 0.5f;
-	
 	private final static float SCALE = 1;
 
 	public GoalUnit(int value) {
 		super(value);
-		this.dimension = new Vector2(SIZE, SIZE);
+		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 	}
 	
 	public void setPosition(float positionX, float positionY) {
@@ -23,7 +21,7 @@ public class GoalUnit extends AbstractUnit {
 
 	@Override
 	protected BitmapFont getFont() {
-		return Assets.instance.fonts._19;
+		return Assets.instance.fonts.gui_24;
 	}
 
 	@Override
