@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-import org.dragberry.ozo.game.level.goal.Goal;
+import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 
@@ -18,8 +18,8 @@ public abstract class Level {
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
 	
-    private Array<Goal> goalsToWin = new Array<Goal>();
-    private Array<Goal> goalsToLose = new Array<Goal>();
+    private Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
+    private Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
 
     public final int width;
     public final int height;
@@ -42,11 +42,11 @@ public abstract class Level {
         this.levelName = levelName;
     }
 
-    protected void addGoalToWin(Goal goalToWin) {
+    protected void addGoalToWin(AbstractGoal goalToWin) {
         this.goalsToWin.add(goalToWin);
     }
 
-    protected void addGoalToLose(Goal goalToLose) {
+    protected void addGoalToLose(AbstractGoal goalToLose) {
         this.goalsToLose.add(goalToLose);
     }
 
@@ -58,9 +58,9 @@ public abstract class Level {
         return checkGoals(units, selectedUnit, neighbors, goalsToWin);
     }
 
-    public static boolean checkGoals(Unit[][] units, Unit selectedUnit, Unit[] neighbors, Array<Goal> goals) {
+    public static boolean checkGoals(Unit[][] units, Unit selectedUnit, Unit[] neighbors, Array<AbstractGoal> goals) {
         boolean reached = true;
-        for (Goal goal : goals) {
+        for (AbstractGoal goal : goals) {
             if (!goal.isReached(units, selectedUnit, neighbors)) {
                 reached = false;
             }
@@ -70,15 +70,23 @@ public abstract class Level {
 
     public void renderGoals(SpriteBatch batch) {
     	Vector2 goalPosition = new Vector2(25.0f, 65.0f);
-		for (Goal goal : goalsToWin) {
+		for (AbstractGoal goal : goalsToWin) {
 			goal.render(batch, goalPosition.x, goalPosition.y);
-			goalPosition.x += (goal.getDimension().x + 10);
+			goalPosition.x += (goal.dimension.x + 10);
 		}
 		goalPosition.x = CameraHelper.INSTANCE.cameraGui.viewportWidth - 25.0f;
-		for (Goal goal : goalsToLose) {
-			goalPosition.x -= (goal.getDimension().x + 10);
+		for (AbstractGoal goal : goalsToLose) {
+			goalPosition.x -= (goal.dimension.x + 10);
 			goal.render(batch, goalPosition.x, goalPosition.y);
 		}
     }
 
+    public void update(float deltaTime) {
+        for (AbstractGoal goal : goalsToWin) {
+            goal.update(deltaTime);
+        }
+        for (AbstractGoal goal : goalsToLose) {
+            goal.update(deltaTime);
+        }
+    }
 }

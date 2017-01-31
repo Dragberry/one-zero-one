@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
  * Created by maksim on 29.01.17.
  */
 
-public class JustReachGoal implements Goal {
+public class JustReachGoal extends AbstractGoal {
 
     public enum Operator {
 
@@ -55,6 +55,7 @@ public class JustReachGoal implements Goal {
         this.goal = goal;
         this.operator = operator;
         this.unit = new GoalUnit(goal);
+        this.dimension = unit.dimension;
     }
 
     @Override
@@ -73,15 +74,11 @@ public class JustReachGoal implements Goal {
     public String getMessage() {
         return operator.msg + goal;
     }
-    
+
     @Override
     public void render(SpriteBatch batch, float x, float y) {
-    	unit.setPosition(x, y);
-    	unit.render(batch);
+        unit.setPosition(x, y);
+        unit.render(batch);
     }
-    
-    @Override
-    public Vector2 getDimension() {
-    	return unit.dimension;
-    }
+
 }

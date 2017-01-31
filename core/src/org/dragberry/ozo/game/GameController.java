@@ -50,7 +50,8 @@ public class GameController extends InputAdapter {
 	}
 
     public void update(float deltaTime) {
-    	level.time += deltaTime; 
+    	level.time += deltaTime;
+		level.update(deltaTime);
     	if (state == State.IN_MOTION) {
     		motionTime += deltaTime;
     		if (motionTime >= Constants.UNIT_MOTION_TIME + 0.1) {

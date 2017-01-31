@@ -17,5 +17,5 @@ public interface Goal {
 
 	void render(SpriteBatch batch, float x, float y);
 
-	Vector2 getDimension();
+    void update(float deltaTime);
 }

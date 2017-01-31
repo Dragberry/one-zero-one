@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
  * Created by maksim on 30.01.17.
  */
 
-public class MultiGoal implements Goal {
+public class MultiGoal extends AbstractGoal {
 
     private static class SimpleGoal {
         int goalValue;
@@ -40,6 +40,7 @@ public class MultiGoal implements Goal {
         for (int i = 0; i < goalValues.length; i++) {
             this.goals[i] = new SimpleGoal(goalValues[i]);
         }
+        this.dimension = new Vector2(Constants.UNIT_SIZE * goals.length, Constants.UNIT_SIZE);
     }
 
     @Override
@@ -88,8 +89,4 @@ public class MultiGoal implements Goal {
 		 }
 	}
 
-	@Override
-	public Vector2 getDimension() {
-		return new Vector2(Constants.UNIT_SIZE * goals.length, Constants.UNIT_SIZE);
-	}
 }
