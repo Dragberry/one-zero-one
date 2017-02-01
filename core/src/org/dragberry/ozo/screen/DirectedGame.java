@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
+import java.lang.reflect.Constructor;
+
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
+import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 /**
  * Created by maksim on 29.01.17.
@@ -22,13 +25,20 @@ public abstract class DirectedGame implements ApplicationListener {
     private SpriteBatch batch;
     private float time;
     private ScreenTransition screenTransition;
-
+    
+    private Class<? extends AbstractGameScreen> callerScreen;
+    
     public void setScreen(AbstractGameScreen screen) {
-        setScreen(screen, null);
+        setScreen(screen, null, null);
+    }
+    
+    public void setScreen(AbstractGameScreen screen, Class<? extends AbstractGameScreen> callerScreen) {
+        setScreen(screen, null, callerScreen);
     }
 
-    public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition) {
-        int width = Gdx.graphics.getWidth();
+    public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition, Class<? extends AbstractGameScreen> callerScreen) {
+        this.callerScreen = callerScreen;
+    	int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
         if (!init) {
             currFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
@@ -48,6 +58,23 @@ public abstract class DirectedGame implements ApplicationListener {
         Gdx.input.setInputProcessor(null); // disable input
         this.screenTransition = screenTransition;
         time = 0;
+    }
+    
+    public void back() {
+    	try {
+	    	if (callerScreen != null) {
+	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
+	    		constructor.newInstance(this);
+	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
+	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
+	    	} else {
+	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
+	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
+	    	}
+    	} catch (Exception exc) {
+    		Gdx.app.error(getClass().getName(), "An error has occured during navigation! Application is terminated!", exc);
+    		Gdx.app.exit();
+    	}
     }
 
     @Override

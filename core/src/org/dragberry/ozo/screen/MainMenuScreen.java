@@ -75,7 +75,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new SelectLevelMenuScreen(game), ScreenTransitionFade.init());
+				game.setScreen(new SelectLevelMenuScreen(game), ScreenTransitionFade.init(), MainMenuScreen.this.getClass());
 			}
 		});
 		return btn;
@@ -91,7 +91,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new GameScreen(game, new ReachTheGoalLevel("Reach the Goal", -5, 5)));
+				game.setScreen(new GameScreen(game, new ReachTheGoalLevel("Reach the Goal", -5, 5)), MainMenuScreen.this.getClass());
 			}
 		});
 		return btn;

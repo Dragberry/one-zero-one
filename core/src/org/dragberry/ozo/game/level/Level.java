@@ -1,10 +1,14 @@
 package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Collections;
+import java.util.Map;
+
+import org.dragberry.ozo.game.level.generator.Generator;
+import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
@@ -20,18 +24,16 @@ public abstract class Level {
 	
     private Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     private Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
-
+    
+    protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
+    
     public final int width;
     public final int height;
     public final String levelName;
 
     public float time = 0;
     public int steps = 0;
-
-    public int generateValue(int x, int y) {
-        return MathUtils.random(-1, 1);
-    }
-
+    
     public Level(String levelName) {
         this(levelName, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
@@ -40,6 +42,26 @@ public abstract class Level {
         this.width = width;
         this.height = height;
         this.levelName = levelName;
+        createGenerators();
+    }
+    
+    protected void createGenerators() {
+    	generators = Collections.emptyMap();
+    }
+
+    public Unit generateUnit(int x, int y) {
+    	Generator gen = null;
+    	if (!generators.isEmpty()) {
+    		gen = generators.get(new Generator.Id(x, y));
+    	}
+    	if (gen == null) {
+    		gen = getDefaultGenerator(x, y);
+    	}
+        return new Unit(gen.next(), x, y);
+    }
+    
+    protected Generator getDefaultGenerator(int x, int y) {
+    	 return RandomGenerator.DEFAUTL;
     }
 
     protected void addGoalToWin(AbstractGoal goalToWin) {

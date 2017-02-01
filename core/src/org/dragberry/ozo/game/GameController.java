@@ -44,7 +44,7 @@ public class GameController extends InputAdapter {
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y] = new Unit(level.generateValue(x, y), x, y);
+				units[x][y] = level.generateUnit(x, y);
 			}
 		}
 	}
@@ -69,12 +69,12 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Lost!");
-			backToMenu();
+			game.back();
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Won!");
-			backToMenu();
+			game.back();
 			return true;
 		}
 		return false;
@@ -142,7 +142,7 @@ public class GameController extends InputAdapter {
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.x][0] = new Unit(level.generateValue(selectedUnit.x, 0), selectedUnit.x, 0);
+		units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0);
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
@@ -151,7 +151,7 @@ public class GameController extends InputAdapter {
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.x][level.height - 1] = new Unit(level.generateValue(selectedUnit.x, level.height - 1), selectedUnit.x, level.height - 1);
+		units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1);
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
@@ -160,7 +160,7 @@ public class GameController extends InputAdapter {
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[level.width - 1][selectedUnit.y] = new Unit(level.generateValue(level.width - 1, selectedUnit.y), level.width - 1, selectedUnit.y);
+		units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y);
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
@@ -169,7 +169,7 @@ public class GameController extends InputAdapter {
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[0][selectedUnit.y] = new Unit(level.generateValue(0, selectedUnit.y), 0, selectedUnit.y);
+		units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y);
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {

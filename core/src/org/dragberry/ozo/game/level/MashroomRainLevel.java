@@ -1,8 +1,7 @@
 package org.dragberry.ozo.game.level;
 
-import com.badlogic.gdx.math.MathUtils;
-
-import java.text.MessageFormat;
+import org.dragberry.ozo.game.level.generator.ConstGenerator;
+import org.dragberry.ozo.game.level.generator.Generator;
 
 /**
  * Created by maksim on 31.01.17.
@@ -15,17 +14,16 @@ public class MashroomRainLevel extends ReachTheGoalLevel {
     }
 
     @Override
-    public int generateValue(int x, int y) {
+    protected Generator getDefaultGenerator(int x, int y) {
         if (y == 0) {
-            return 1;
+            return ConstGenerator.POS_ONE;
         }
         if (y == height - 1) {
-            return -1;
+            return ConstGenerator.NEG_ONE;
         }
         if (x == 0 || x == width - 1) {
-            return 0;
+            return ConstGenerator.ZERO;
         }
-        return MathUtils.random(-1, 1);
-//        throw new IllegalArgumentException(MessageFormat.format("Cannot generate value for Unit[{0}][{1}]!", x, y));
+        return super.getDefaultGenerator(x, y);
     }
 }

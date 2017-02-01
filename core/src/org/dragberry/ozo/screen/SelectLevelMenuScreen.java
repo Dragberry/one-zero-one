@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationLevel;
@@ -52,11 +53,12 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         levels.put("Roulette", new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 }));
         levels.put("Save us", new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10));
         levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25));
+        levels.put("The Chessboard", new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25));
     }
 
     private Stage stage;
 
-    SelectLevelMenuScreen(DirectedGame game) {
+    public SelectLevelMenuScreen(DirectedGame game) {
         super(game);
     }
 
@@ -106,7 +108,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game), ScreenTransitionFade.init());
+                game.setScreen(new MainMenuScreen(game), ScreenTransitionFade.init(), SelectLevelMenuScreen.this.getClass());
             }
         });
         table.add(backBtn);
@@ -136,7 +138,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                     }
                     Constructor<? extends Level> constructor = levelInfo.clazz.getConstructor(paramClasses);
                     Level level = constructor.newInstance(levelInfo.params);
-                    game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init());
+                    game.setScreen(new GameScreen(game, level), ScreenTransitionFade.init(), SelectLevelMenuScreen.this.getClass());
                 } catch (Exception exc) {
                     Gdx.app.debug(TAG, "An exception has occured during level creation", exc);
                 }

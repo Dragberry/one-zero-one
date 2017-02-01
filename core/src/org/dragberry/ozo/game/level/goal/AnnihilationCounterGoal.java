@@ -67,7 +67,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 			}
 		}
 		if (neg != 0 && pos != 0) {
-			annihilationCounter += neg;
+			annihilationCounter += pos < neg ? pos : neg;
 		}
 		return annihilationCounter >= goal;
 	}
@@ -79,6 +79,8 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 
 	@Override
 	public void render(SpriteBatch batch, float x, float y) {
+		posUnit.value = goal - annihilationCounter;
+		negUnit.value = -(goal - annihilationCounter);
 		if (animationAfter) {
 			zeroUnit.position.set(x + offset, y);
 			zeroUnit.render(batch);
