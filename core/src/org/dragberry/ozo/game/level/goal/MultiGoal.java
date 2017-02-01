@@ -40,7 +40,7 @@ public class MultiGoal extends AbstractGoal {
         for (int i = 0; i < goalValues.length; i++) {
             this.goals[i] = new SimpleGoal(goalValues[i]);
         }
-        this.dimension = new Vector2(Constants.UNIT_SIZE * goals.length, Constants.UNIT_SIZE);
+        this.dimension = new Vector2(GoalUnit.SIZE * goals.length, GoalUnit.SIZE);
     }
 
     @Override

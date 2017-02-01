@@ -8,11 +8,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GoalUnit extends AbstractUnit {
 	
+	public static final float SIZE = Constants.UNIT_SIZE * 0.5f;
+	
 	private final static float SCALE = 1;
 
 	public GoalUnit(int value) {
 		super(value);
-		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
+		this.dimension = new Vector2(SIZE, SIZE);
 	}
 	
 	public void setPosition(float positionX, float positionY) {

@@ -40,7 +40,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 			animationTime = 0;
 			offset = 0;
 		}
-		float newOffset = offset + deltaTime * Constants.UNIT_SIZE / 2;
+		float newOffset = offset + deltaTime * GoalUnit.SIZE / 2;
 		if (newOffset < dimension.x / 4) {
 			offset = newOffset;
 			animationAfter = false;

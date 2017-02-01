@@ -4,6 +4,7 @@ import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.util.Constants;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,9 +32,9 @@ public class GuiRenderer implements Renderer {
 	
 	@Override
 	public void init() {
-		camera = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
-		camera.position.set(0, 0, 0);
-		camera.setToOrtho(true);
+		float height = Gdx.graphics.getHeight() * (Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth());
+        camera = new OrthographicCamera();
+		camera.setToOrtho(true, Constants.VIEWPORT_GUI_WIDTH, height);
         camera.update();
 	}
 	
@@ -113,8 +114,7 @@ public class GuiRenderer implements Renderer {
 	
 	@Override
 	public void resize(int width, int height) {
-		camera.viewportHeight = Constants.VIEWPORT_GUI_HEIGHT;
-        camera.viewportWidth = (Constants.VIEWPORT_GUI_HEIGHT / (float) height) * (float) width;
+        camera.viewportHeight = (Constants.VIEWPORT_GUI_WIDTH / width) * height;
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         camera.update();
 	}
