@@ -60,7 +60,7 @@ public class GuiRenderer implements Renderer {
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_28;
+		BitmapFont font = Assets.instance.fonts.gui_36;
 		font.setColor(Color.BLACK);
 		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.levelName);
 		font.draw(batch, layout,

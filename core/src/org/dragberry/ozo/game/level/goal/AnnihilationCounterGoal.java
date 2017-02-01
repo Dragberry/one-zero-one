@@ -3,7 +3,6 @@ package org.dragberry.ozo.game.level.goal;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
-import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -81,14 +80,14 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	@Override
 	public void render(SpriteBatch batch, float x, float y) {
 		if (animationAfter) {
-			zeroUnit.setPosition(x + offset, y);
+			zeroUnit.position.set(x + offset, y);
 			zeroUnit.render(batch);
 		} else {
-			posUnit.setPosition(x + offset, y);
+			posUnit.position.set(x + offset, y);
 			posUnit.render(batch);
 			Assets.instance.fonts.gui_24.draw(batch, layout,
 					x + posUnit.dimension.x, y + posUnit.dimension.y / 2 - layout.height / 2);
-			negUnit.setPosition(x + posUnit.dimension.x + layout.width - offset, y);
+			negUnit.position.set(x + posUnit.dimension.x + layout.width - offset, y);
 			negUnit.render(batch);
 		}
 	}

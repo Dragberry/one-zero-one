@@ -4,7 +4,6 @@ import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by maksim on 29.01.17.
@@ -77,7 +76,7 @@ public class JustReachGoal extends AbstractGoal {
 
     @Override
     public void render(SpriteBatch batch, float x, float y) {
-        unit.setPosition(x, y);
+        unit.position.set(x, y);
         unit.render(batch);
     }
 

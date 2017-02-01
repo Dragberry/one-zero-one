@@ -83,7 +83,7 @@ public class MultiGoal extends AbstractGoal {
 	@Override
 	public void render(SpriteBatch batch, float x, float y) {
 		 for (SimpleGoal goal : goals) {
-			 goal.renderUnit.setPosition(x, y);
+			 goal.renderUnit.position.set(x, y);
 			 goal.renderUnit.render(batch);
 			 x += goal.renderUnit.dimension.x;
 		 }

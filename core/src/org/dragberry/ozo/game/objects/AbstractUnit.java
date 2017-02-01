@@ -46,13 +46,14 @@ public abstract class AbstractUnit extends AbstractGameObject {
 		String valueStr = sign.sign + Math.abs(value);
 		GlyphLayout layout = new GlyphLayout(font, valueStr);
 		font.setColor(Color.BLACK);
-		font.draw(batch, 
-				layout,
-				position.x + (dimension.x - layout.width) * 0.375f,
-				position.y + dimension.y / 2 - layout.height / 2);
+		font.draw(batch, layout,getFontX(layout), getFontY(layout));
 	}
 	
 	protected abstract BitmapFont getFont();
+	
+	protected abstract float getFontX(GlyphLayout layout);
+	
+	protected abstract float getFontY(GlyphLayout layout);
 	
 	protected abstract float getScaleX();
 	

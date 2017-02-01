@@ -76,6 +76,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class AssetFonts implements Disposable {
 		public BitmapFont gui_24;
 		public BitmapFont gui_28;
+		public BitmapFont gui_36;
 		public BitmapFont game_58;
 		public BitmapFont game_68;
 		
@@ -84,6 +85,7 @@ public class Assets implements Disposable, AssetErrorListener {
 			float factorGui = Gdx.graphics.getWidth() /  Constants.VIEWPORT_GUI_WIDTH;
 			gui_24 = createFont((int)(24 * factorGui), true);
 			gui_28 = createFont((int)(28 * factorGui), true);
+			gui_36 = createFont((int)(36 * factorGui), true);
 			game_58 = createFont((int)(58 * factor), false);
 			game_68 = createFont((int)(68 * factor), false);
 		}
@@ -92,6 +94,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		public void dispose() {
 			gui_24.dispose();
 			gui_28.dispose();
+			gui_36.dispose();
 			game_58.dispose();
 			game_68.dispose();
 		}

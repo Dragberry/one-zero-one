@@ -4,23 +4,18 @@ import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 
 public class GoalUnit extends AbstractUnit {
 	
-	public static final float SIZE = Constants.UNIT_SIZE * 0.5f;
+	public static final float SIZE = Constants.UNIT_SIZE * 0.6f;
 	
-	private final static float SCALE = 1;
-
 	public GoalUnit(int value) {
 		super(value);
 		this.dimension = new Vector2(SIZE, SIZE);
 	}
 	
-	public void setPosition(float positionX, float positionY) {
-		position.set(positionX, positionY);
-	}
-
 	@Override
 	protected BitmapFont getFont() {
 		return Assets.instance.fonts.gui_24;
@@ -28,13 +23,22 @@ public class GoalUnit extends AbstractUnit {
 
 	@Override
 	protected float getScaleX() {
-		return SCALE;
+		return scale.x;
 	}
 
 	@Override
 	protected float getScaleY() {
-		return SCALE;
+		return scale.y;
+	}
+	
+	@Override
+	protected float getFontX(GlyphLayout layout) {
+		return position.x + (dimension.x - layout.width) * 0.375f;
 	}
 
+	@Override
+	protected float getFontY(GlyphLayout layout) {
+		return position.y + dimension.y / 2 - layout.height / 2;
+	}
 
 }

@@ -26,7 +26,7 @@ public abstract class AbstractGameObject {
 	protected void init() {}
 	
 	public void update (float deltaTime) {
-		
+		// do nothing by default
 	}
 	
 	public abstract void render(SpriteBatch batch);
