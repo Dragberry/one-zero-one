@@ -97,6 +97,7 @@ public class Assets implements Disposable, AssetErrorListener {
 			gui_36.dispose();
 			game_58.dispose();
 			game_68.dispose();
+			Gdx.app.debug(getClass().getName(), " disposed");
 		}
 	}
 	

@@ -25,6 +25,29 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public abstract class DirectedGame implements ApplicationListener {
 
+    public static final ArrayMap<String, LevelInfo> LEVELS = new ArrayMap<String, LevelInfo>(true, 1);
+    static {
+        LevelInfo li = null;
+        li = new LevelInfo(ReachTheGoalLevel.class, "Let's start!", -10, 2, JustReachGoal.Operator.MORE);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 10);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 33);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 });
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 });
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25);
+        LEVELS.put(li.getName(), li);
+    }
+
+    private LevelInfo currentLevelInfo;
+
     private boolean init;
     private AbstractGameScreen currScreen;
     private AbstractGameScreen nextScreen;
@@ -81,6 +104,7 @@ public abstract class DirectedGame implements ApplicationListener {
 	    		constructor.newInstance(this);
 	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
 	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
+                callerScreen = null;
 	    	} else {
 	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
 	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
@@ -177,45 +201,15 @@ public abstract class DirectedGame implements ApplicationListener {
             init = false;
         }
     }
-    
-    private static class LevelInfo {
-        private Class<? extends Level> clazz;
-        private Object[] params;
 
-        LevelInfo(Class<? extends Level> clazz, String name, Object... params) {
-        	this.clazz = clazz;
-            this.params = new Object[params.length + 1]; 
-            this.params[0] = name;
-            System.arraycopy(params, 0, this.params, 1, params.length);
-        }
-        
-        public String getName() {
-        	return (String) params[0];
-        }
-    }
-    
-    private static final ArrayMap<String, LevelInfo> levels = new ArrayMap<String, LevelInfo>(true, 1);
-    static {
-        levels.put("Let's start!", new LevelInfo(ReachTheGoalLevel.class, "Let's start!", -10, 2, JustReachGoal.Operator.MORE));
-        levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 10));
-        levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 33));
-        levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 }));
-        levels.put("Roulette", new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 }));
-        levels.put("Save us", new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10));
-        levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25));
-        levels.put("The Chessboard", new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25));
-    }
-    
-    private LevelInfo currentLevelInfo;
-    
     public void setCurrentLevelInfo(LevelInfo currentLevelInfo) {
     	this.currentLevelInfo = currentLevelInfo;
     }
     
     public void playNextLevel() {
-    	int currLevelIndex = levels.indexOfKey(currentLevelInfo.getName());
-    	if (currLevelIndex < levels.size - 1) {
-    		setCurrentLevelInfo(levels.getValueAt(currLevelIndex + 1));
+    	int currLevelIndex = LEVELS.indexOfKey(currentLevelInfo.getName());
+    	if (currLevelIndex < LEVELS.size - 1) {
+    		setCurrentLevelInfo(LEVELS.getValueAt(currLevelIndex + 1));
     		playLevel();
     	} else {
     		back();
@@ -229,14 +223,18 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playLevel(LevelInfo currentLevelInfo, Class<? extends AbstractGameScreen> callerClass) {
-    	this.currentLevelInfo = currentLevelInfo;
-    	Class<?>[] paramClasses = new Class<?>[currentLevelInfo.params.length];
+        this.currentLevelInfo = currentLevelInfo;
+        Class<?>[] paramClasses = new Class<?>[currentLevelInfo.params.length];
         for (int i = 0; i < currentLevelInfo.params.length; i++) {
             paramClasses[i] = currentLevelInfo.params[i].getClass();
         }
-        Constructor<? extends Level> constructor = currentLevelInfo.clazz.getConstructor(paramClasses);
-        Level level = constructor.newInstance(currentLevelInfo.params);
-        setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
+        try {
+            Constructor<? extends Level> constructor = currentLevelInfo.clazz.getConstructor(paramClasses);
+            Level level = constructor.newInstance(currentLevelInfo.params);
+            setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
+        } catch (Exception exc) {
+            Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);
+        }
     }
-    
+
 }

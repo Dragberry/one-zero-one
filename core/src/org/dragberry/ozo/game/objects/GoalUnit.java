@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GoalUnit extends AbstractUnit {
 	
-	public static final float SIZE = Constants.UNIT_SIZE * 0.6f;
+	public static final float SIZE = Constants.UNIT_SIZE * 0.80f;
 	
 	public GoalUnit(int value) {
 		super(value);

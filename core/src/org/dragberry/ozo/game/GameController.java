@@ -7,8 +7,8 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.DefeatScreen;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MainMenuScreen;
 import org.dragberry.ozo.screen.VictoryScreen;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -71,7 +71,7 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Lost!");
-			game.back();
+			game.setScreen(new DefeatScreen(game), ScreenTransitionFade.init());
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
@@ -186,7 +186,7 @@ public class GameController extends InputAdapter {
     	return null;
     }
     
-    private void unselectAllUnits() {
+    private void deselectAllUnits() {
     	selectedUnit = null;
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
@@ -211,7 +211,7 @@ public class GameController extends InputAdapter {
     	Unit currentSelectedUnit = getSelectedUnit(xCoord, yCoord);
     	if (currentSelectedUnit == null || isBorderUnit(currentSelectedUnit)) {
     		// unit is border unit
-    		unselectAllUnits();
+    		deselectAllUnits();
     		return;
     	}
     	if (selectedUnit == currentSelectedUnit) {
@@ -222,7 +222,7 @@ public class GameController extends InputAdapter {
     	}
     	if (selectedUnit != null) {
     		// unit is not selected or another unit is selected
-			unselectAllUnits();
+			deselectAllUnits();
 		} 
     	if (selectedUnit == null) {
     		// unit first selection
@@ -241,7 +241,7 @@ public class GameController extends InputAdapter {
 	}
 	
 	private void backToMenu() {
-		game.setScreen(new MainMenuScreen(game));
+		game.back();
 	}
 
 	private void handleDebugInput(float deltaTime) {

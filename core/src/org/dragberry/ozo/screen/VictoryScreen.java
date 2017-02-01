@@ -36,10 +36,13 @@ public class VictoryScreen extends AbstractGameScreen {
 	public void resize(int width, int height) {
 	}
 	
-
 	@Override
 	public void show() {
 		stage = new Stage();
+		rebuildStage();
+	}
+
+	private void rebuildStage() {
 		Table tbl = new Table();
 		tbl.align(Align.center);
 		final float viewportWidth = stage.getViewport().getCamera().viewportWidth;
@@ -56,13 +59,24 @@ public class VictoryScreen extends AbstractGameScreen {
 		wonLbl.setAlignment(Align.center);
 		tbl.add(wonLbl).fill().expand();
 		tbl.row();
-		tbl.add(new TextButton("Next level", MenuSkin.getSkin())).fill().expand();
+		tbl.add(createNextBtn()).fill().expand();
 		tbl.row();
-		tbl.add(new TextButton("Play again", MenuSkin.getSkin())).fill().expand();
+		tbl.add(createPlayAgainBtn()).fill().expand();
 		tbl.row();
 		tbl.add(createMainMenuBtn()).fill().expand();
 	}
-	
+
+	private TextButton createNextBtn() {
+		TextButton btn = new TextButton("Next level", MenuSkin.getSkin());
+		btn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.playNextLevel();
+			}
+		});
+		return btn;
+	}
+
 	private TextButton createMainMenuBtn() {
 		TextButton btn = new TextButton("Go to menu", MenuSkin.getSkin());
 		btn.addListener(new ClickListener() {
@@ -74,8 +88,20 @@ public class VictoryScreen extends AbstractGameScreen {
 		return btn;
 	}
 
+	private TextButton createPlayAgainBtn() {
+		TextButton btn = new TextButton("Play agian", MenuSkin.getSkin());
+		btn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.playLevel();
+			}
+		});
+		return btn;
+	}
+
 	@Override
 	public void hide() {
+		Gdx.app.debug(getClass().getName(), " disposed");
 		stage.dispose();
 	}
 
