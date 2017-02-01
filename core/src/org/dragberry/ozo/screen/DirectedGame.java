@@ -5,9 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.ArrayMap;
 
 import java.lang.reflect.Constructor;
 
+import org.dragberry.ozo.game.level.ChessboardLevel;
+import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.MashroomRainLevel;
+import org.dragberry.ozo.game.level.NoAnnihilationLevel;
+import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
+import org.dragberry.ozo.game.level.ReachTheGoalLevel;
+import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -32,12 +40,18 @@ public abstract class DirectedGame implements ApplicationListener {
         setScreen(screen, null, null);
     }
     
+    public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition) {
+        setScreen(screen, screenTransition, null);
+    }
+    
     public void setScreen(AbstractGameScreen screen, Class<? extends AbstractGameScreen> callerScreen) {
         setScreen(screen, null, callerScreen);
     }
 
     public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition, Class<? extends AbstractGameScreen> callerScreen) {
-        this.callerScreen = callerScreen;
+        if (callerScreen != null) {
+        	this.callerScreen = callerScreen;
+        }
     	int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
         if (!init) {
@@ -163,4 +177,66 @@ public abstract class DirectedGame implements ApplicationListener {
             init = false;
         }
     }
+    
+    private static class LevelInfo {
+        private Class<? extends Level> clazz;
+        private Object[] params;
+
+        LevelInfo(Class<? extends Level> clazz, String name, Object... params) {
+        	this.clazz = clazz;
+            this.params = new Object[params.length + 1]; 
+            this.params[0] = name;
+            System.arraycopy(params, 0, this.params, 1, params.length);
+        }
+        
+        public String getName() {
+        	return (String) params[0];
+        }
+    }
+    
+    private static final ArrayMap<String, LevelInfo> levels = new ArrayMap<String, LevelInfo>(true, 1);
+    static {
+        levels.put("Let's start!", new LevelInfo(ReachTheGoalLevel.class, "Let's start!", -10, 2, JustReachGoal.Operator.MORE));
+        levels.put("A little bit harder", new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 10));
+        levels.put("We need more!", new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 33));
+        levels.put("Double 5", new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 }));
+        levels.put("Roulette", new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 }));
+        levels.put("Save us", new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10));
+        levels.put("The Mashroom Rain", new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25));
+        levels.put("The Chessboard", new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25));
+    }
+    
+    private LevelInfo currentLevelInfo;
+    
+    public void setCurrentLevelInfo(LevelInfo currentLevelInfo) {
+    	this.currentLevelInfo = currentLevelInfo;
+    }
+    
+    public void playNextLevel() {
+    	int currLevelIndex = levels.indexOfKey(currentLevelInfo.getName());
+    	if (currLevelIndex < levels.size - 1) {
+    		setCurrentLevelInfo(levels.getValueAt(currLevelIndex + 1));
+    		playLevel();
+    	} else {
+    		back();
+    	}
+    }
+    
+    public void playLevel() {
+    	if (currentLevelInfo != null) {
+    		playLevel(currentLevelInfo, null);
+    	}
+    }
+    
+    public void playLevel(LevelInfo currentLevelInfo, Class<? extends AbstractGameScreen> callerClass) {
+    	this.currentLevelInfo = currentLevelInfo;
+    	Class<?>[] paramClasses = new Class<?>[currentLevelInfo.params.length];
+        for (int i = 0; i < currentLevelInfo.params.length; i++) {
+            paramClasses[i] = currentLevelInfo.params[i].getClass();
+        }
+        Constructor<? extends Level> constructor = currentLevelInfo.clazz.getConstructor(paramClasses);
+        Level level = constructor.newInstance(currentLevelInfo.params);
+        setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
+    }
+    
 }

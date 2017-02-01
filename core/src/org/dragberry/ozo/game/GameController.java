@@ -9,6 +9,8 @@ import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MainMenuScreen;
+import org.dragberry.ozo.screen.VictoryScreen;
+import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -74,7 +76,7 @@ public class GameController extends InputAdapter {
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Won!");
-			game.back();
+			game.setScreen(new VictoryScreen(game), ScreenTransitionFade.init());
 			return true;
 		}
 		return false;
