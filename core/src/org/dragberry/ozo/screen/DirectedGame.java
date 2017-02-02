@@ -13,6 +13,7 @@ import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationLevel;
+import org.dragberry.ozo.game.level.QueueLevel;
 import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
 import org.dragberry.ozo.game.level.ReachTheGoalLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
@@ -43,6 +44,8 @@ public abstract class DirectedGame implements ApplicationListener {
         li = new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25);
         LEVELS.put(li.getName(), li);
         li = new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(QueueLevel.class, "Queues", -10, 25);
         LEVELS.put(li.getName(), li);
     }
 
