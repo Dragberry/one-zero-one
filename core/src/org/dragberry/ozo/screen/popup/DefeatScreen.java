@@ -1,4 +1,8 @@
-package org.dragberry.ozo.screen;
+package org.dragberry.ozo.screen.popup;
+
+import org.dragberry.ozo.screen.AbstractGameScreen;
+import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.screen.MenuSkin;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -15,12 +19,12 @@ import com.badlogic.gdx.utils.Align;
  * Created by maksim on 01.02.17.
  */
 
-public class DefeatScreen extends AbstractGameScreen {
+public class DefeatScreen extends AbstractPopup {
 
     private Stage stage;
 
-    public DefeatScreen(DirectedGame game) {
-        super(game);
+    public DefeatScreen(DirectedGame game, AbstractGameScreen parent) {
+        super(game, parent);
     }
 
     @Override
@@ -30,15 +34,10 @@ public class DefeatScreen extends AbstractGameScreen {
 
     @Override
     public void render(float deltaTime) {
-        Gdx.gl.glClearColor(MenuSkin.BACKGROUND_COLOR.r, MenuSkin.BACKGROUND_COLOR.g, MenuSkin.BACKGROUND_COLOR.b, MenuSkin.BACKGROUND_COLOR.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    	Gdx.gl.glClearColor(1, 1, 1, 0);
+    	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
     }
 
     @Override
@@ -90,12 +89,6 @@ public class DefeatScreen extends AbstractGameScreen {
 
     @Override
     public void hide() {
-        Gdx.app.debug(getClass().getName(), " disposed");
         stage.dispose();
-    }
-
-    @Override
-    public void pause() {
-
     }
 }

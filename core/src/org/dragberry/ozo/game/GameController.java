@@ -7,11 +7,10 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
-import org.dragberry.ozo.screen.DefeatScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.GameScreen;
+import org.dragberry.ozo.screen.popup.DefeatScreen;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
-import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -74,7 +73,7 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Lost!");
-			game.setScreen(new DefeatScreen(game), ScreenTransitionFade.init());
+			gameScreen.showPopup(new DefeatScreen(game, gameScreen));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
