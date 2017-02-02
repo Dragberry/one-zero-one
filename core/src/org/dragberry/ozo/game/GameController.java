@@ -9,7 +9,8 @@ import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.DefeatScreen;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.VictoryScreen;
+import org.dragberry.ozo.screen.GameScreen;
+import org.dragberry.ozo.screen.popup.VictoryPopup;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import com.badlogic.gdx.Gdx;
@@ -32,13 +33,15 @@ public class GameController extends InputAdapter {
 	private Unit selectedUnit = null;
 	
 	private DirectedGame game;
+	private GameScreen gameScreen;
 	public Level level;
 	
 	public Unit[][] units;
 	private Unit[] neighbors = new Unit[4];
 	
-	public GameController(DirectedGame game) {
+	public GameController(DirectedGame game, GameScreen gameScreen) {
 		this.game = game;
+		this.gameScreen = gameScreen;
 	}
 	
 	public void init(Level level) {
@@ -76,7 +79,7 @@ public class GameController extends InputAdapter {
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			Gdx.app.debug(TAG, "Won!");
-			game.setScreen(new VictoryScreen(game), ScreenTransitionFade.init());
+			gameScreen.showPopup(new VictoryPopup(game, gameScreen));
 			return true;
 		}
 		return false;

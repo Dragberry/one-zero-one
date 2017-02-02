@@ -24,7 +24,7 @@ public class DefeatScreen extends AbstractGameScreen {
     }
 
     @Override
-    public InputProcessor getInputProcessor() {
+    public InputProcessor getScreenInputProcessor() {
         return stage;
     }
 

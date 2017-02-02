@@ -2,6 +2,7 @@ package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -56,6 +57,7 @@ public abstract class DirectedGame implements ApplicationListener {
     private AbstractGameScreen nextScreen;
     private FrameBuffer currFbo;
     private FrameBuffer nextFbo;
+    private FrameBuffer popupFbo;;
     private SpriteBatch batch;
     private float time;
     private ScreenTransition screenTransition;
@@ -83,6 +85,7 @@ public abstract class DirectedGame implements ApplicationListener {
         if (!init) {
             currFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
             nextFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
+            popupFbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
             batch = new SpriteBatch();
             init = true;
         }
@@ -118,13 +121,53 @@ public abstract class DirectedGame implements ApplicationListener {
     	}
     }
 
+   private void renderPopup(float deltaTime) {
+	   currFbo.begin();
+       if (currScreen != null) {
+           currScreen.render(deltaTime);
+       }
+       currFbo.end();
+       popupFbo.begin();
+       currScreen.getPopup().render(deltaTime);
+       popupFbo.end();
+       
+       
+       float width = currFbo.getColorBufferTexture().getWidth();
+       float height = currFbo.getColorBufferTexture().getHeight();
+       Gdx.gl.glClearColor(0, 0, 0, 0);
+       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+       batch.begin();
+       batch.setColor(1, 1, 1, 1);
+       batch.draw(currFbo.getColorBufferTexture(),
+    		   0, 0, 
+    		   0, 0, 
+    		   width, height,
+    		   1, 1, 0, 0, 0,
+    		   currFbo.getColorBufferTexture().getWidth(), currFbo.getColorBufferTexture().getHeight(),
+    		   false, true);
+       batch.setColor(1, 1, 1, 1);
+       batch.draw(popupFbo.getColorBufferTexture(), 
+    		   0, 0, 
+    		   0, 0, width, height,
+    		   1, 1, 0, 0, 0,
+    		   popupFbo.getColorBufferTexture().getWidth(), popupFbo.getColorBufferTexture().getHeight(),
+               false, true);
+       batch.end();
+   }
+    
     @Override
     public void render() {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
         if (nextScreen == null) {
             // no ongoing transition
             if (currScreen != null) {
-                currScreen.render(deltaTime);
+            	if (currScreen.hasPopup()) {
+            		// render popup
+            		renderPopup(deltaTime);
+            	} else {
+            		currScreen.render(deltaTime);
+            	}
             }
         } else {
             //ongoing transition
@@ -196,6 +239,7 @@ public abstract class DirectedGame implements ApplicationListener {
             nextScreen.hide();
         }
         if (init) {
+        	popupFbo.dispose();
             currFbo.dispose();
             currScreen = null;
             nextFbo.dispose();
