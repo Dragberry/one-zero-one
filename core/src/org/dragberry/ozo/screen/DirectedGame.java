@@ -91,6 +91,7 @@ public abstract class DirectedGame implements ApplicationListener {
         }
         // start new transition
         nextScreen = screen;
+        Gdx.app.debug(getClass().getName(), "setScreen()");
         nextScreen.show(); // activate next screen
         nextScreen.resize(width, height);
         nextScreen.render(0); // let screen update() once
@@ -104,6 +105,7 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void back() {
+        Gdx.input.setCatchBackKey(false);
     	try {
 	    	if (callerScreen != null) {
 	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
@@ -270,6 +272,7 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playLevel(LevelInfo currentLevelInfo, Class<? extends AbstractGameScreen> callerClass) {
+        Gdx.input.setCatchBackKey(true);
         this.currentLevelInfo = currentLevelInfo;
         Class<?>[] paramClasses = new Class<?>[currentLevelInfo.params.length];
         for (int i = 0; i < currentLevelInfo.params.length; i++) {

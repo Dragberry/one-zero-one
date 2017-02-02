@@ -51,13 +51,11 @@ public class GameScreen extends AbstractGameScreen {
 		gameRenderer = new GameRenderer(gameController);
 		objectivePopup = new ObjectivePopup(game, level, this);
 		showPopup(objectivePopup);
-		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
 	public void hide() {
 		gameRenderer.dispose();
-		Gdx.input.setCatchBackKey(false);
 	}
 
 	@Override

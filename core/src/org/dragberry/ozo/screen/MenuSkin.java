@@ -30,7 +30,7 @@ public class MenuSkin {
 
             // Create a texture
             Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
-            pixmap.setColor(Color.WHITE);
+            pixmap.setColor(BACKGROUND_COLOR);
             pixmap.fill();
             SKIN.add(BACKGROUND, new Texture(pixmap));
 
