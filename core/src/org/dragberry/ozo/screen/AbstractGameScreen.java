@@ -1,12 +1,10 @@
 package org.dragberry.ozo.screen;
 
-import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 
 public abstract class AbstractGameScreen implements Screen {
 	

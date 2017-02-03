@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.ArrayMap;
 
 import java.lang.reflect.Constructor;
@@ -62,6 +63,8 @@ public abstract class DirectedGame implements ApplicationListener {
     private float time;
     private ScreenTransition screenTransition;
     
+    private ShaderProgram blackoutShader;
+    
     private Class<? extends AbstractGameScreen> callerScreen;
     
     public void setScreen(AbstractGameScreen screen) {
@@ -87,6 +90,9 @@ public abstract class DirectedGame implements ApplicationListener {
             nextFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
             popupFbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
             batch = new SpriteBatch();
+            blackoutShader = new ShaderProgram(
+            		Gdx.files.internal("shaders/blackout.vert"), 
+            		Gdx.files.internal("shaders/blackout.frag"));
             init = true;
         }
         // start new transition
@@ -112,11 +118,11 @@ public abstract class DirectedGame implements ApplicationListener {
 	    		constructor.newInstance(this);
 	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
 	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
-                callerScreen = null;
 	    	} else {
 	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
 	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
 	    	}
+	    	callerScreen = null;
     	} catch (Exception exc) {
     		Gdx.app.error(getClass().getName(), "An error has occured during navigation! Application is terminated!", exc);
     		Gdx.app.exit();
@@ -140,6 +146,7 @@ public abstract class DirectedGame implements ApplicationListener {
        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
        batch.begin();
+       batch.setShader(blackoutShader);
        batch.setColor(1, 1, 1, 1);
        batch.draw(currFbo.getColorBufferTexture(),
     		   0, 0, 
@@ -148,6 +155,7 @@ public abstract class DirectedGame implements ApplicationListener {
     		   1, 1, 0, 0, 0,
     		   currFbo.getColorBufferTexture().getWidth(), currFbo.getColorBufferTexture().getHeight(),
     		   false, true);
+       batch.setShader(null);
        batch.setColor(1, 1, 1, 1);
        batch.draw(popupFbo.getColorBufferTexture(), 
     		   0, 0, 
@@ -247,6 +255,7 @@ public abstract class DirectedGame implements ApplicationListener {
             nextFbo.dispose();
             nextScreen = null;
             batch.dispose();
+            blackoutShader.dispose();
             init = false;
         }
     }
