@@ -20,18 +20,8 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
 		batch.setColor(sign.color);
-		switch (sign) {
-			case MINUS:
-				regBall = Assets.instance.unit.redBall;
-				break;
-			case ZERO:
-				regBall = Assets.instance.unit.blueBall;
-				break;
-			case PLUS:
-				regBall = Assets.instance.unit.greenBall;
-				break;
-		}
-		
+		regBall = Assets.instance.unit.ball;
+
 		batch.draw(regBall.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,

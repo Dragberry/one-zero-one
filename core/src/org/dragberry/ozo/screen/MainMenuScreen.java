@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import org.dragberry.ozo.game.level.ReachTheGoalLevel;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -17,7 +16,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	private static final String TAG = MainMenuScreen.class.getName();
 	private static final String EXIT_LBL = "Exit";
 	private static final String START_GAME_LBL = "Start";
-	private static final String RANDOM_GAME_LBL = "Random game";
+	private static final String FREEPLAY_LBL = "Freeplay";
 
 	private Stage stage;
 
@@ -83,7 +82,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 
 	private TextButton createRandomGameBtn() {
-		TextButton btn = new TextButton(RANDOM_GAME_LBL, MenuSkin.getSkin());
+		TextButton btn = new TextButton(FREEPLAY_LBL, MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
 		btn.setPosition(
 				Gdx.graphics.getWidth() / 2 - btn.getWidth() / 2,
@@ -92,10 +91,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new GameScreen(game, 
-						new ReachTheGoalLevel(new ReachTheGoalLevelSettings("Reach the Goal", -5, 5))),
-						ScreenTransitionFade.init(),
-						MainMenuScreen.this.getClass());
+				game.playLevel(new ReachTheGoalLevelSettings("Freeplay", 25, 99), MainMenuScreen.this.getClass());
 			}
 		});
 		return btn;

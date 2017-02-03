@@ -89,21 +89,45 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderState(SpriteBatch batch) {
-		TextureRegion ball = null;
-		ball = Assets.instance.unit.redBall;
+		float offset = 105f;
+		GlyphLayout layout;
+		BitmapFont font = Assets.instance.fonts.gui_28;
+		font.setColor(Color.BLACK);
+		TextureRegion ball;
+		ball = Assets.instance.unit.infoBall;
+		batch.setColor(Color.GREEN);
 		batch.draw(ball,
-				10, camera.viewportHeight - 80,
+				offset, camera.viewportHeight - offset,
+				0, 0, 
+				ball.getRegionWidth(), ball.getRegionHeight(),
+				1, 1,
+				0);
+
+		layout = new GlyphLayout(font, String.valueOf(gameController.posCount));
+		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 1.5f * layout.height;
+		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.5f * layout.height;
+		float posX = offset + ball.getRegionWidth() / 2 - layout.width / 2;
+		font.draw(batch, layout,
+				posX,
+				countY);
+		layout = new GlyphLayout(font, String.valueOf(gameController.posSum));
+		font.draw(batch, layout,
+				posX,
+				sumY);
+
+		batch.setColor(Color.RED);
+		batch.draw(ball,
+				camera.viewportWidth - ball.getRegionWidth() - offset, camera.viewportHeight - offset,
 				0, 0, 
 				ball.getRegionWidth(), ball.getRegionHeight(), 
 				1, 1,
 				0);
-		ball = Assets.instance.unit.greenBall;
-		batch.draw(ball,
-				camera.viewportWidth - ball.getRegionWidth() - 10, camera.viewportHeight - 80,
-				0, 0, 
-				ball.getRegionWidth(), ball.getRegionHeight(), 
-				1, 1,
-				0);
+
+		layout = new GlyphLayout(font, String.valueOf(gameController.negCount));
+		float negX = camera.viewportWidth - offset - ball.getRegionWidth() / 2 - layout.width / 2;
+		font.draw(batch, layout, negX, countY);
+		layout = new GlyphLayout(font, String.valueOf(-gameController.negSum));
+		font.draw(batch, layout, negX, sumY);
 	}
 	
 	private static String timeToString(int timeInSeconds) {

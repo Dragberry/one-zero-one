@@ -62,13 +62,7 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachMultiGoalLevelSettings("Casino Royale", -99, 99, 99, 99));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "Regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("Unsafe place", 49, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "Unsafe regularity", 99, 50));
-    }
-    
-    public void refreshLevels() {
-    	for (LevelSettings level : levels) {
-    		level.load();
-    	}
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "Unsafe regularity", 30, 50));
     }
     
     public void setScreen(AbstractGameScreen screen) {

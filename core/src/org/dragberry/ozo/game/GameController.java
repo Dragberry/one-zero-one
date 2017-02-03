@@ -38,6 +38,12 @@ public class GameController extends InputAdapter {
 	
 	public Unit[][] units;
 	private Unit[] neighbors = new Unit[4];
+
+	public int negCount;
+	public int negSum;
+	public int posCount;
+	public int posSum;
+	public int zeroCount;
 	
 	public GameController(DirectedGame game, GameScreen gameScreen) {
 		this.game = game;
@@ -49,8 +55,22 @@ public class GameController extends InputAdapter {
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y] = level.generateUnit(x, y);
+				Unit unit = level.generateUnit(x, y);
+				units[x][y] = unit;
+				updateStateForUnit(unit);
 			}
+		}
+	}
+
+	private void updateStateForUnit(Unit unit) {
+		if (unit.value < 0) {
+			negCount++;
+			negSum += unit.value;
+		} else if (unit.value > 0) {
+			posCount++;
+			posSum += unit.value;
+		} else {
+			zeroCount++;
 		}
 	}
 
@@ -138,6 +158,7 @@ public class GameController extends InputAdapter {
     	shiftRightUnits(selectedUnit);
     	shiftBottomUnits(selectedUnit);
     	shiftLeftUnits(selectedUnit);
+		refreshState();
     	level.steps++;
     	if (isGameFinished()) {
 			return;
@@ -145,8 +166,21 @@ public class GameController extends InputAdapter {
     	selectedUnit.selected = false;
     	selectedUnit = null;
     }
-    
-    private void shiftBottomUnits(Unit selectedUnit) {
+
+	private void refreshState() {
+		negCount = 0;
+		negSum = 0;
+		posCount = 0;
+		posSum = 0;
+		zeroCount = 0;
+		for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
+				updateStateForUnit(units[x][y]);
+			}
+		}
+	}
+
+	private void shiftBottomUnits(Unit selectedUnit) {
 		for (int y = selectedUnit.y - 1; y > 0; y--) {
 			Unit unitToMove = units[selectedUnit.x][y - 1];
 			units[selectedUnit.x][y] = unitToMove;
