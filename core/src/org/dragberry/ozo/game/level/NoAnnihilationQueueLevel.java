@@ -5,8 +5,8 @@ import org.dragberry.ozo.game.level.generator.QueueGeneratorHelper;
 
 public class NoAnnihilationQueueLevel extends NoAnnihilationLevel {
 
-	public NoAnnihilationQueueLevel(String levelName, Integer goalToLose, Integer goalToWin) {
-		super(levelName, goalToLose, goalToWin);
+	public NoAnnihilationQueueLevel(NoAnnihilationLevel.NoAnnihilationLevelInfo levelInfo) {
+		super(levelInfo);
 	}
 	
 	@Override

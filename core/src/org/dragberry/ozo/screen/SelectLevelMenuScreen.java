@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * Created by maksim on 28.01.17.
@@ -60,8 +59,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         table.row();
 
         Table scrollTable = new Table();
-        for (ObjectMap.Entry<String, LevelInfo> entry : game.LEVELS.entries()) {
-            scrollTable.add(createLevelBtn(entry.key, entry.value)).fillX().expand(true, false);
+        for (LevelInfo levelnfo : game.levels) {
+        	scrollTable.add(createLevelBtn(levelnfo)).fillX().expand(true, false);
             scrollTable.row();
         }
         ScrollPane scroller = new ScrollPane(scrollTable);
@@ -89,8 +88,8 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     public void pause() {
     }
 
-    private TextButton createLevelBtn(String btnLabel, final LevelInfo levelInfo) {
-        TextButton btn = new TextButton(btnLabel, MenuSkin.getSkin());
+    private TextButton createLevelBtn(final LevelInfo levelInfo) {
+        TextButton btn = new TextButton(levelInfo.name, MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
 
             @Override

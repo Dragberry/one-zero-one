@@ -7,10 +7,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.ArrayMap;
-
+import com.badlogic.gdx.utils.Array;
 import java.lang.reflect.Constructor;
-
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
@@ -29,39 +27,24 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public abstract class DirectedGame implements ApplicationListener {
 
-    public static final ArrayMap<String, LevelInfo> LEVELS = new ArrayMap<String, LevelInfo>(true, 1);
-    static {
-        LevelInfo li = null;
-        li = new LevelInfo(ReachTheGoalLevel.class, "Let's start!", -10, 2, JustReachGoal.Operator.MORE);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ReachTheGoalLevel.class, "A little bit harder", -5, 10);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ReachTheGoalLevel.class, "We need more!", -10, 33);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 });
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(NoAnnihilationLevel.class, "Save us", 5, 10);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 });
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(MashroomRainLevel.class, "Mashroom rain", -10, 25);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(QueueLevel.class, "Queues", -10, 25);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(MashroomRainLevel.class, "Mashroom shower", -25, 75);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(ReachMultiGoalLevel.class, "Casino Royale", -99, new Integer[] { 99, 99, 99 });
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(QueueLevel.class, "Regularity", -33, 99);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(NoAnnihilationLevel.class, "Unsafe place", 49, 99);
-        LEVELS.put(li.getName(), li);
-        li = new LevelInfo(NoAnnihilationQueueLevel.class, "Unsafe regularity", 99, 50);
-        LEVELS.put(li.getName(), li);
-    }
-
+	public final Array<LevelInfo> levels = new Array<LevelInfo>();
+	{
+		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("A little bit harder", -5, 10));
+		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("We need more!", -10, 33));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Double 5", -10, 5, 5));
+		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Save us", 5, 10));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Roulette", -10, 7, 7, 7));
+		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom rain", -10, 25));
+		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Queues", -10, 25));
+		levels.add(new ChessboardLevel.ReachTheGoalLevelInfo("Chessboard", -10, 25));
+		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom shower", -25, 75));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Casino Royale", -99, 99, 99, 99));
+		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Regularity", -33, 99));
+		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Unsafe place", 49, 99));
+		levels.add(new NoAnnihilationQueueLevel.NoAnnihilationLevelInfo("Unsafe regularity", 99, 50));
+	}
+	
     private LevelInfo currentLevelInfo;
 
     private boolean init;
@@ -276,9 +259,9 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playNextLevel() {
-    	int currLevelIndex = LEVELS.indexOfKey(currentLevelInfo.getName());
-    	if (currLevelIndex < LEVELS.size - 1) {
-    		setCurrentLevelInfo(LEVELS.getValueAt(currLevelIndex + 1));
+    	int currLevelIndex = levels.indexOf(currentLevelInfo, true);
+    	if (currLevelIndex < levels.size - 1) {
+    		setCurrentLevelInfo(levels.get(currLevelIndex + 1));
     		playLevel();
     	} else {
     		back();
@@ -294,13 +277,9 @@ public abstract class DirectedGame implements ApplicationListener {
     public void playLevel(LevelInfo currentLevelInfo, Class<? extends AbstractGameScreen> callerClass) {
         Gdx.input.setCatchBackKey(true);
         this.currentLevelInfo = currentLevelInfo;
-        Class<?>[] paramClasses = new Class<?>[currentLevelInfo.params.length];
-        for (int i = 0; i < currentLevelInfo.params.length; i++) {
-            paramClasses[i] = currentLevelInfo.params[i].getClass();
-        }
         try {
-            Constructor<? extends Level> constructor = currentLevelInfo.clazz.getConstructor(paramClasses);
-            Level level = constructor.newInstance(currentLevelInfo.params);
+            Constructor<? extends Level<? extends LevelInfo>> constructor = currentLevelInfo.clazz.getConstructor(currentLevelInfo.getClass());
+            Level<? extends LevelInfo> level = constructor.newInstance(currentLevelInfo);
             setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
             Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);

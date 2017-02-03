@@ -34,7 +34,7 @@ public class MultiGoal extends AbstractGoal {
 
     protected SimpleGoal[] goals;
 
-    public MultiGoal(Integer... goalValues) {
+    public MultiGoal(int... goalValues) {
         this.goals = new SimpleGoal[goalValues.length];
         for (int i = 0; i < goalValues.length; i++) {
             this.goals[i] = new SimpleGoal(goalValues[i]);

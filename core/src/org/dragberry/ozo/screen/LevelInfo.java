@@ -6,17 +6,16 @@ import org.dragberry.ozo.game.level.Level;
  * Created by maksim on 01.02.17.
  */
 public class LevelInfo {
-    public Class<? extends Level> clazz;
-    public Object[] params;
+    public final Class<? extends Level<? extends LevelInfo>> clazz;
+    public final String name;
+    
+    public boolean completed;
+    public float bestTime;
+    public float bestSteps;
 
-    LevelInfo(Class<? extends Level> clazz, String name, Object... params) {
+    public LevelInfo(Class<? extends Level<? extends LevelInfo>> clazz, String name) {
         this.clazz = clazz;
-        this.params = new Object[params.length + 1];
-        this.params[0] = name;
-        System.arraycopy(params, 0, this.params, 1, params.length);
+        this.name = name;
     }
 
-    public String getName() {
-        return (String) params[0];
-    }
 }

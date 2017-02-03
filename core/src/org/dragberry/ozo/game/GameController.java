@@ -34,7 +34,7 @@ public class GameController extends InputAdapter {
 	
 	private DirectedGame game;
 	private GameScreen gameScreen;
-	public Level level;
+	public Level<?> level;
 	
 	public Unit[][] units;
 	private Unit[] neighbors = new Unit[4];
@@ -44,7 +44,7 @@ public class GameController extends InputAdapter {
 		this.gameScreen = gameScreen;
 	}
 	
-	public void init(Level level) {
+	public void init(Level<?> level) {
 		this.level = level;
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
@@ -247,10 +247,6 @@ public class GameController extends InputAdapter {
 				|| selectedUnit.y == 0 || selectedUnit.y == level.height - 1;
 	}
 	
-	private void backToMenu() {
-		game.back();
-	}
-
 	private void handleDebugInput(float deltaTime) {
 		if (Gdx.app.getType() != ApplicationType.Desktop) {
 			return;

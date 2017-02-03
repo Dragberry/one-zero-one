@@ -5,8 +5,8 @@ import org.dragberry.ozo.game.level.generator.QueueGeneratorHelper;
 
 public class QueueLevel extends ReachTheGoalLevel {
 
-	public QueueLevel(String levelName, Integer goalToLose, Integer goal) {
-		super(levelName, goalToLose, goal);
+	public QueueLevel(QueueLevel.ReachTheGoalLevelInfo levelInfo) {
+		super(levelInfo);
 	}
 
 	@Override

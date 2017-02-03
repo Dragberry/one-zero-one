@@ -4,6 +4,7 @@ import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.screen.LevelInfo;
 import org.dragberry.ozo.screen.MenuSkin;
 
 import com.badlogic.gdx.Gdx;
@@ -20,9 +21,9 @@ import com.badlogic.gdx.utils.Align;
 public class ObjectivePopup extends AbstractPopup {
 
 	private Stage stage;
-	private Level level;
+	private Level<? extends LevelInfo> level;
 	
-	public ObjectivePopup(DirectedGame game, Level level, AbstractGameScreen parentScreen) {
+	public ObjectivePopup(DirectedGame game, Level<? extends LevelInfo> level, AbstractGameScreen parentScreen) {
 		super(game, parentScreen);
 		this.level = level;
 	}
