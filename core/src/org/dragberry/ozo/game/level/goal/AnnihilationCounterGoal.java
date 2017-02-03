@@ -74,7 +74,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 
 	@Override
 	public String getMessage() {
-		return "Annihilate " + annihilationCounter;
+		return "Lost " + goal + " positive numbers";
 	}
 
 	@Override

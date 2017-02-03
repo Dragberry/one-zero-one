@@ -8,7 +8,10 @@ import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MainMenuScreen;
+import org.dragberry.ozo.screen.GameScreen;
+import org.dragberry.ozo.screen.popup.ConfirmationPopup;
+import org.dragberry.ozo.screen.popup.DefeatScreen;
+import org.dragberry.ozo.screen.popup.VictoryPopup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -30,16 +33,18 @@ public class GameController extends InputAdapter {
 	private Unit selectedUnit = null;
 	
 	private DirectedGame game;
-	public Level level;
+	private GameScreen gameScreen;
+	public Level<?> level;
 	
 	public Unit[][] units;
 	private Unit[] neighbors = new Unit[4];
 	
-	public GameController(DirectedGame game) {
+	public GameController(DirectedGame game, GameScreen gameScreen) {
 		this.game = game;
+		this.gameScreen = gameScreen;
 	}
 	
-	public void init(Level level) {
+	public void init(Level<?> level) {
 		this.level = level;
 		units = new Unit[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {
@@ -50,7 +55,9 @@ public class GameController extends InputAdapter {
 	}
 
     public void update(float deltaTime) {
-    	level.time += deltaTime;
+    	if (level.started) {
+    		level.time += deltaTime;
+    	}
 		level.update(deltaTime);
     	if (state == State.IN_MOTION) {
     		motionTime += deltaTime;
@@ -68,13 +75,16 @@ public class GameController extends InputAdapter {
 
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
+			level.started = false;
 			Gdx.app.debug(TAG, "Lost!");
-			game.back();
+			gameScreen.showPopup(new DefeatScreen(game, gameScreen));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
+			level.started = false;
+			level.save();
 			Gdx.app.debug(TAG, "Won!");
-			game.back();
+			gameScreen.showPopup(new VictoryPopup(game, gameScreen));
 			return true;
 		}
 		return false;
@@ -184,7 +194,7 @@ public class GameController extends InputAdapter {
     	return null;
     }
     
-    private void unselectAllUnits() {
+    private void deselectAllUnits() {
     	selectedUnit = null;
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
@@ -209,7 +219,7 @@ public class GameController extends InputAdapter {
     	Unit currentSelectedUnit = getSelectedUnit(xCoord, yCoord);
     	if (currentSelectedUnit == null || isBorderUnit(currentSelectedUnit)) {
     		// unit is border unit
-    		unselectAllUnits();
+    		deselectAllUnits();
     		return;
     	}
     	if (selectedUnit == currentSelectedUnit) {
@@ -220,7 +230,7 @@ public class GameController extends InputAdapter {
     	}
     	if (selectedUnit != null) {
     		// unit is not selected or another unit is selected
-			unselectAllUnits();
+			deselectAllUnits();
 		} 
     	if (selectedUnit == null) {
     		// unit first selection
@@ -238,10 +248,6 @@ public class GameController extends InputAdapter {
 				|| selectedUnit.y == 0 || selectedUnit.y == level.height - 1;
 	}
 	
-	private void backToMenu() {
-		game.setScreen(new MainMenuScreen(game));
-	}
-
 	private void handleDebugInput(float deltaTime) {
 		if (Gdx.app.getType() != ApplicationType.Desktop) {
 			return;
@@ -307,7 +313,7 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				backToMenu();
+				gameScreen.showPopup(new ConfirmationPopup(game, gameScreen));
 				break;
 		}
 		return false;

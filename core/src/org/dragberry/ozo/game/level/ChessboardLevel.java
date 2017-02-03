@@ -9,8 +9,8 @@ import org.dragberry.ozo.game.level.generator.Generator;
 public class ChessboardLevel extends ReachTheGoalLevel {
 	
 
-	public ChessboardLevel(String levelName, Integer goalToLose, Integer goal) {
-		super(levelName, goalToLose, goal);
+	public ChessboardLevel(ReachTheGoalLevel.ReachTheGoalLevelInfo levelInfo) {
+		super(levelInfo);
 	}
 	
 	@Override

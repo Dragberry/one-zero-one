@@ -12,36 +12,38 @@ import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
+import org.dragberry.ozo.screen.LevelInfo;
 
 /**
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level {
+public abstract class Level<LI extends LevelInfo> {
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
 	
-    private Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
-    private Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
+    public final Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
+    public final Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
     
     protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
+    public final LI settings;
     public final int width;
     public final int height;
-    public final String levelName;
 
     public float time = 0;
     public int steps = 0;
+	public boolean started = false;
     
-    public Level(String levelName) {
-        this(levelName, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    public Level(LI settings) {
+        this(settings, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public Level(String levelName, int width, int height) {
+    public Level(LI settings, int width, int height) {
         this.width = width;
         this.height = height;
-        this.levelName = levelName;
+        this.settings = settings;
         createGenerators();
     }
     
@@ -111,4 +113,13 @@ public abstract class Level {
             goal.update(deltaTime);
         }
     }
+
+	public void save() {
+		settings.bestSteps =
+				Math.min(settings.bestSteps == 0 ? steps : settings.bestSteps, steps);
+		settings.bestTime =
+				Math.min(settings.bestTime == 0 ? time : settings.bestTime, time);
+		settings.completed = true;
+		settings.save();
+	}
 }

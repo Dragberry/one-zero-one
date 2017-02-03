@@ -13,19 +13,19 @@ public class JustReachGoal extends AbstractGoal {
 
     public enum Operator {
 
-        LESS("reach less than ", new OperatorExecutor() {
+        LESS("Got a unit of value <= ", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck <= goalValue;
             }
         }),
-        EQUALS("reach ", new OperatorExecutor() {
+        EQUALS("Got a unit of value = ", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck == goalValue;
             }
         }),
-        MORE("reach more than", new OperatorExecutor() {
+        MORE("Got a unit of value >= ", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck >= goalValue;

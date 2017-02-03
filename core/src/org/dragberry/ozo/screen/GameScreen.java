@@ -3,6 +3,7 @@ package org.dragberry.ozo.screen;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.GameRenderer;
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.screen.popup.ObjectivePopup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -13,6 +14,8 @@ public class GameScreen extends AbstractGameScreen {
 	private Level level;
 	private boolean paused;
 	
+	private ObjectivePopup objectivePopup;
+	
 	private GameController gameController;
 	private GameRenderer gameRenderer;
 
@@ -22,7 +25,7 @@ public class GameScreen extends AbstractGameScreen {
 	}
 
 	@Override
-	public InputProcessor getInputProcessor() {
+	public InputProcessor getScreenInputProcessor() {
 		return gameController;
 	}
 
@@ -43,16 +46,16 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		gameController = new GameController(game);
+		gameController = new GameController(game, this);
 		gameController.init(level);
 		gameRenderer = new GameRenderer(gameController);
-		Gdx.input.setCatchBackKey(true);
+		objectivePopup = new ObjectivePopup(game, level, this);
+		showPopup(objectivePopup);
 	}
 
 	@Override
 	public void hide() {
 		gameRenderer.dispose();
-		Gdx.input.setCatchBackKey(false);
 	}
 
 	@Override

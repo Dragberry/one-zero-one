@@ -62,7 +62,7 @@ public class GuiRenderer implements Renderer {
 	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_36;
 		font.setColor(Color.BLACK);
-		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.levelName);
+		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.settings.name);
 		font.draw(batch, layout,
 				camera.viewportWidth / 2 - layout.width / 2, 15);
 	}

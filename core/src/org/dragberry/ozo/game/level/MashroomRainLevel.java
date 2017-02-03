@@ -9,8 +9,8 @@ import org.dragberry.ozo.game.level.generator.Generator;
 
 public class MashroomRainLevel extends ReachTheGoalLevel {
 
-    public MashroomRainLevel(String levelName, Integer goalToLose, Integer goal) {
-        super(levelName, goalToLose, goal);
+    public MashroomRainLevel(ReachTheGoalLevel.ReachTheGoalLevelInfo levelInfo) {
+        super(levelInfo);
     }
 
     @Override
