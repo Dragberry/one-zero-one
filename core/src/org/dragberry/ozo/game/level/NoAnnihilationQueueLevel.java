@@ -3,12 +3,12 @@ package org.dragberry.ozo.game.level;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.QueueGeneratorHelper;
 
-public class QueueLevel extends ReachTheGoalLevel {
+public class NoAnnihilationQueueLevel extends NoAnnihilationLevel {
 
-	public QueueLevel(String levelName, Integer goalToLose, Integer goal) {
-		super(levelName, goalToLose, goal);
+	public NoAnnihilationQueueLevel(String levelName, Integer goalToLose, Integer goalToWin) {
+		super(levelName, goalToLose, goalToWin);
 	}
-
+	
 	@Override
 	protected void createGenerators() {
 		generators = QueueGeneratorHelper.createGenerators(width, height);

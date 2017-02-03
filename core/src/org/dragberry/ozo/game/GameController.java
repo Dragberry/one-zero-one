@@ -55,7 +55,9 @@ public class GameController extends InputAdapter {
 	}
 
     public void update(float deltaTime) {
-    	level.time += deltaTime;
+    	if (level.started) {
+    		level.time += deltaTime;
+    	}
 		level.update(deltaTime);
     	if (state == State.IN_MOTION) {
     		motionTime += deltaTime;
@@ -73,11 +75,13 @@ public class GameController extends InputAdapter {
 
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
+			level.started = false;
 			Gdx.app.debug(TAG, "Lost!");
 			gameScreen.showPopup(new DefeatScreen(game, gameScreen));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
+			level.started = false;
 			Gdx.app.debug(TAG, "Won!");
 			gameScreen.showPopup(new VictoryPopup(game, gameScreen));
 			return true;

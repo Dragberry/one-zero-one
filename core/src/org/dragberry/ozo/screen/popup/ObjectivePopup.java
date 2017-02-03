@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen.popup;
 
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
@@ -50,13 +51,39 @@ public class ObjectivePopup extends AbstractPopup {
 		tbl.align(Align.center);
 		final float viewportWidth = stage.getViewport().getCamera().viewportWidth;
 		final float viewportHeight = stage.getViewport().getCamera().viewportHeight;
-		tbl.setWidth(viewportWidth / 2);
+		tbl.setWidth(viewportWidth * 0.75f);
 		tbl.setHeight(viewportHeight / 2);
-		tbl.setPosition(viewportWidth * 0.25f, viewportHeight * 0.25f);
+		tbl.setPosition(viewportWidth * 0.125f, viewportHeight * 0.25f);
 		stage.addActor(tbl);
-		Label objLbl = new Label("Objectives:", MenuSkin.getSkin());
-		objLbl.setAlignment(Align.center);
-		tbl.add(objLbl).fill().expand();
+		Label winLbl = new Label("To win:", MenuSkin.getSkin());
+		winLbl.setAlignment(Align.center);
+		tbl.add(winLbl).fill().expand();
+		tbl.row().expand().fill();
+		Table winTbl = new Table();
+		int index = 1;
+		for (Goal goal : level.goalsToWin) {
+			Label goalLbl = new Label(" " + index++ + ". " + goal.getMessage(), MenuSkin.getSkin());
+			goalLbl.setAlignment(Align.left);
+			winTbl.add(goalLbl).fill().expand();
+			winTbl.row();
+		}
+		tbl.add(winTbl).expand().fill();
+		tbl.row();
+		
+		Label loseLbl = new Label("To lose:", MenuSkin.getSkin());
+		loseLbl.setAlignment(Align.center);
+		tbl.add(loseLbl).fill().expand();
+		tbl.row().expand().fill();
+		Table loseTbl = new Table();
+		index = 1;
+		for (Goal goal : level.goalsToLose) {
+			Label goalLbl = new Label(" " + index++ +" . " + goal.getMessage(), MenuSkin.getSkin());
+			goalLbl.setAlignment(Align.left);
+			loseTbl.add(goalLbl).fill().expand();
+			loseTbl.row();
+		}
+		tbl.add(loseTbl).expand().fill();
+		
 		tbl.row();
 		tbl.add(createOkBtn()).fill().expand();
 		tbl.row();
@@ -67,6 +94,7 @@ public class ObjectivePopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				level.started = true;
 				parentScreen.hidePopup();
 			}
 		});

@@ -2,7 +2,6 @@ package org.dragberry.ozo.game.level.goal;
 
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
-import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -71,7 +70,13 @@ public class MultiGoal extends AbstractGoal {
 
     @Override
     public String getMessage() {
-        return null;
+    	String values = "";
+    	for (int index = 0; index < goals.length; index++) {
+    		values += index == goals.length - 1 
+    				?  goals[index].goalValue : goals[index].goalValue + ",";
+    		
+    	}
+        return "Got " + goals.length +  " units of values: " + values;
     }
 
     private void clearGoals() {

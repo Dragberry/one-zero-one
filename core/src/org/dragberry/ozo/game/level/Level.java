@@ -22,8 +22,8 @@ public abstract class Level {
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
 	
-    private Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
-    private Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
+    public final Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
+    public final Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
     
     protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
@@ -33,6 +33,7 @@ public abstract class Level {
 
     public float time = 0;
     public int steps = 0;
+	public boolean started = false;
     
     public Level(String levelName) {
         this(levelName, DEFAULT_WIDTH, DEFAULT_HEIGHT);

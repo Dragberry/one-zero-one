@@ -15,6 +15,7 @@ import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationLevel;
+import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
 import org.dragberry.ozo.game.level.QueueLevel;
 import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
 import org.dragberry.ozo.game.level.ReachTheGoalLevel;
@@ -39,15 +40,25 @@ public abstract class DirectedGame implements ApplicationListener {
         LEVELS.put(li.getName(), li);
         li = new LevelInfo(ReachMultiGoalLevel.class, "Double 5", -10, new Integer[] { 5, 5 });
         LEVELS.put(li.getName(), li);
+        li = new LevelInfo(NoAnnihilationLevel.class, "Save us", 5, 10);
+        LEVELS.put(li.getName(), li);
         li = new LevelInfo(ReachMultiGoalLevel.class, "Roulette", -10, new Integer[] { 7, 7, 7 });
         LEVELS.put(li.getName(), li);
-        li = new LevelInfo(NoAnnihilationLevel.class, "Save Us", 5, 10);
+        li = new LevelInfo(MashroomRainLevel.class, "Mashroom rain", -10, 25);
         LEVELS.put(li.getName(), li);
-        li = new LevelInfo(MashroomRainLevel.class, "The Mashroom Rain", -10, 25);
+        li = new LevelInfo(QueueLevel.class, "Queues", -10, 25);
         LEVELS.put(li.getName(), li);
         li = new LevelInfo(ChessboardLevel.class, "The Chessboard", -10, 25);
         LEVELS.put(li.getName(), li);
-        li = new LevelInfo(QueueLevel.class, "Queues", -10, 25);
+        li = new LevelInfo(MashroomRainLevel.class, "Mashroom shower", -25, 75);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(ReachMultiGoalLevel.class, "Casino Royale", -99, new Integer[] { 99, 99, 99 });
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(QueueLevel.class, "Regularity", -33, 99);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(NoAnnihilationLevel.class, "Unsafe place", 49, 99);
+        LEVELS.put(li.getName(), li);
+        li = new LevelInfo(NoAnnihilationQueueLevel.class, "Unsafe regularity", 99, 50);
         LEVELS.put(li.getName(), li);
     }
 
