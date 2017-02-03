@@ -10,7 +10,7 @@ import org.dragberry.ozo.screen.LevelInfo;
 public class ReachTheGoalLevel extends Level<ReachTheGoalLevel.ReachTheGoalLevelInfo> {
 
     public ReachTheGoalLevel(ReachTheGoalLevel.ReachTheGoalLevelInfo levelInfo) {
-    	super(levelInfo.name);
+    	super(levelInfo);
     	addGoalToWin(new JustReachGoal(levelInfo.goal, levelInfo.operator));
         addGoalToLose(new JustReachGoal(levelInfo.goalToLose, JustReachGoal.Operator.LESS));
     }
@@ -34,8 +34,4 @@ public class ReachTheGoalLevel extends Level<ReachTheGoalLevel.ReachTheGoalLevel
     	
     }
     
-	@Override
-	public LevelInfo getLevelInfo() {
-		return null;
-	}
 }

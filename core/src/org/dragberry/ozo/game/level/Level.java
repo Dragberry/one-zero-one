@@ -18,7 +18,7 @@ import org.dragberry.ozo.screen.LevelInfo;
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level<T extends LevelInfo> {
+public abstract class Level<LI extends LevelInfo> {
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
@@ -28,26 +28,24 @@ public abstract class Level<T extends LevelInfo> {
     
     protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
+    public final LI settings;
     public final int width;
     public final int height;
-    public final String levelName;
 
     public float time = 0;
     public int steps = 0;
 	public boolean started = false;
     
-    public Level(String levelName) {
-        this(levelName, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    public Level(LI settings) {
+        this(settings, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public Level(String levelName, int width, int height) {
+    public Level(LI settings, int width, int height) {
         this.width = width;
         this.height = height;
-        this.levelName = levelName;
+        this.settings = settings;
         createGenerators();
     }
-    
-    public abstract LevelInfo getLevelInfo();
     
     protected void createGenerators() {
     	generators = Collections.emptyMap();
@@ -115,4 +113,13 @@ public abstract class Level<T extends LevelInfo> {
             goal.update(deltaTime);
         }
     }
+
+	public void save() {
+		settings.bestSteps =
+				Math.min(settings.bestSteps == 0 ? steps : settings.bestSteps, steps);
+		settings.bestTime =
+				Math.min(settings.bestTime == 0 ? time : settings.bestTime, time);
+		settings.completed = true;
+		settings.save();
+	}
 }

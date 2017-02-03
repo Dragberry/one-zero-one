@@ -59,9 +59,15 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         table.row();
 
         Table scrollTable = new Table();
+        boolean previousCompleted = true;
         for (LevelInfo levelnfo : game.levels) {
-        	scrollTable.add(createLevelBtn(levelnfo)).fillX().expand(true, false);
-            scrollTable.row();
+        	if (previousCompleted) {
+	        	scrollTable.add(createLevelBtn(levelnfo)).fillX().expand(true, false);
+	            scrollTable.row();
+	            previousCompleted = levelnfo.completed;
+        	} else {
+        		break;
+        	}
         }
         ScrollPane scroller = new ScrollPane(scrollTable);
         table.add(scroller).fill().expand();

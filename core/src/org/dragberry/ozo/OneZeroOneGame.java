@@ -15,6 +15,7 @@ public class OneZeroOneGame extends DirectedGame {
 	
 	@Override
 	public void create() {
+		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Assets.instance.init(new AssetManager());
 		setScreen(new MainMenuScreen(this));

@@ -11,7 +11,7 @@ import org.dragberry.ozo.screen.LevelInfo;
 public class ReachMultiGoalLevel extends Level<ReachMultiGoalLevel.ReachMultiGoalLevelInfo> {
 
     public ReachMultiGoalLevel(ReachMultiGoalLevel.ReachMultiGoalLevelInfo levelInfo) {
-        super(levelInfo.name);
+        super(levelInfo);
     	addGoalToLose(new JustReachGoal(levelInfo.goalToLose, JustReachGoal.Operator.LESS));
         addGoalToWin(new MultiGoal(levelInfo.goals));
     }
@@ -29,8 +29,4 @@ public class ReachMultiGoalLevel extends Level<ReachMultiGoalLevel.ReachMultiGoa
     	
     }
 
-	@Override
-	public LevelInfo getLevelInfo() {
-		return null;
-	}
 }

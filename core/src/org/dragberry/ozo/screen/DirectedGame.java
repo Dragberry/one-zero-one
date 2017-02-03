@@ -28,22 +28,6 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 public abstract class DirectedGame implements ApplicationListener {
 
 	public final Array<LevelInfo> levels = new Array<LevelInfo>();
-	{
-		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("A little bit harder", -5, 10));
-		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("We need more!", -10, 33));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Double 5", -10, 5, 5));
-		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Save us", 5, 10));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Roulette", -10, 7, 7, 7));
-		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom rain", -10, 25));
-		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Queues", -10, 25));
-		levels.add(new ChessboardLevel.ReachTheGoalLevelInfo("Chessboard", -10, 25));
-		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom shower", -25, 75));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Casino Royale", -99, 99, 99, 99));
-		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Regularity", -33, 99));
-		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Unsafe place", 49, 99));
-		levels.add(new NoAnnihilationQueueLevel.NoAnnihilationLevelInfo("Unsafe regularity", 99, 50));
-	}
 	
     private LevelInfo currentLevelInfo;
 
@@ -60,6 +44,30 @@ public abstract class DirectedGame implements ApplicationListener {
     private ShaderProgram blackoutShader;
     
     private Class<? extends AbstractGameScreen> callerScreen;
+    
+    @Override
+    public void create() {
+    	levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("A little bit harder", -5, 10));
+		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("We need more!", -10, 33));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Double 5", -10, 5, 5));
+		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Save us", 5, 10));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Roulette", -10, 7, 7, 7));
+		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom rain", -10, 25));
+		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Queues", -10, 25));
+		levels.add(new ChessboardLevel.ReachTheGoalLevelInfo("Chessboard", -10, 25));
+		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom shower", -25, 75));
+		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Casino Royale", -99, 99, 99, 99));
+		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Regularity", -33, 99));
+		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Unsafe place", 49, 99));
+		levels.add(new NoAnnihilationQueueLevel.NoAnnihilationLevelInfo("Unsafe regularity", 99, 50));
+    }
+    
+    public void refreshLevels() {
+    	for (LevelInfo level : levels) {
+    		level.load();
+    	}
+    }
     
     public void setScreen(AbstractGameScreen screen) {
         setScreen(screen, null, null);

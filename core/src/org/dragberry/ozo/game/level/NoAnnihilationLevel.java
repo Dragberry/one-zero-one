@@ -8,27 +8,22 @@ import org.dragberry.ozo.screen.LevelInfo;
 public class NoAnnihilationLevel extends Level<NoAnnihilationLevel.NoAnnihilationLevelInfo> {
 	
 	public NoAnnihilationLevel(NoAnnihilationLevel.NoAnnihilationLevelInfo levelInfo) {
-		super(levelInfo.name);
+		super(levelInfo);
 		addGoalToWin(new JustReachGoal(levelInfo.goal, Operator.EQUALS));
 		addGoalToLose(new AnnihilationCounterGoal(levelInfo.goalToLose));
 	}
 	
 	 public static class NoAnnihilationLevelInfo extends LevelInfo {
 	    	
-	    	public final int goalToLose;
-	    	public final int goal;
+    	public final int goalToLose;
+    	public final int goal;
 
-	    	public NoAnnihilationLevelInfo(String name, int goalToLose, int goal) {
-	    		super(ReachTheGoalLevel.class, name);
-				this.goalToLose = goalToLose;
-				this.goal = goal;
-			}
-	    	
-	    }
-
-	@Override
-	public LevelInfo getLevelInfo() {
-		return null;
-	}
+    	public NoAnnihilationLevelInfo(String name, int goalToLose, int goal) {
+    		super(ReachTheGoalLevel.class, name);
+			this.goalToLose = goalToLose;
+			this.goal = goal;
+		}
+    	
+    }
 
 }

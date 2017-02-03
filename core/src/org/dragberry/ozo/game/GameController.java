@@ -82,6 +82,7 @@ public class GameController extends InputAdapter {
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
+			level.save();
 			Gdx.app.debug(TAG, "Won!");
 			gameScreen.showPopup(new VictoryPopup(game, gameScreen));
 			return true;
