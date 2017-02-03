@@ -9,15 +9,17 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import java.lang.reflect.Constructor;
+
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
-import org.dragberry.ozo.game.level.NoAnnihilationLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
 import org.dragberry.ozo.game.level.QueueLevel;
-import org.dragberry.ozo.game.level.ReachMultiGoalLevel;
-import org.dragberry.ozo.game.level.ReachTheGoalLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
+import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
+import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
+import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -27,9 +29,9 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public abstract class DirectedGame implements ApplicationListener {
 
-	public final Array<LevelInfo> levels = new Array<LevelInfo>();
+	public final Array<LevelSettings> levels = new Array<LevelSettings>();
 	
-    private LevelInfo currentLevelInfo;
+    private LevelSettings currentLevelSettings;
 
     private boolean init;
     private AbstractGameScreen currScreen;
@@ -47,24 +49,24 @@ public abstract class DirectedGame implements ApplicationListener {
     
     @Override
     public void create() {
-    	levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("A little bit harder", -5, 10));
-		levels.add(new ReachTheGoalLevel.ReachTheGoalLevelInfo("We need more!", -10, 33));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Double 5", -10, 5, 5));
-		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Save us", 5, 10));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Roulette", -10, 7, 7, 7));
-		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom rain", -10, 25));
-		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Queues", -10, 25));
-		levels.add(new ChessboardLevel.ReachTheGoalLevelInfo("Chessboard", -10, 25));
-		levels.add(new MashroomRainLevel.ReachTheGoalLevelInfo("Mashroom shower", -25, 75));
-		levels.add(new ReachMultiGoalLevel.ReachMultiGoalLevelInfo("Casino Royale", -99, 99, 99, 99));
-		levels.add(new QueueLevel.ReachTheGoalLevelInfo("Regularity", -33, 99));
-		levels.add(new NoAnnihilationLevel.NoAnnihilationLevelInfo("Unsafe place", 49, 99));
-		levels.add(new NoAnnihilationQueueLevel.NoAnnihilationLevelInfo("Unsafe regularity", 99, 50));
+    	levels.add(new ReachTheGoalLevelSettings("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevelSettings("A little bit harder", -5, 10));
+		levels.add(new ReachTheGoalLevelSettings("We need more!", -10, 33));
+		levels.add(new ReachMultiGoalLevelSettings("Double 5", -10, 5, 5));
+		levels.add(new NoAnnihilationLevelSettings("Save us", 5, 10));
+		levels.add(new ReachMultiGoalLevelSettings("Roulette", -10, 7, 7, 7));
+		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "Mashroom rain", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "Queues", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "Chessboard", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "Mashroom shower", -25, 75));
+		levels.add(new ReachMultiGoalLevelSettings("Casino Royale", -99, 99, 99, 99));
+		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "Regularity", -33, 99));
+		levels.add(new NoAnnihilationLevelSettings("Unsafe place", 49, 99));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "Unsafe regularity", 99, 50));
     }
     
     public void refreshLevels() {
-    	for (LevelInfo level : levels) {
+    	for (LevelSettings level : levels) {
     		level.load();
     	}
     }
@@ -262,14 +264,14 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
-    public void setCurrentLevelInfo(LevelInfo currentLevelInfo) {
-    	this.currentLevelInfo = currentLevelInfo;
+    public void setCurrentLevelSettings(LevelSettings currentLevelSettings) {
+    	this.currentLevelSettings = currentLevelSettings;
     }
     
     public void playNextLevel() {
-    	int currLevelIndex = levels.indexOf(currentLevelInfo, true);
+    	int currLevelIndex = levels.indexOf(currentLevelSettings, true);
     	if (currLevelIndex < levels.size - 1) {
-    		setCurrentLevelInfo(levels.get(currLevelIndex + 1));
+    		setCurrentLevelSettings(levels.get(currLevelIndex + 1));
     		playLevel();
     	} else {
     		back();
@@ -277,17 +279,17 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playLevel() {
-    	if (currentLevelInfo != null) {
-    		playLevel(currentLevelInfo, null);
+    	if (currentLevelSettings != null) {
+    		playLevel(currentLevelSettings, null);
     	}
     }
     
-    public void playLevel(LevelInfo currentLevelInfo, Class<? extends AbstractGameScreen> callerClass) {
+    public void playLevel(LevelSettings currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
         Gdx.input.setCatchBackKey(true);
-        this.currentLevelInfo = currentLevelInfo;
+        this.currentLevelSettings = currentLevelSettings;
         try {
-            Constructor<? extends Level<? extends LevelInfo>> constructor = currentLevelInfo.clazz.getConstructor(currentLevelInfo.getClass());
-            Level<? extends LevelInfo> level = constructor.newInstance(currentLevelInfo);
+            Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
+            Level<? extends LevelSettings> level = constructor.newInstance(currentLevelSettings);
             setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
             Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);

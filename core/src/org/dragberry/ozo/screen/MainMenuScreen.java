@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import org.dragberry.ozo.game.level.ReachTheGoalLevel;
+import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public class MainMenuScreen extends AbstractGameScreen {
@@ -92,7 +93,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				game.setScreen(new GameScreen(game, 
-						new ReachTheGoalLevel(new ReachTheGoalLevel.ReachTheGoalLevelInfo("Reach the Goal", -5, 5))),
+						new ReachTheGoalLevel(new ReachTheGoalLevelSettings("Reach the Goal", -5, 5))),
 						ScreenTransitionFade.init(),
 						MainMenuScreen.this.getClass());
 			}

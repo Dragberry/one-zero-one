@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level;
 
 import org.dragberry.ozo.game.level.generator.ConstGenerator;
 import org.dragberry.ozo.game.level.generator.Generator;
+import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 /**
  * Created by maksim on 31.01.17.
@@ -9,7 +10,7 @@ import org.dragberry.ozo.game.level.generator.Generator;
 
 public class MashroomRainLevel extends ReachTheGoalLevel {
 
-    public MashroomRainLevel(ReachTheGoalLevel.ReachTheGoalLevelInfo levelInfo) {
+    public MashroomRainLevel(ReachTheGoalLevelSettings levelInfo) {
         super(levelInfo);
     }
 

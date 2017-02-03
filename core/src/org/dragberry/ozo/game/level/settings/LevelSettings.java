@@ -1,4 +1,4 @@
-package org.dragberry.ozo.screen;
+package org.dragberry.ozo.game.level.settings;
 
 import org.dragberry.ozo.game.level.Level;
 
@@ -8,20 +8,20 @@ import com.badlogic.gdx.Preferences;
 /**
  * Created by maksim on 01.02.17.
  */
-public class LevelInfo {
+public class LevelSettings {
 	
     private static final String BEST_STEPS = "bestSteps";
 	private static final String BEST_TIME = "bestTime";
 	private static final String COMPLETED = "completed";
 	
-	public final Class<? extends Level<? extends LevelInfo>> clazz;
+	public final Class<? extends Level<? extends LevelSettings>> clazz;
     public final String name;
     
     public boolean completed;
     public float bestTime;
     public int bestSteps;
 
-    public LevelInfo(Class<? extends Level<? extends LevelInfo>> clazz, String name) {
+    public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String name) {
         this.clazz = clazz;
         this.name = name;
         load();
@@ -32,7 +32,7 @@ public class LevelInfo {
     }
 
 	protected void load(Preferences prefs) {
-		completed = prefs.getBoolean(COMPLETED, false);
+		completed = prefs.getBoolean(COMPLETED, true);
     	bestTime = prefs.getFloat(BEST_TIME, 0);
     	bestSteps = prefs.getInteger(BEST_STEPS, 0);
 	}

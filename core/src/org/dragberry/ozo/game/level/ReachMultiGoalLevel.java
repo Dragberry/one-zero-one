@@ -2,31 +2,18 @@ package org.dragberry.ozo.game.level;
 
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.goal.MultiGoal;
-import org.dragberry.ozo.screen.LevelInfo;
+import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 
 /**
  * Created by maksim on 30.01.17.
  */
 
-public class ReachMultiGoalLevel extends Level<ReachMultiGoalLevel.ReachMultiGoalLevelInfo> {
+public class ReachMultiGoalLevel extends Level<ReachMultiGoalLevelSettings> {
 
-    public ReachMultiGoalLevel(ReachMultiGoalLevel.ReachMultiGoalLevelInfo levelInfo) {
+    public ReachMultiGoalLevel(ReachMultiGoalLevelSettings levelInfo) {
         super(levelInfo);
     	addGoalToLose(new JustReachGoal(levelInfo.goalToLose, JustReachGoal.Operator.LESS));
         addGoalToWin(new MultiGoal(levelInfo.goals));
-    }
-
-    public static class ReachMultiGoalLevelInfo extends LevelInfo {
-    	
-    	public final int goalToLose;
-    	public final int[] goals;
-
-		public ReachMultiGoalLevelInfo(String name, int goalToLose, int... goals) {
-			super(ReachTheGoalLevel.class, name);
-			this.goalToLose = goalToLose;
-			this.goals = goals;
-		}
-    	
     }
 
 }

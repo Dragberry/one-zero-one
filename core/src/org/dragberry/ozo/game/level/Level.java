@@ -12,13 +12,13 @@ import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
-import org.dragberry.ozo.screen.LevelInfo;
+import org.dragberry.ozo.game.level.settings.LevelSettings;
 
 /**
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level<LI extends LevelInfo> {
+public abstract class Level<LI extends LevelSettings> {
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;

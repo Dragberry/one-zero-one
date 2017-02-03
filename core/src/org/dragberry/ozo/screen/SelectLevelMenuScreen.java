@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import org.dragberry.ozo.game.level.settings.LevelSettings;
+
 /**
  * Created by maksim on 28.01.17.
  */
@@ -60,7 +62,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
         Table scrollTable = new Table();
         boolean previousCompleted = true;
-        for (LevelInfo levelnfo : game.levels) {
+        for (LevelSettings levelnfo : game.levels) {
         	if (previousCompleted) {
 	        	scrollTable.add(createLevelBtn(levelnfo)).fillX().expand(true, false);
 	            scrollTable.row();
@@ -94,13 +96,13 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     public void pause() {
     }
 
-    private TextButton createLevelBtn(final LevelInfo levelInfo) {
-        TextButton btn = new TextButton(levelInfo.name, MenuSkin.getSkin());
+    private TextButton createLevelBtn(final LevelSettings levelSettings) {
+        TextButton btn = new TextButton(levelSettings.name, MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.playLevel(levelInfo, SelectLevelMenuScreen.this.getClass());
+                game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
             }
         });
         return btn;

@@ -5,11 +5,12 @@ import java.util.HashMap;
 import org.dragberry.ozo.game.level.generator.AlternationOppositesGenerator;
 import org.dragberry.ozo.game.level.generator.ConstGenerator;
 import org.dragberry.ozo.game.level.generator.Generator;
+import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 public class ChessboardLevel extends ReachTheGoalLevel {
 	
 
-	public ChessboardLevel(ReachTheGoalLevel.ReachTheGoalLevelInfo levelInfo) {
+	public ChessboardLevel(ReachTheGoalLevelSettings levelInfo) {
 		super(levelInfo);
 	}
 	
