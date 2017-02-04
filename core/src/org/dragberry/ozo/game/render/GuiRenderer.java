@@ -51,7 +51,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderGoals(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_28;
+		BitmapFont font = Assets.instance.fonts.gui_s;
 		font.setColor(Color.BLACK);
 		font.draw(batch, "Goal to win:", 10, 15);
 		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
@@ -61,7 +61,7 @@ public class GuiRenderer implements Renderer {
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_40;
+		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.settings.name);
 		font.draw(batch, layout,
@@ -74,7 +74,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderSteps(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_40;
+		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		String stepsString = STEPS + getGameContoller().level.steps;
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
@@ -84,7 +84,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderTime(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_40;
+		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		font.draw(batch,
 				TIME + timeToString((int) getGameContoller().level.time),
@@ -99,7 +99,7 @@ public class GuiRenderer implements Renderer {
 		TextureRegion ball;
 
 		// Blue ball
-		font = Assets.instance.fonts.gui_36;
+		font = Assets.instance.fonts.gui_m;
 		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.ball;
 		batch.setColor(Color.BLUE);
@@ -115,7 +115,7 @@ public class GuiRenderer implements Renderer {
 				camera.viewportHeight - offset + ball.getRegionHeight() / 2 - layout.height / 2);
 
 		// Green ball
-		font = Assets.instance.fonts.gui_28;
+		font = Assets.instance.fonts.gui_s;
 		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.infoBall;
 		batch.setColor(Color.GREEN);

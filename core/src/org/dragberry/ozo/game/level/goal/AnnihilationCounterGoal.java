@@ -28,7 +28,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 		this.posUnit = new GoalUnit(goal);
 		this.negUnit = new GoalUnit(-goal);
 		this.zeroUnit = new GoalUnit(0);
-		this.layout = new GlyphLayout(Assets.instance.fonts.gui_24, "+");
+		this.layout = new GlyphLayout(Assets.instance.fonts.gui_xs, "+");
 		this.dimension = new Vector2(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y); 
 	}
 
@@ -87,7 +87,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 		} else {
 			posUnit.position.set(x + offset, y);
 			posUnit.render(batch);
-			Assets.instance.fonts.gui_24.draw(batch, layout,
+			Assets.instance.fonts.gui_xs.draw(batch, layout,
 					x + posUnit.dimension.x, y + posUnit.dimension.y / 2 - layout.height / 2);
 			negUnit.position.set(x + posUnit.dimension.x + layout.width - offset, y);
 			negUnit.render(batch);

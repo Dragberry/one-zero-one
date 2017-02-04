@@ -18,7 +18,7 @@ public class GoalUnit extends AbstractUnit {
 	
 	@Override
 	protected BitmapFont getFont() {
-		return Assets.instance.fonts.gui_24;
+		return Assets.instance.fonts.gui_xs;
 	}
 
 	@Override

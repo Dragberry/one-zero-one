@@ -87,7 +87,7 @@ public class Unit extends AbstractUnit {
 	
 	@Override
 	protected BitmapFont getFont() {
-		return selected || selectedNeighbor ? Assets.instance.fonts.game_68 : Assets.instance.fonts.game_58;
+		return selected || selectedNeighbor ? Assets.instance.fonts.game_l : Assets.instance.fonts.game_m;
 	}
 	
 	@Override

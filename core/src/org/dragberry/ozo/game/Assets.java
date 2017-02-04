@@ -46,7 +46,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 		unit = new AssetUnit(atlas);
-		fonts = new AssetFonts();
+		fonts = AssetFonts.create(Gdx.graphics.getWidth());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -70,38 +70,61 @@ public class Assets implements Disposable, AssetErrorListener {
 			infoBall = atlas.findRegion("ball_info");
 		}
 	}
-	
-	public class AssetFonts implements Disposable {
-		public BitmapFont gui_24;
-		public BitmapFont gui_28;
-		public BitmapFont gui_36;
-		public BitmapFont gui_40;
-		public BitmapFont game_58;
-		public BitmapFont game_68;
-		
-		public AssetFonts() {
-			float factor = Gdx.graphics.getWidth() /  Constants.VIEWPORT_WIDTH;
-			float factorGui = Gdx.graphics.getWidth() /  Constants.VIEWPORT_GUI_WIDTH;
-			gui_24 = createFont((int)(24 * factorGui), true);
-			gui_28 = createFont((int)(28 * factorGui), true);
-			gui_36 = createFont((int)(36 * factorGui), true);
-			gui_40 = createFont((int)(40 * factorGui), true);
-			game_58 = createFont((int)(58 * factor), false);
-			game_68 = createFont((int)(68 * factor), false);
+
+	public static class AssetFonts implements Disposable {
+
+		public final BitmapFont gui_xs;
+		public final BitmapFont gui_s;
+		public final BitmapFont gui_m;
+		public final BitmapFont gui_l;
+		public final BitmapFont menu_m;
+		public final BitmapFont game_m;
+		public final BitmapFont game_l;
+
+		private AssetFonts(int guiXS, int guiS, int guiM, int guiL, int menuM, int gameM, int gameL) {
+			gui_xs = createFont(guiXS, true);
+			gui_s = createFont(guiS, true);
+			gui_m = createFont(guiM, true);
+			gui_l = createFont(guiL, true);
+			menu_m = createFont(menuM, false);
+			game_m = createFont(gameM, false);
+			game_l = createFont(gameL, false);
 		}
-		
+
+		public static AssetFonts create(int screenWidth) {
+			switch (screenWidth) {
+				case 720:
+					return new AssetFonts(24, 28, 36, 40, 30, 28, 34);
+				case 480:
+					return new AssetFonts(16, 17, 28, 30, 20, 32, 38);
+				case 1080:
+				case 1440:
+					return new AssetFonts(17, 18, 25, 27, 44, 26, 30);
+				default:
+					float factor = screenWidth /  Constants.VIEWPORT_WIDTH;
+					float factorGui = screenWidth /  Constants.VIEWPORT_GUI_WIDTH;
+					return new AssetFonts(
+							(int)(24 * factorGui),
+							(int)(28 * factorGui),
+							(int)(36 * factorGui),
+							(int)(40 * factorGui),
+							(int)(30 * factor),
+							(int)(58 * factor),
+							(int)(68 * factor));
+			}
+		}
+
 		@Override
 		public void dispose() {
-			gui_24.dispose();
-			gui_28.dispose();
-			gui_36.dispose();
-			gui_40.dispose();
-			game_58.dispose();
-			game_68.dispose();
-			Gdx.app.debug(getClass().getName(), " disposed");
+			gui_xs.dispose();
+			gui_s.dispose();
+			gui_m.dispose();
+			gui_l.dispose();
+			game_m.dispose();
+			game_l.dispose();
 		}
 	}
-	
+
 	private static BitmapFont createFont(int size, boolean flip) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();

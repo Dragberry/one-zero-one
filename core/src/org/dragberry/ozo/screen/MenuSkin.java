@@ -26,7 +26,7 @@ public class MenuSkin {
     public static Skin getSkin() {
         if (SKIN == null) {
             SKIN = new Skin();
-            SKIN.add(DEFAULT, Assets.instance.fonts.game_58);
+            SKIN.add(DEFAULT, Assets.instance.fonts.menu_m);
 
             // Create a texture
             Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);

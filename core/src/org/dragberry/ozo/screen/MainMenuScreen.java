@@ -91,7 +91,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.playLevel(new ReachTheGoalLevelSettings("Freeplay", 25, 99), MainMenuScreen.this.getClass());
+				game.playLevel(new ReachTheGoalLevelSettings("Freeplay", -5, 99), MainMenuScreen.this.getClass());
 			}
 		});
 		return btn;
