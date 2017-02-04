@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 public class GuiRenderer implements Renderer {
 	
@@ -52,15 +53,15 @@ public class GuiRenderer implements Renderer {
 	private void renderGoals(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_28;
 		font.setColor(Color.BLACK);
-		font.draw(batch, "Goal to win:", 10, 40);
+		font.draw(batch, "Goal to win:", 10, 15);
 		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
 		font.draw(batch, layout,
-				camera.viewportWidth - layout.width - 10, 40);
-		getGameContoller().level.renderGoals(batch);
+				camera.viewportWidth - layout.width - 10, 15);
+		getGameContoller().level.renderGoals(batch, new Vector2(25.0f, 40.0f));
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_36;
+		BitmapFont font = Assets.instance.fonts.gui_40;
 		font.setColor(Color.BLACK);
 		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.settings.name);
 		font.draw(batch, layout,
@@ -73,58 +74,75 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderSteps(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_28;
+		BitmapFont font = Assets.instance.fonts.gui_40;
 		font.setColor(Color.BLACK);
 		String stepsString = STEPS + getGameContoller().level.steps;
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
 		font.draw(batch, layout,
-				camera.viewportWidth - layout.width - 10, 15);
+				camera.viewportWidth - layout.width - 10,
+				camera.viewportHeight - 50);
 	}
 	
 	private void renderTime(SpriteBatch batch) {
-		BitmapFont font = Assets.instance.fonts.gui_28;
+		BitmapFont font = Assets.instance.fonts.gui_40;
 		font.setColor(Color.BLACK);
 		font.draw(batch,
-				   TIME + timeToString((int) getGameContoller().level.time), 10, 15);
+				TIME + timeToString((int) getGameContoller().level.time),
+				10,
+				camera.viewportHeight - 50);
 	}
 	
 	private void renderState(SpriteBatch batch) {
 		float offset = 105f;
 		GlyphLayout layout;
-		BitmapFont font = Assets.instance.fonts.gui_28;
-		font.setColor(Color.BLACK);
+		BitmapFont font;
 		TextureRegion ball;
-		ball = Assets.instance.unit.infoBall;
-		batch.setColor(Color.GREEN);
+
+		// Blue ball
+		font = Assets.instance.fonts.gui_36;
+		font.setColor(Color.BLACK);
+		ball = Assets.instance.unit.ball;
+		batch.setColor(Color.BLUE);
 		batch.draw(ball,
-				offset, camera.viewportHeight - offset,
-				0, 0, 
+				camera.viewportWidth / 2 - ball.getRegionWidth() / 2, camera.viewportHeight - offset,
+				0, 0,
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
 				0);
+		layout = new GlyphLayout(font, String.valueOf(gameController.zeroCount));
+		font.draw(batch, layout,
+				camera.viewportWidth / 2 - layout.width / 2,
+				camera.viewportHeight - offset + ball.getRegionHeight() / 2 - layout.height / 2);
 
+		// Green ball
+		font = Assets.instance.fonts.gui_28;
+		font.setColor(Color.BLACK);
+		ball = Assets.instance.unit.infoBall;
+		batch.setColor(Color.GREEN);
+		batch.draw(ball,
+				camera.viewportWidth / 2 - ball.getRegionWidth() * 1.5f, camera.viewportHeight - offset,
+				0, 0,
+				ball.getRegionWidth(), ball.getRegionHeight(),
+				1, 1,
+				0);
 		layout = new GlyphLayout(font, String.valueOf(gameController.posCount));
 		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 1.5f * layout.height;
 		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.5f * layout.height;
-		float posX = offset + ball.getRegionWidth() / 2 - layout.width / 2;
-		font.draw(batch, layout,
-				posX,
-				countY);
+		float posX = camera.viewportWidth / 2 - ball.getRegionWidth() - layout.width / 2;
+		font.draw(batch, layout, posX, countY);
 		layout = new GlyphLayout(font, String.valueOf(gameController.posSum));
-		font.draw(batch, layout,
-				posX,
-				sumY);
+		font.draw(batch, layout, posX, sumY);
 
+		// Red ball
 		batch.setColor(Color.RED);
 		batch.draw(ball,
-				camera.viewportWidth - ball.getRegionWidth() - offset, camera.viewportHeight - offset,
-				0, 0, 
-				ball.getRegionWidth(), ball.getRegionHeight(), 
+				camera.viewportWidth / 2 + ball.getRegionWidth() / 2, camera.viewportHeight - offset,
+				0, 0,
+				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
 				0);
-
 		layout = new GlyphLayout(font, String.valueOf(gameController.negCount));
-		float negX = camera.viewportWidth - offset - ball.getRegionWidth() / 2 - layout.width / 2;
+		float negX = camera.viewportWidth / 2 + ball.getRegionWidth() - layout.width / 2;
 		font.draw(batch, layout, negX, countY);
 		layout = new GlyphLayout(font, String.valueOf(-gameController.negSum));
 		font.draw(batch, layout, negX, sumY);

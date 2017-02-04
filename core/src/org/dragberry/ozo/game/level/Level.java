@@ -92,8 +92,7 @@ public abstract class Level<LI extends LevelSettings> {
         return reached;
     }
 
-    public void renderGoals(SpriteBatch batch) {
-    	Vector2 goalPosition = new Vector2(25.0f, 65.0f);
+    public void renderGoals(SpriteBatch batch, Vector2 goalPosition ) {
 		for (AbstractGoal goal : goalsToWin) {
 			goal.render(batch, goalPosition.x, goalPosition.y);
 			goalPosition.x += (goal.dimension.x + 10);
