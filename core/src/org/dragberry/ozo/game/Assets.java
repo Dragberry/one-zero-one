@@ -98,15 +98,17 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final BitmapFont gui_m;
 		public final BitmapFont gui_l;
 		public final BitmapFont menu_m;
+		public final BitmapFont menu_l;
 		public final BitmapFont game_m;
 		public final BitmapFont game_l;
 
-		private AssetFonts(int guiXS, int guiS, int guiM, int guiL, int menuM, int gameM, int gameL) {
+		private AssetFonts(int guiXS, int guiS, int guiM, int guiL, int menuM, int menuL, int gameM, int gameL) {
 			gui_xs = createFont(guiXS, true);
 			gui_s = createFont(guiS, true);
 			gui_m = createFont(guiM, true);
 			gui_l = createFont(guiL, true);
 			menu_m = createFont(menuM, false);
+			menu_l = createFont(menuL, false);
 			game_m = createFont(gameM, false);
 			game_l = createFont(gameL, false);
 		}
@@ -114,12 +116,12 @@ public class Assets implements Disposable, AssetErrorListener {
 		public static AssetFonts create(int screenWidth) {
 			switch (screenWidth) {
 				case 720:
-					return new AssetFonts(24, 28, 36, 40, 30, 28, 34);
+					return new AssetFonts(24, 28, 36, 40, 30, 36, 28, 34);
 				case 480:
-					return new AssetFonts(16, 17, 28, 30, 20, 32, 38);
+					return new AssetFonts(16, 17, 28, 30, 20, 24, 32, 38);
 				case 1080:
 				case 1440:
-					return new AssetFonts(17, 18, 25, 27, 44, 26, 30);
+					return new AssetFonts(17, 18, 25, 27, 44, 54, 26, 30);
 				default:
 					float factor = screenWidth /  Constants.VIEWPORT_WIDTH;
 					float factorGui = screenWidth /  Constants.VIEWPORT_GUI_WIDTH;
@@ -129,6 +131,7 @@ public class Assets implements Disposable, AssetErrorListener {
 							(int)(36 * factorGui),
 							(int)(40 * factorGui),
 							(int)(30 * factor),
+							(int)(36 * factor),
 							(int)(58 * factor),
 							(int)(68 * factor));
 			}

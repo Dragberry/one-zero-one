@@ -19,13 +19,13 @@ public class ChessboardLevel extends ReachTheGoalLevel {
 		generators = new HashMap<Generator.Id, Generator>((width - 2) * (height - 2));
 		int index;
 		Generator gen;
-		for (index = 1; index < width - 1; index++) {
+		for (index = 0; index < width; index++) {
 			gen = new AlternationOppositesGenerator(index % 2 == 0 ? 1 : -1, index, 0);
 			generators.put(gen.id, gen);
 			gen = new AlternationOppositesGenerator((index + (height - 1)) % 2 == 0 ? 1 : -1, index, height - 1);
 			generators.put(gen.id, gen);
 		}
-		for (index = 1; index < height - 1; index++) {
+		for (index = 0; index < height; index++) {
 			gen = new AlternationOppositesGenerator(index % 2 == 0 ? 1 : -1, 0, index);
 			generators.put(gen.id, gen);
 			gen = new AlternationOppositesGenerator((index  + (width - 1)) % 2 == 0 ? 1 : -1, width - 1, index);
