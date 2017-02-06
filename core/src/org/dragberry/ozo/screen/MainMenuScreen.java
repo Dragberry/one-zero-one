@@ -80,8 +80,8 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 
 	private TextButton createRandomGameBtn() {
-		final String freeplay = Assets.instance.translation.format("ozo.freeplay");
-		TextButton btn = new TextButton(freeplay, MenuSkin.getSkin());
+		final String freeplay = "ozo.freeplay";
+		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
 		btn.setPosition(
 				Gdx.graphics.getWidth() / 2 - btn.getWidth() / 2,

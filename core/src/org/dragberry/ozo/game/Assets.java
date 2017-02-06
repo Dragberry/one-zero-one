@@ -47,7 +47,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public void init(AssetManager assetManager) {
 		// TODO for test purposes
-		Locale.setDefault(new Locale("ru", "RU"));
+//		Locale.setDefault(new Locale("ru", "RU"));
 		this.assetManager = assetManager;
 		assetManager.setErrorListener(this);
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
@@ -118,7 +118,7 @@ public class Assets implements Disposable, AssetErrorListener {
 				case 720:
 					return new AssetFonts(24, 28, 36, 40, 30, 36, 28, 34);
 				case 480:
-					return new AssetFonts(16, 17, 28, 30, 20, 24, 32, 38);
+					return new AssetFonts(16, 17, 26, 28, 20, 24, 32, 38);
 				case 1080:
 				case 1440:
 					return new AssetFonts(17, 18, 25, 27, 44, 54, 26, 30);
@@ -149,7 +149,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 
 	private static BitmapFont createFont(int size, boolean flip) {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/UbuntuMono-BI.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/UbuntuMono-BI.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.characters = FONT_CHARS;
 		parameter.color = Color.BLACK;
