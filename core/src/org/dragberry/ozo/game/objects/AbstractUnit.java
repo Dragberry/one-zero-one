@@ -1,6 +1,8 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.util.Constants;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -50,7 +52,9 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	protected abstract float getScaleY();
 
 	protected enum Sign {
-		MINUS(Color.RED, "-"), ZERO(Color.BLUE, ""), PLUS(Color.GREEN, "+");
+		MINUS(Constants.NEGATIVE, "-"),
+		ZERO(Constants.NEUTRAL, ""),
+		PLUS(Constants.POSITIVE, "+");
 		
 		public Color color;
 		public String sign;

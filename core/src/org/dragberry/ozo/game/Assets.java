@@ -87,7 +87,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		public AssetUnit(TextureAtlas atlas) {
 			ball = atlas.findRegion("ball");
-			infoBall = atlas.findRegion("ball_info");
+			infoBall = atlas.findRegion("info_ball");
 		}
 	}
 

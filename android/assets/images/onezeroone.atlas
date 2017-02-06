@@ -3,16 +3,16 @@ onezeroone.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-ball_info
-  rotate: false
-  xy: 1, 1
-  size: 81, 81
-  orig: 81, 81
-  offset: 0, 0
-  index: -1
 ball
   rotate: false
-  xy: 84, 2
+  xy: 1, 1
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+info_ball
+  rotate: false
+  xy: 83, 1
   size: 80, 80
   orig: 80, 80
   offset: 0, 0

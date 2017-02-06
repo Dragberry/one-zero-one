@@ -101,7 +101,7 @@ public class GuiRenderer implements Renderer {
 		font = Assets.instance.fonts.gui_m;
 		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.ball;
-		batch.setColor(Color.BLUE);
+		batch.setColor(Constants.NEUTRAL);
 		batch.draw(ball,
 				camera.viewportWidth / 2 - ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,
@@ -117,7 +117,7 @@ public class GuiRenderer implements Renderer {
 		font = Assets.instance.fonts.gui_s;
 		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.infoBall;
-		batch.setColor(Color.GREEN);
+		batch.setColor(Constants.POSITIVE);
 		batch.draw(ball,
 				camera.viewportWidth / 2 - ball.getRegionWidth() * 1.5f, camera.viewportHeight - offset,
 				0, 0,
@@ -133,7 +133,7 @@ public class GuiRenderer implements Renderer {
 		font.draw(batch, layout, posX, sumY);
 
 		// Red ball
-		batch.setColor(Color.RED);
+		batch.setColor(Constants.NEGATIVE);
 		batch.draw(ball,
 				camera.viewportWidth / 2 + ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,
