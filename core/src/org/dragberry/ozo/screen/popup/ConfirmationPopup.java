@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
@@ -56,7 +57,7 @@ public class ConfirmationPopup extends AbstractPopup {
         tbl.setPosition(viewportWidth * 0.125f, viewportHeight * 0.375f);
         stage.addActor(tbl);
         tbl.row().fill().expand();
-        Label msgLbl = new Label("Are you sure to exit?", MenuSkin.getSkin());
+        Label msgLbl = new Label(Assets.instance.translation.get("ozo.exitConfirmationMsg"), MenuSkin.getSkin());
         msgLbl.setAlignment(Align.center);
         tbl.add(msgLbl).fillX().expandX();
         tbl.row().expand().fill();
@@ -67,7 +68,7 @@ public class ConfirmationPopup extends AbstractPopup {
     }
 
     private TextButton createConfirmBtn() {
-        TextButton btn = new TextButton("Yes", MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.yes"), MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -78,7 +79,7 @@ public class ConfirmationPopup extends AbstractPopup {
     }
 
     private TextButton createCancelBtn() {
-        TextButton btn = new TextButton("No", MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.no"), MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

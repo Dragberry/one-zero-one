@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level.settings;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 
 import com.badlogic.gdx.Gdx;
@@ -15,15 +16,17 @@ public class LevelSettings {
 	private static final String COMPLETED = "completed";
 	
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
+    private final String nameKey;
     public final String name;
     
     public boolean completed;
     public float bestTime;
     public int bestSteps;
 
-    public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String name) {
+    public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String nameKey) {
         this.clazz = clazz;
-        this.name = name;
+        this.nameKey = nameKey;
+        this.name = Assets.instance.translation.get(nameKey);
         load();
     }
     
@@ -50,6 +53,6 @@ public class LevelSettings {
 	}
 
 	protected Preferences loadPreferences() {
-		return Gdx.app.getPreferences(clazz.getName() + name);
+		return Gdx.app.getPreferences(clazz.getName() + nameKey);
 	}
 }

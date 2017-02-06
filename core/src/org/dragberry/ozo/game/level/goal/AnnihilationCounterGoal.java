@@ -31,6 +31,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 		this.zeroUnit = new GoalUnit(0);
 		this.layout = new GlyphLayout(Assets.instance.fonts.gui_xs, "+");
 		this.dimension = new Vector2(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y); 
+		this.msg = Assets.instance.translation.format("ozo.goal.annihilationGoal", goal);
 	}
 
 	@Override
@@ -71,11 +72,6 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 			annihilationCounter += pos < neg ? pos : neg;
 		}
 		return annihilationCounter >= goal;
-	}
-
-	@Override
-	public String getMessage() {
-		return "Lost " + goal + " positive numbers";
 	}
 
 	@Override

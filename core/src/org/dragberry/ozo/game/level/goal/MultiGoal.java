@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level.goal;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
 
@@ -41,6 +42,7 @@ public class MultiGoal extends AbstractGoal {
             this.goals[i] = new SimpleGoal(goalValues[i]);
         }
         this.dimension = new Vector2(GoalUnit.SIZE * goals.length, GoalUnit.SIZE);
+        this.msg = buildMessage();
     }
 
     @Override
@@ -69,15 +71,14 @@ public class MultiGoal extends AbstractGoal {
         return goalReached;
     }
 
-    @Override
-    public String getMessage() {
+    public String buildMessage() {
     	String values = "";
     	for (int index = 0; index < goals.length; index++) {
     		values += index == goals.length - 1 
     				?  goals[index].goalValue : goals[index].goalValue + ",";
     		
     	}
-        return "Got " + goals.length +  " units of values: " + values;
+        return Assets.instance.translation.format("ozo.goal.multiGoal", goals.length, values);
     }
 
     private void clearGoals() {

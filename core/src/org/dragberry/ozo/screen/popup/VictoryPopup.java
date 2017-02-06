@@ -1,5 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
@@ -51,11 +52,11 @@ public class VictoryPopup extends AbstractPopup {
 		tbl.setHeight(viewportHeight / 2);
 		tbl.setPosition(viewportWidth * 0.25f, viewportHeight * 0.25f);
 		stage.addActor(tbl);
-		Label congrLbl = new Label("Congratulations!", MenuSkin.getSkin());
+		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), MenuSkin.getSkin());
 		congrLbl.setAlignment(Align.center);
 		tbl.add(congrLbl).fill().expand();
 		tbl.row();
-		Label wonLbl = new Label("You won!", MenuSkin.getSkin());
+		Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), MenuSkin.getSkin());
 		wonLbl.setAlignment(Align.center);
 		tbl.add(wonLbl).fill().expand();
 		tbl.row();
@@ -67,7 +68,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createNextBtn() {
-		TextButton btn = new TextButton("Next level", MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.nextLevel"), MenuSkin.getSkin());
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -78,7 +79,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createMainMenuBtn() {
-		TextButton btn = new TextButton("Go to menu", MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), MenuSkin.getSkin());
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -89,7 +90,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createPlayAgainBtn() {
-		TextButton btn = new TextButton("Play agian", MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.playAgain"), MenuSkin.getSkin());
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

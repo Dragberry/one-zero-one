@@ -1,5 +1,7 @@
 package org.dragberry.ozo.game;
 
+import java.util.Locale;
+
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -15,10 +17,23 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.I18NBundle;
 
 public class Assets implements Disposable, AssetErrorListener {
 
 	private static final String TAG = Assets.class.getName();
+	
+	private static final String FONT_CHARS;
+	static {
+		StringBuilder sb = new StringBuilder();
+		for( int i = 32; i < 127; i++ ) {
+			sb.append((char)i);
+		}
+		for( int i = 1024; i < 1104; i++ ) {
+			sb.append((char)i); 
+		}
+		FONT_CHARS = sb.toString();
+	}
 	
 	public static final Assets instance = new Assets();
 	
@@ -26,13 +41,17 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public AssetUnit unit;
 	public AssetFonts fonts;
+	public I18NBundle translation;
 	
 	private Assets() {}
 	
 	public void init(AssetManager assetManager) {
+		// TODO for test purposes
+		Locale.setDefault(new Locale("ru", "RU"));
 		this.assetManager = assetManager;
 		assetManager.setErrorListener(this);
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		assetManager.load(Constants.TRANSLATION, I18NBundle.class);
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
 		for (String asset : assetManager.getAssetNames()) {
@@ -47,6 +66,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		
 		unit = new AssetUnit(atlas);
 		fonts = AssetFonts.create(Gdx.graphics.getWidth());
+		translation = assetManager.get(Constants.TRANSLATION, I18NBundle.class);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -128,6 +148,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	private static BitmapFont createFont(int size, boolean flip) {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/UbuntuMono-BI.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.characters = FONT_CHARS;
 		parameter.color = Color.BLACK;
 		parameter.size = size;
 		parameter.flip = flip;

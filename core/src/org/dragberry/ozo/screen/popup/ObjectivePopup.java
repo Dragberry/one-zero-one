@@ -1,5 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.screen.AbstractGameScreen;
@@ -56,7 +57,7 @@ public class ObjectivePopup extends AbstractPopup {
 		tbl.setHeight(viewportHeight / 2);
 		tbl.setPosition(viewportWidth * 0.125f, viewportHeight * 0.25f);
 		stage.addActor(tbl);
-		Label winLbl = new Label("To win:", MenuSkin.getSkin());
+		Label winLbl = new Label(Assets.instance.translation.get("ozo.toWin"), MenuSkin.getSkin());
 		winLbl.setAlignment(Align.center);
 		tbl.add(winLbl).fill().expand();
 		tbl.row().expand().fill();
@@ -71,14 +72,14 @@ public class ObjectivePopup extends AbstractPopup {
 		tbl.add(winTbl).expand().fill();
 		tbl.row();
 		
-		Label loseLbl = new Label("To lose:", MenuSkin.getSkin());
+		Label loseLbl = new Label(Assets.instance.translation.get("ozo.toLose"), MenuSkin.getSkin());
 		loseLbl.setAlignment(Align.center);
 		tbl.add(loseLbl).fill().expand();
 		tbl.row().expand().fill();
 		Table loseTbl = new Table();
 		index = 1;
 		for (Goal goal : level.goalsToLose) {
-			Label goalLbl = new Label(" " + index++ +" . " + goal.getMessage(), MenuSkin.getSkin());
+			Label goalLbl = new Label(" " + index++ +". " + goal.getMessage(), MenuSkin.getSkin());
 			goalLbl.setAlignment(Align.left);
 			loseTbl.add(goalLbl).fill().expand();
 			loseTbl.row();
@@ -91,7 +92,7 @@ public class ObjectivePopup extends AbstractPopup {
 	}
 	
 	private TextButton createOkBtn() {
-		TextButton btn = new TextButton("Ok", MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.ok"), MenuSkin.getSkin());
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

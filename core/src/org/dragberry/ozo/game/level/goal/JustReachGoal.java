@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level.goal;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
 
@@ -14,19 +15,19 @@ public class JustReachGoal extends AbstractGoal {
 
     public enum Operator {
 
-        LESS("Got a unit of value <= ", new OperatorExecutor() {
+        LESS("ozo.goal.justReahGoalLE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck <= goalValue;
             }
         }),
-        EQUALS("Got a unit of value = ", new OperatorExecutor() {
+        EQUALS("ozo.goal.justReahGoalE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck == goalValue;
             }
         }),
-        MORE("Got a unit of value >= ", new OperatorExecutor() {
+        MORE("ozo.goal.justReahGoalGE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck >= goalValue;
@@ -56,6 +57,7 @@ public class JustReachGoal extends AbstractGoal {
         this.operator = operator;
         this.unit = new GoalUnit(goal);
         this.dimension = unit.dimension;
+        this.msg = Assets.instance.translation.format(operator.msg, goal);
     }
 
     @Override
@@ -68,11 +70,6 @@ public class JustReachGoal extends AbstractGoal {
             }
         }
         return false;
-    }
-
-    @Override
-    public String getMessage() {
-        return operator.msg + goal;
     }
 
     @Override

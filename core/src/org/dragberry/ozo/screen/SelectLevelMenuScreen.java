@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 
 /**
@@ -55,7 +56,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         Table table = new Table();
         table.setFillParent(true);
 
-        Label label = new Label("Select Level", MenuSkin.getSkin());
+        Label label = new Label(Assets.instance.translation.format("ozo.selectLevel"), MenuSkin.getSkin());
         label.setAlignment(Align.center);
         table.add(label).fill().expand();
         table.row();
@@ -75,7 +76,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
         table.add(scroller).fill().expand();
         table.row().fill().expand();
 
-        TextButton backBtn = new TextButton("Back", MenuSkin.getSkin());
+        TextButton backBtn = new TextButton(Assets.instance.translation.format("ozo.back"), MenuSkin.getSkin());
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

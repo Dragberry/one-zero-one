@@ -15,12 +15,15 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GuiRenderer implements Renderer {
 	
-	private static final String TIME = "Time: ";
-	private static final String STEPS = "Steps: ";
+	private static final String TIME = "ozo.time";
+	private static final String STEPS = "ozo.steps";
 	private static final int SECONDS_PER_MINUTE = 60;
 	private static final String EMPTY = "";
 	private static final String ZERO = "0";
 	private static final String COLON = ":";
+	
+	private final GlyphLayout goal =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goal"));
+	private final GlyphLayout goalToLose =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goalToLose"));
 	
 	private OrthographicCamera camera;
 	
@@ -53,10 +56,8 @@ public class GuiRenderer implements Renderer {
 	private void renderGoals(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_s;
 		font.setColor(Color.BLACK);
-		font.draw(batch, "Goal to win:", 10, 15);
-		GlyphLayout layout = new GlyphLayout(font, "Goal to lose:");
-		font.draw(batch, layout,
-				camera.viewportWidth - layout.width - 10, 15);
+		font.draw(batch, goal, 10, 15);
+		font.draw(batch, goalToLose, camera.viewportWidth - goalToLose.width - 10, 15);
 		getGameContoller().level.renderGoals(batch, new Vector2(25.0f, 40.0f));
 	}
 
@@ -76,7 +77,7 @@ public class GuiRenderer implements Renderer {
 	private void renderSteps(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
-		String stepsString = STEPS + getGameContoller().level.steps;
+		String stepsString = Assets.instance.translation.format(STEPS, getGameContoller().level.steps);
 		GlyphLayout layout = new GlyphLayout(font, stepsString);
 		font.draw(batch, layout,
 				camera.viewportWidth - layout.width - 10,
@@ -87,7 +88,7 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		font.draw(batch,
-				TIME + timeToString((int) getGameContoller().level.time),
+				Assets.instance.translation.format(TIME, timeToString((int) getGameContoller().level.time)),
 				10,
 				camera.viewportHeight - 50);
 	}

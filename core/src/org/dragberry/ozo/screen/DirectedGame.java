@@ -2,14 +2,17 @@ package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
+
 import java.lang.reflect.Constructor;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
@@ -49,20 +52,21 @@ public abstract class DirectedGame implements ApplicationListener {
     
     @Override
     public void create() {
-    	levels.add(new ReachTheGoalLevelSettings("Let's start!", -10, 2, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevelSettings("A little bit harder", -5, 10));
-		levels.add(new ReachTheGoalLevelSettings("We need more!", -10, 33));
-		levels.add(new ReachMultiGoalLevelSettings("Double 5", -10, 5, 5));
-		levels.add(new NoAnnihilationLevelSettings("Save us", 5, 10));
-		levels.add(new ReachMultiGoalLevelSettings("Roulette", -10, 7, 7, 7));
-		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "Mashroom rain", -10, 25));
-		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "Queues", -10, 25));
-		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "Chessboard", -10, 25));
-		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "Mashroom shower", -25, 75));
-		levels.add(new ReachMultiGoalLevelSettings("Casino Royale", -99, 99, 99, 99));
-		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "Regularity", -33, 99));
-		levels.add(new NoAnnihilationLevelSettings("Unsafe place", 49, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "Unsafe regularity", 30, 50));
+    	Assets.instance.init(new AssetManager());
+    	levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 10));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -10, 33));
+		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.double5", -10, 5, 5));
+		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.saveUs", 5, 10));
+		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.roulette", -10, 7, 7, 7));
+		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomRain", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.queues", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "ozo.lvl.chessboard", -10, 25));
+		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomShower", -25, 75));
+		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 99, 99, 99));
+		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
+		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 49, 99));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 30, 50));
     }
     
     public void setScreen(AbstractGameScreen screen) {

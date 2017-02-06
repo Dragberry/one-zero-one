@@ -1,5 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
@@ -56,7 +57,7 @@ public class DefeatScreen extends AbstractPopup {
         tbl.setPosition(viewportWidth * 0.25f, viewportHeight * 0.25f);
         stage.addActor(tbl);
         tbl.row();
-        Label lostLbl = new Label("You lost!", MenuSkin.getSkin());
+        Label lostLbl = new Label(Assets.instance.translation.get("ozo.youLost"), MenuSkin.getSkin());
         lostLbl.setAlignment(Align.center);
         tbl.add(lostLbl).fill().expand();
         tbl.row();
@@ -66,7 +67,7 @@ public class DefeatScreen extends AbstractPopup {
     }
 
     private TextButton createMainMenuBtn() {
-        TextButton btn = new TextButton("Go to menu", MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -77,7 +78,7 @@ public class DefeatScreen extends AbstractPopup {
     }
 
     private TextButton createRetryBtn() {
-        TextButton btn = new TextButton("Retry", MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.retry"), MenuSkin.getSkin());
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
