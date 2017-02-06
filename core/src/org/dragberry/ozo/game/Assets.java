@@ -126,7 +126,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 
 	private static BitmapFont createFont(int size, boolean flip) {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/hemi_head_bd_ it.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("types/UbuntuMono-BI.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.color = Color.BLACK;
 		parameter.size = size;

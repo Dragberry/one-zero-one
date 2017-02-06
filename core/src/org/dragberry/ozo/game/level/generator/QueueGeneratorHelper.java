@@ -6,17 +6,17 @@ import java.util.Map;
 public class QueueGeneratorHelper {
 
 	public static Map<Generator.Id, Generator> createGenerators(int width, int height) {
-		Map<Generator.Id, Generator> generators = new HashMap<Generator.Id, Generator>((width - 2) * (height - 2));
+		Map<Generator.Id, Generator> generators = new HashMap<Generator.Id, Generator>((width - 1) * (height - 1));
 		int index;
 		Generator gen;
-		for (index = 1; index < width - 1; index++) {
+		for (index = 0; index < width; index++) {
 			
 			gen = new QueueGenerator(getInitialValue(index, 0), index, 0);
 			generators.put(gen.id, gen);
 			gen = new QueueGenerator(getInitialValue(index, height -1), index, height - 1);
 			generators.put(gen.id, gen);
 		}
-		for (index = 1; index < height - 1; index++) {
+		for (index = 0; index < height; index++) {
 			gen = new QueueGenerator(getInitialValue(0, index), 0, index);
 			generators.put(gen.id, gen);
 			gen = new QueueGenerator(getInitialValue(width - 1, index), width - 1, index);

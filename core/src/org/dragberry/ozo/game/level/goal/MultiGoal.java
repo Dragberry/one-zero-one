@@ -5,6 +5,7 @@ import org.dragberry.ozo.game.objects.Unit;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by maksim on 30.01.17.
@@ -43,7 +44,7 @@ public class MultiGoal extends AbstractGoal {
     }
 
     @Override
-    public boolean isReached(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
+    public boolean isReached(Unit[][] units, Unit selectedUnit,Array<Unit> neighbors) {
         clearGoals();
         for (Unit[] row : units) {
             unitLoop: for (Unit unit : row) {

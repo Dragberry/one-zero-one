@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class AnnihilationCounterGoal extends AbstractGoal {
 	
@@ -51,7 +52,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	}
 
 	@Override
-	public boolean isReached(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
+	public boolean isReached(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
 		int pos = 0;
 		int neg = 0;
 		if (selectedUnit.previousValue > 0) {

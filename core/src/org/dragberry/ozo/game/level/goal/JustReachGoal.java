@@ -4,6 +4,7 @@ import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by maksim on 29.01.17.
@@ -58,7 +59,7 @@ public class JustReachGoal extends AbstractGoal {
     }
 
     @Override
-    public boolean isReached(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
+    public boolean isReached(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
                 if (operator.executor.execute(goal, unit.value)) {

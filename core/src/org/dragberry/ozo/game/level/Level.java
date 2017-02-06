@@ -74,15 +74,15 @@ public abstract class Level<LI extends LevelSettings> {
         this.goalsToLose.add(goalToLose);
     }
 
-    public boolean isLost(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
+    public boolean isLost(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
         return checkGoals(units, selectedUnit, neighbors, goalsToLose);
     }
 
-    public boolean isWon(Unit[][] units, Unit selectedUnit, Unit[] neighbors) {
+    public boolean isWon(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
         return checkGoals(units, selectedUnit, neighbors, goalsToWin);
     }
 
-    public static boolean checkGoals(Unit[][] units, Unit selectedUnit, Unit[] neighbors, Array<AbstractGoal> goals) {
+    public static boolean checkGoals(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors, Array<AbstractGoal> goals) {
         boolean reached = true;
         for (AbstractGoal goal : goals) {
             if (!goal.isReached(units, selectedUnit, neighbors)) {

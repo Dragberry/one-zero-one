@@ -19,6 +19,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public class GameController extends InputAdapter {
 
@@ -37,7 +38,7 @@ public class GameController extends InputAdapter {
 	public Level<?> level;
 	
 	public Unit[][] units;
-	private Unit[] neighbors = new Unit[4];
+	private Array<Unit> neighbors = new Array<Unit>(4);
 
 	public int negCount;
 	public int negSum;
@@ -150,7 +151,7 @@ public class GameController extends InputAdapter {
     	// sum neighbors
     	selectedUnit.previousValue = selectedUnit.value;
     	for (Unit neighbor : neighbors) {
-    		selectedUnit.value +=neighbor.value;
+			selectedUnit.value +=neighbor.value;
     	}
     	// logical shift all units
     	// fix and recalculate position
@@ -186,7 +187,9 @@ public class GameController extends InputAdapter {
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0);
+		if (selectedUnit.y != 0) {
+			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0);
+		}
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
@@ -195,7 +198,9 @@ public class GameController extends InputAdapter {
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1);
+		if (selectedUnit.y != level.height - 1) {
+			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1);
+		}
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
@@ -204,7 +209,9 @@ public class GameController extends InputAdapter {
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y);
+		if (selectedUnit.x != level.width - 1) {
+			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y);
+		}
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
@@ -213,7 +220,9 @@ public class GameController extends InputAdapter {
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y);
+		if (selectedUnit.x != 0) {
+			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y);
+		}
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {
@@ -239,10 +248,19 @@ public class GameController extends InputAdapter {
     }
     
     private void getNeighbors(Unit unit) {
-		neighbors[0] = units[unit.x][unit.y - 1];
-		neighbors[1] = units[unit.x + 1][unit.y];
-		neighbors[2] = units[unit.x][unit.y + 1];
-		neighbors[3] = units[unit.x - 1][unit.y];
+    	neighbors.clear();
+    	if (unit.y != 0) {
+    		neighbors.add(units[unit.x][unit.y - 1]);
+    	}
+    	if (unit.x != level.width - 1) {
+    		neighbors.add(units[unit.x + 1][unit.y]);
+    	}
+    	if (unit.y != level.height - 1) {
+    		neighbors.add(units[unit.x][unit.y + 1]);
+    	}
+    	if (unit.x != 0) {
+    		neighbors.add(units[unit.x - 1][unit.y]);
+    	}
     }
     
     private void onScreenTouch(float xCoord, float yCoord) {
@@ -251,7 +269,7 @@ public class GameController extends InputAdapter {
     		return;
     	}
     	Unit currentSelectedUnit = getSelectedUnit(xCoord, yCoord);
-    	if (currentSelectedUnit == null || isBorderUnit(currentSelectedUnit)) {
+    	if (currentSelectedUnit == null) {
     		// unit is border unit
     		deselectAllUnits();
     		return;

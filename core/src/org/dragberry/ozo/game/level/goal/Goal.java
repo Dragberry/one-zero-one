@@ -3,6 +3,7 @@ package org.dragberry.ozo.game.level.goal;
 import org.dragberry.ozo.game.objects.Unit;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by maksim on 29.01.17.
@@ -10,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public interface Goal {
 
-    boolean isReached(Unit[][] units, Unit selectedUnit, Unit[] neighbors);
+    boolean isReached(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors);
 
     String getMessage();
 

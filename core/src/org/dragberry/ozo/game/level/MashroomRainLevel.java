@@ -16,14 +16,14 @@ public class MashroomRainLevel extends ReachTheGoalLevel {
 
     @Override
     protected Generator getDefaultGenerator(int x, int y) {
-        if (y == 0) {
+    	if (x == 0 || x == width - 1) {
+            return ConstGenerator.ZERO;
+        }
+    	if (y == 0) {
             return ConstGenerator.POS_ONE;
         }
         if (y == height - 1) {
             return ConstGenerator.NEG_ONE;
-        }
-        if (x == 0 || x == width - 1) {
-            return ConstGenerator.ZERO;
         }
         return super.getDefaultGenerator(x, y);
     }
