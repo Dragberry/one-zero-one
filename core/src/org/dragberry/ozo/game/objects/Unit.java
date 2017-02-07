@@ -13,17 +13,68 @@ public class Unit extends AbstractUnit {
 		NORTH, SOUTH, EAST, WEST
 	}
 	
-	private static final float UINIT_SELECTED_SCALE = 0.8f;
+	private static final float UNIT_INITIAL_SCALE = 0.01f;
+	private static final float UNIT_UNSELECTED_SCALE = 0.8f;
+	private static final float UNIT_SELECTED_SCALE = 1.0f;
 
 	public int x;
 	public int y;
 	public int previousValue;
 	
-	public boolean selected;
-	public boolean selectedNeighbor;
+	private boolean selected;
+	private boolean selectedNeighbor;
+	
+	public enum State {
+		FIXED, GROW_UP, GROW_DOWN, INITIAL
+	}
+	private State state;
+	private float time;
+	private static final float GROWING_TIME = 0.2f;
 	
 	public Unit() {
 		this(0, 0, 0);
+	}
+	
+	@Override
+	public void update(float deltaTime) {
+		switch (state) {
+			case INITIAL:
+				time += deltaTime;
+				scale.x += deltaTime * 2;
+				scale.y += deltaTime * 2;
+				if (scale.x >= UNIT_UNSELECTED_SCALE) {
+					time = 0;
+					state = State.FIXED;
+					scale.x = UNIT_UNSELECTED_SCALE;
+					scale.y = UNIT_UNSELECTED_SCALE;
+					renderValue = true;
+				}
+				break;
+			case GROW_UP:
+				time += deltaTime;
+				scale.x += deltaTime;
+				scale.y += deltaTime;
+				if (time >= GROWING_TIME || scale.x >= UNIT_SELECTED_SCALE) {
+					time = 0;
+					state = State.FIXED;
+					scale.x = UNIT_SELECTED_SCALE;
+					scale.y = UNIT_SELECTED_SCALE;
+				}
+				break;
+			case GROW_DOWN:
+				time += deltaTime;
+				scale.x -= deltaTime;
+				scale.y -= deltaTime;
+				if (time >= GROWING_TIME || scale.x <= UNIT_UNSELECTED_SCALE) {
+					time = 0;
+					state = State.FIXED;
+					scale.x = UNIT_UNSELECTED_SCALE;
+					scale.y = UNIT_UNSELECTED_SCALE;
+				}
+				break;
+			default:
+				break;
+		}
 	}
 	
 	public Unit(int value, int x, int y) {
@@ -34,6 +85,11 @@ public class Unit extends AbstractUnit {
 		this.y = y;
 		origin.x = dimension.x / 2;
 		origin.y = dimension.y / 2;
+		scale.x = UNIT_INITIAL_SCALE;
+		scale.y = UNIT_INITIAL_SCALE;
+		time = 0;
+		state = State.INITIAL;
+		renderValue = false;
 		init();
 	}
 	
@@ -91,16 +147,6 @@ public class Unit extends AbstractUnit {
 	}
 	
 	@Override
-	protected float getScaleX() {
-		return selected || selectedNeighbor ? scale.x : scale.x * UINIT_SELECTED_SCALE;
-	}
-	
-	@Override
-	protected float getScaleY() {
-		return selected || selectedNeighbor ? scale.y : scale.y * UINIT_SELECTED_SCALE;
-	}
-	
-	@Override
 	protected float getFontX(GlyphLayout layout) {
 		return position.x + (dimension.x - layout.width) * 0.4f;
 	}
@@ -114,4 +160,38 @@ public class Unit extends AbstractUnit {
 	public String toString() {
 		return "Unit[" + x + "][" + y + "]=" + value;
 	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void select() {
+		selected = true;
+		state = State.GROW_UP;
+		time = 0;
+	}
+	
+	public void unselect() {
+		selected = false;
+		state = State.GROW_DOWN;
+		time = 0;
+	}
+
+	public boolean isSelectedNeighbor() {
+		return selectedNeighbor;
+	}
+
+	public void selectedNeighbor() {
+		selectedNeighbor = true;
+		state = State.GROW_UP;
+		time = 0;
+		
+	}
+	
+	public void unselectedNeighbor() {
+		selectedNeighbor = false;
+		state = State.GROW_DOWN;
+		time = 0;
+	}
+	
 }

@@ -26,7 +26,7 @@ public class LevelRenderer implements Renderer {
 		Unit selectedUnit = null;
 		for (Unit[] row : gameController.units) {
 			for (Unit unit : row) {
-				if (unit.selected) {
+				if (unit.isSelected()) {
 					selectedUnit = unit;
 					continue;
 				}

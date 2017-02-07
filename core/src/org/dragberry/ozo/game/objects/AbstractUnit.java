@@ -13,9 +13,11 @@ public abstract class AbstractUnit extends AbstractGameObject {
 
 	protected TextureRegion regBall;
 	public int value;
+	protected boolean renderValue;
 	
 	public AbstractUnit(int value) {
 		this.value = value;
+		renderValue = true;
 	}
 	
 	@Override
@@ -28,17 +30,18 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
-				getScaleX(), getScaleY(),
+				scale.x, scale.y,
 				rotation,
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
-		
-		BitmapFont font = getFont();
-		String valueStr = sign.sign + Math.abs(value);
-		GlyphLayout layout = new GlyphLayout(font, valueStr);
-		font.setColor(Color.BLACK);
-		font.draw(batch, layout,getFontX(layout), getFontY(layout));
+		if (renderValue) {
+			BitmapFont font = getFont();
+			String valueStr = sign.sign + Math.abs(value);
+			GlyphLayout layout = new GlyphLayout(font, valueStr);
+			font.setColor(Color.BLACK);
+			font.draw(batch, layout,getFontX(layout), getFontY(layout));
+		}
 	}
 	
 	protected abstract BitmapFont getFont();
@@ -47,10 +50,6 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	
 	protected abstract float getFontY(GlyphLayout layout);
 	
-	protected abstract float getScaleX();
-	
-	protected abstract float getScaleY();
-
 	protected enum Sign {
 		MINUS(Constants.NEGATIVE, "-"),
 		ZERO(Constants.NEUTRAL, ""),

@@ -78,6 +78,11 @@ public class GameController extends InputAdapter {
     public void update(float deltaTime) {
     	if (level.started) {
     		level.time += deltaTime;
+    		for (int x = 0; x < level.width; x++) {
+    			for (int y = 0; y < level.height; y++) {
+    				units[x][y].update(deltaTime);
+    			}
+    		}
     	}
 		level.update(deltaTime);
     	if (state == State.IN_MOTION) {
@@ -164,7 +169,7 @@ public class GameController extends InputAdapter {
     	if (isGameFinished()) {
 			return;
 		}
-    	selectedUnit.selected = false;
+    	selectedUnit.unselect();
     	selectedUnit = null;
     }
 
@@ -241,8 +246,8 @@ public class GameController extends InputAdapter {
     	selectedUnit = null;
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y].selected = false;
-				units[x][y].selectedNeighbor = false;
+				units[x][y].unselect();
+				units[x][y].unselectedNeighbor();
 			}
     	}
     }
@@ -287,10 +292,10 @@ public class GameController extends InputAdapter {
     	if (selectedUnit == null) {
     		// unit first selection
     		selectedUnit = currentSelectedUnit;
-    		selectedUnit.selected = true;
+    		selectedUnit.select();
     		getNeighbors(selectedUnit);
     		for (Unit neighbor : neighbors) {
-    			neighbor.selectedNeighbor = true;
+    			neighbor.selectedNeighbor();
 			}
     	}
     }

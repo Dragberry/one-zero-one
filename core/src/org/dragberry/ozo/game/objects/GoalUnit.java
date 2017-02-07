@@ -20,16 +20,6 @@ public class GoalUnit extends AbstractUnit {
 	protected BitmapFont getFont() {
 		return Assets.instance.fonts.gui_xs;
 	}
-
-	@Override
-	protected float getScaleX() {
-		return scale.x;
-	}
-
-	@Override
-	protected float getScaleY() {
-		return scale.y;
-	}
 	
 	@Override
 	protected float getFontX(GlyphLayout layout) {
