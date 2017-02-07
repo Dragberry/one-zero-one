@@ -64,12 +64,13 @@ public class GameController extends InputAdapter {
 	}
 
 	private void updateStateForUnit(Unit unit) {
-		if (unit.value < 0) {
+		int value = unit.getValue();
+		if (value < 0) {
 			negCount++;
-			negSum += unit.value;
-		} else if (unit.value > 0) {
+			negSum += value;
+		} else if (value > 0) {
 			posCount++;
-			posSum += unit.value;
+			posSum += value;
 		} else {
 			zeroCount++;
 		}
@@ -154,10 +155,12 @@ public class GameController extends InputAdapter {
     
     private void finishStepExecution() {
     	// sum neighbors
-    	selectedUnit.previousValue = selectedUnit.value;
+    	selectedUnit.previousValue = selectedUnit.getValue();
+    	int valueToAdd = 0;
     	for (Unit neighbor : neighbors) {
-			selectedUnit.value +=neighbor.value;
+    		valueToAdd +=neighbor.getValue();
     	}
+    	selectedUnit.addValue(valueToAdd);
     	// logical shift all units
     	// fix and recalculate position
     	shiftTopUnits(selectedUnit);

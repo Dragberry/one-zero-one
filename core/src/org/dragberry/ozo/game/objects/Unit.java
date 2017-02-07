@@ -1,10 +1,7 @@
 package org.dragberry.ozo.game.objects;
 
-import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.util.Constants;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 
 public class Unit extends AbstractUnit {
@@ -47,7 +44,6 @@ public class Unit extends AbstractUnit {
 					state = State.FIXED;
 					scale.x = UNIT_UNSELECTED_SCALE;
 					scale.y = UNIT_UNSELECTED_SCALE;
-					renderValue = true;
 				}
 				break;
 			case GROW_UP:
@@ -83,13 +79,11 @@ public class Unit extends AbstractUnit {
 		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		this.x = x;
 		this.y = y;
-		origin.x = dimension.x / 2;
-		origin.y = dimension.y / 2;
-		scale.x = UNIT_INITIAL_SCALE;
-		scale.y = UNIT_INITIAL_SCALE;
+		origin.set(dimension.x / 2, dimension.y / 2);
+		scale.set(UNIT_INITIAL_SCALE, UNIT_INITIAL_SCALE);
+		flipY = false;
 		time = 0;
 		state = State.INITIAL;
-		renderValue = false;
 		init();
 	}
 	
@@ -139,21 +133,6 @@ public class Unit extends AbstractUnit {
 		this.x = gameX;
 		this.y = gameY;
 		init();
-	}
-	
-	@Override
-	protected BitmapFont getFont() {
-		return selected || selectedNeighbor ? Assets.instance.fonts.game_l : Assets.instance.fonts.game_m;
-	}
-	
-	@Override
-	protected float getFontX(GlyphLayout layout) {
-		return position.x + (dimension.x - layout.width) * 0.4f;
-	}
-
-	@Override
-	protected float getFontY(GlyphLayout layout) {
-		return position.y + dimension.y / 2 + layout.height / 2;
 	}
 	
 	@Override

@@ -15,6 +15,6 @@ public interface Constants {
     float UNIT_SPEED = UNIT_SIZE / UNIT_MOTION_TIME;
 
     Color POSITIVE = Color.GREEN;
-    Color NEGATIVE = Color.RED;
+    Color NEGATIVE = new Color(0xFF / 255f, 0x45 / 255f, 0x00 / 255, 1);
     Color NEUTRAL = new Color(0x1E / 255f, 0x90 / 255f, 0xFF / 255, 1);
 }

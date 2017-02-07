@@ -4,22 +4,57 @@ import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class AbstractUnit extends AbstractGameObject {
 
 	protected TextureRegion regBall;
-	public int value;
-	protected boolean renderValue;
+	protected int value;
+	protected boolean flipY;
+	protected Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
 	
 	public AbstractUnit(int value) {
 		this.value = value;
-		renderValue = true;
+		resolveValueDigits();
 	}
 	
+	public void addValue(int valueToAdd) {
+		value += valueToAdd;
+		resolveValueDigits();
+	}
+	
+	public void setValue(int value) {
+		this.value = value;
+		resolveValueDigits();
+	}
+	
+	public int getValue() {
+		return value;
+	}
+	
+	private void resolveValueDigits() {
+		valueDigits.clear();
+		resolveNextDigit(value);
+		if (value < 0) {
+			valueDigits.add(Assets.instance.digits.minus);
+		}
+		if (value > 0) {
+			valueDigits.add(Assets.instance.digits.plus);
+		}
+		valueDigits.reverse();
+	}
+	
+	private void resolveNextDigit(int value) {
+		int digit = value % 10;
+		valueDigits.add(Assets.instance.digits.digits[Math.abs(digit)]);
+		value /= 10;
+		if (value != 0) {
+			resolveNextDigit(value);
+		}
+	}
+
 	@Override
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
@@ -35,20 +70,27 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				regBall.getRegionX(), regBall.getRegionY(),
 				regBall.getRegionWidth(), regBall.getRegionHeight(),
 				false, false);
-		if (renderValue) {
-			BitmapFont font = getFont();
-			String valueStr = sign.sign + Math.abs(value);
-			GlyphLayout layout = new GlyphLayout(font, valueStr);
-			font.setColor(Color.BLACK);
-			font.draw(batch, layout,getFontX(layout), getFontY(layout));
+		
+		int digitWidth = Assets.instance.digits.plus.getRegionWidth();
+		int digitHeight= Assets.instance.digits.plus.getRegionHeight();
+		float offsetX = digitWidth * valueDigits.size / 2;
+		float posY = position.y + dimension.y / 2 - digitHeight / 2;
+		TextureRegion digit;
+		for (int i = 0; i < valueDigits.size; i++) {
+			digit = valueDigits.get(i);
+			batch.draw(digit.getTexture(),
+					position.x + dimension.x / 2 - offsetX * scale.x, 
+					posY,
+					0, 0,
+					digitWidth, digitHeight,
+					scale.x, scale.y,
+					rotation,
+					digit.getRegionX(), digit.getRegionY(),
+					digit.getRegionWidth(), digit.getRegionHeight(),
+					false, flipY);
+			offsetX -= digitWidth;
 		}
 	}
-	
-	protected abstract BitmapFont getFont();
-	
-	protected abstract float getFontX(GlyphLayout layout);
-	
-	protected abstract float getFontY(GlyphLayout layout);
 	
 	protected enum Sign {
 		MINUS(Constants.NEGATIVE, "-"),

@@ -1,7 +1,5 @@
 package org.dragberry.ozo.game;
 
-import java.util.Locale;
-
 import org.dragberry.ozo.game.util.Constants;
 
 import com.badlogic.gdx.Gdx;
@@ -40,14 +38,13 @@ public class Assets implements Disposable, AssetErrorListener {
 	private AssetManager assetManager;
 	
 	public AssetUnit unit;
+	public AssetDigits digits;
 	public AssetFonts fonts;
 	public I18NBundle translation;
 	
 	private Assets() {}
 	
 	public void init(AssetManager assetManager) {
-		// TODO for test purposes
-//		Locale.setDefault(new Locale("ru", "RU"));
 		this.assetManager = assetManager;
 		assetManager.setErrorListener(this);
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
@@ -65,6 +62,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 		unit = new AssetUnit(atlas);
+		digits = new AssetDigits(atlas);
 		fonts = AssetFonts.create(Gdx.graphics.getWidth());
 		translation = assetManager.get(Constants.TRANSLATION, I18NBundle.class);
 	}
@@ -88,6 +86,20 @@ public class Assets implements Disposable, AssetErrorListener {
 		public AssetUnit(TextureAtlas atlas) {
 			ball = atlas.findRegion("ball");
 			infoBall = atlas.findRegion("info_ball");
+		}
+	}
+	
+	public class AssetDigits {
+		public final AtlasRegion[] digits = new AtlasRegion[10];
+		public final AtlasRegion plus;
+		public final AtlasRegion minus;
+		
+		public AssetDigits(TextureAtlas atlas) {
+			for (int i = 0; i < 10; i++) {
+				digits[i] = atlas.findRegion("n" + i);
+			}
+			plus = atlas.findRegion("n+");
+			minus = atlas.findRegion("n-");
 		}
 	}
 

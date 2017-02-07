@@ -64,7 +64,7 @@ public class JustReachGoal extends AbstractGoal {
     public boolean isReached(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
         for (Unit[] row : units) {
             for (Unit unit : row) {
-                if (operator.executor.execute(goal, unit.value)) {
+                if (operator.executor.execute(goal, unit.getValue())) {
                     return true;
                 }
             }

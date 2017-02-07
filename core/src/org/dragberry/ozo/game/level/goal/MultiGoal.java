@@ -54,7 +54,7 @@ public class MultiGoal extends AbstractGoal {
                     if (goal.isGoalReached()) {
                         continue;
                     }
-                    if (unit.value == goal.goalValue) {
+                    if (unit.getValue() == goal.goalValue) {
                         goal.goalUnit = unit;
                         continue unitLoop;
                     }
