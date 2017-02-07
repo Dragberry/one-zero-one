@@ -35,15 +35,21 @@ public final class DigitUtil {
 			offsetX -= digitWidth;
 		}
 	}
-	
+
 	public static void resolveDigits(int value, Array<TextureRegion> texRegions) {
+		resolveDigits(value, texRegions, true);
+	}
+
+	public static void resolveDigits(int value, Array<TextureRegion> texRegions, boolean signed) {
 		texRegions.clear();
 		resolveNextDigit(value, texRegions);
-		if (value < 0) {
-			texRegions.add(Assets.instance.digits.minus);
-		}
-		if (value > 0) {
-			texRegions.add(Assets.instance.digits.plus);
+		if (signed) {
+			if (value < 0) {
+				texRegions.add(Assets.instance.digits.minus);
+			}
+			if (value > 0) {
+				texRegions.add(Assets.instance.digits.plus);
+			}
 		}
 		texRegions.reverse();
 	}

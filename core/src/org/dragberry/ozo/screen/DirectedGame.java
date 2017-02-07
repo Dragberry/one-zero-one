@@ -41,9 +41,10 @@ public abstract class DirectedGame implements ApplicationListener {
     private AbstractGameScreen nextScreen;
     private FrameBuffer currFbo;
     private FrameBuffer nextFbo;
-    private FrameBuffer popupFbo;;
+    private FrameBuffer popupFbo;
     private SpriteBatch batch;
     private float time;
+    private float timePopup;
     private ScreenTransition screenTransition;
     
     private ShaderProgram blackoutShader;
@@ -140,8 +141,7 @@ public abstract class DirectedGame implements ApplicationListener {
        popupFbo.begin();
        currScreen.getPopup().render(deltaTime);
        popupFbo.end();
-       
-       
+
        float width = currFbo.getColorBufferTexture().getWidth();
        float height = currFbo.getColorBufferTexture().getHeight();
        Gdx.gl.glClearColor(0, 0, 0, 0);

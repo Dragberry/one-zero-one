@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 public class GuiRenderer implements Renderer {
 	
@@ -65,9 +66,8 @@ public class GuiRenderer implements Renderer {
 	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
-		GlyphLayout layout  = new GlyphLayout(font, getGameContoller().level.settings.name);
-		font.draw(batch, layout,
-				camera.viewportWidth / 2 - layout.width / 2, 15);
+        font.draw(batch, getGameContoller().level.settings.name,
+                camera.viewportWidth / 4, 15, camera.viewportWidth / 2, Align.center, true);
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class GuiRenderer implements Renderer {
 		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.8f * Assets.instance.digits.minus.getRegionHeight();
 		float posX = camera.viewportWidth / 2 - ball.getRegionWidth();
 		
-		DigitUtil.draw(batch, gameController.zeroCountDigits,
+		DigitUtil.draw(batch, gameController.posCountDigits,
 				posX, countY,
 				0.6f, 0.6f,
 				0,
@@ -145,12 +145,12 @@ public class GuiRenderer implements Renderer {
 		
 		float negX = camera.viewportWidth / 2 + ball.getRegionWidth();
 		
-		DigitUtil.draw(batch, gameController.zeroCountDigits,
+		DigitUtil.draw(batch, gameController.negCountDigits,
 				negX, countY,
 				0.6f, 0.6f,
 				0,
 				false, true);
-		DigitUtil.draw(batch, gameController.posSumDigits,
+		DigitUtil.draw(batch, gameController.negSumDigits,
 				negX, sumY,
 				0.6f, 0.6f,
 				0,

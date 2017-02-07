@@ -65,7 +65,8 @@ public class ObjectivePopup extends AbstractPopup {
 		int index = 1;
 		for (Goal goal : level.goalsToWin) {
 			Label goalLbl = new Label(" " + index++ + ". " + goal.getMessage(), MenuSkin.getSkin());
-			goalLbl.setAlignment(Align.left);
+			goalLbl.setWrap(true);
+			goalLbl.setAlignment(Align.center);
 			winTbl.add(goalLbl).fill().expand();
 			winTbl.row();
 		}
@@ -80,7 +81,8 @@ public class ObjectivePopup extends AbstractPopup {
 		index = 1;
 		for (Goal goal : level.goalsToLose) {
 			Label goalLbl = new Label(" " + index++ +". " + goal.getMessage(), MenuSkin.getSkin());
-			goalLbl.setAlignment(Align.left);
+			goalLbl.setWrap(true);
+			goalLbl.setAlignment(Align.center);
 			loseTbl.add(goalLbl).fill().expand();
 			loseTbl.row();
 		}

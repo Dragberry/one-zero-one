@@ -53,7 +53,7 @@ public class GameController extends InputAdapter {
 	public Array<TextureRegion> zeroCountDigits = new Array<TextureRegion>(4);
 	public Array<TextureRegion> negCountDigits = new Array<TextureRegion>(4);
 	public Array<TextureRegion> negSumDigits = new Array<TextureRegion>(4);
-	
+
 	public GameController(DirectedGame game, GameScreen gameScreen) {
 		this.game = game;
 		this.gameScreen = gameScreen;
@@ -69,6 +69,7 @@ public class GameController extends InputAdapter {
 				updateStateForUnit(unit);
 			}
 		}
+		resolveStateDigits();
 	}
 
 	private void updateStateForUnit(Unit unit) {
@@ -82,15 +83,17 @@ public class GameController extends InputAdapter {
 		} else {
 			zeroCount++;
 		}
-		DigitUtil.resolveDigits(posCount, posCountDigits);
-		DigitUtil.resolveDigits(posSum, posSumDigits);
-		DigitUtil.resolveDigits(zeroCount, zeroCountDigits);
-		DigitUtil.resolveDigits(negCount, negCountDigits);
-		DigitUtil.resolveDigits(negSum, negSumDigits);
-		
 	}
 
-    public void update(float deltaTime) {
+	private void resolveStateDigits() {
+		DigitUtil.resolveDigits(posCount, posCountDigits, false);
+		DigitUtil.resolveDigits(posSum, posSumDigits);
+		DigitUtil.resolveDigits(zeroCount, zeroCountDigits, false);
+		DigitUtil.resolveDigits(negCount, negCountDigits, false);
+		DigitUtil.resolveDigits(negSum, negSumDigits);
+	}
+
+	public void update(float deltaTime) {
     	if (level.started) {
     		level.time += deltaTime;
     		for (int x = 0; x < level.width; x++) {
@@ -201,6 +204,7 @@ public class GameController extends InputAdapter {
 				updateStateForUnit(units[x][y]);
 			}
 		}
+		resolveStateDigits();
 	}
 
 	private void shiftBottomUnits(Unit selectedUnit) {
