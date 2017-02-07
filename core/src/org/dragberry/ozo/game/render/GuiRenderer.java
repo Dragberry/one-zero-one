@@ -3,6 +3,7 @@ package org.dragberry.ozo.game.render;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.DigitUtil;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,8 +16,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GuiRenderer implements Renderer {
 	
-	private static final String TIME = "ozo.time";
-	private static final String STEPS = "ozo.steps";
 	private static final int SECONDS_PER_MINUTE = 60;
 	private static final String EMPTY = "";
 	private static final String ZERO = "0";
@@ -93,13 +92,9 @@ public class GuiRenderer implements Renderer {
 	
 	private void renderState(SpriteBatch batch) {
 		float offset = 105f;
-		GlyphLayout layout;
-		BitmapFont font;
 		TextureRegion ball;
 
 		// Blue ball
-		font = Assets.instance.fonts.gui_m;
-		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.ball;
 		batch.setColor(Constants.NEUTRAL);
 		batch.draw(ball,
@@ -108,14 +103,14 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
 				0);
-		layout = new GlyphLayout(font, String.valueOf(gameController.zeroCount));
-		font.draw(batch, layout,
-				camera.viewportWidth / 2 - layout.width / 2,
-				camera.viewportHeight - offset + ball.getRegionHeight() / 2 - layout.height / 2);
+		DigitUtil.draw(batch, gameController.zeroCountDigits,
+				camera.viewportWidth / 2, camera.viewportHeight - offset + ball.getRegionHeight() / 2,
+				1, 1,
+				0,
+				false, true);
+		
 
 		// Green ball
-		font = Assets.instance.fonts.gui_s;
-		font.setColor(Color.BLACK);
 		ball = Assets.instance.unit.infoBall;
 		batch.setColor(Constants.POSITIVE);
 		batch.draw(ball,
@@ -124,13 +119,20 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
 				0);
-		layout = new GlyphLayout(font, String.valueOf(gameController.posCount));
-		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 1.5f * layout.height;
-		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.5f * layout.height;
-		float posX = camera.viewportWidth / 2 - ball.getRegionWidth() - layout.width / 2;
-		font.draw(batch, layout, posX, countY);
-		layout = new GlyphLayout(font, String.valueOf(gameController.posSum));
-		font.draw(batch, layout, posX, sumY);
+		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.digits.minus.getRegionHeight();
+		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.8f * Assets.instance.digits.minus.getRegionHeight();
+		float posX = camera.viewportWidth / 2 - ball.getRegionWidth();
+		
+		DigitUtil.draw(batch, gameController.zeroCountDigits,
+				posX, countY,
+				0.6f, 0.6f,
+				0,
+				false, true);
+		DigitUtil.draw(batch, gameController.posSumDigits,
+				posX, sumY,
+				0.6f, 0.6f,
+				0,
+				false, true);
 
 		// Red ball
 		batch.setColor(Constants.NEGATIVE);
@@ -140,11 +142,19 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
 				0);
-		layout = new GlyphLayout(font, String.valueOf(gameController.negCount));
-		float negX = camera.viewportWidth / 2 + ball.getRegionWidth() - layout.width / 2;
-		font.draw(batch, layout, negX, countY);
-		layout = new GlyphLayout(font, String.valueOf(-gameController.negSum));
-		font.draw(batch, layout, negX, sumY);
+		
+		float negX = camera.viewportWidth / 2 + ball.getRegionWidth();
+		
+		DigitUtil.draw(batch, gameController.zeroCountDigits,
+				negX, countY,
+				0.6f, 0.6f,
+				0,
+				false, true);
+		DigitUtil.draw(batch, gameController.posSumDigits,
+				negX, sumY,
+				0.6f, 0.6f,
+				0,
+				false, true);
 	}
 	
 	private static String timeToString(int timeInSeconds) {

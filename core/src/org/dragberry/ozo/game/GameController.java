@@ -7,6 +7,7 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.GameScreen;
 import org.dragberry.ozo.screen.popup.ConfirmationPopup;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
@@ -46,6 +48,12 @@ public class GameController extends InputAdapter {
 	public int posSum;
 	public int zeroCount;
 	
+	public Array<TextureRegion> posCountDigits = new Array<TextureRegion>(4);
+	public Array<TextureRegion> posSumDigits = new Array<TextureRegion>(4);
+	public Array<TextureRegion> zeroCountDigits = new Array<TextureRegion>(4);
+	public Array<TextureRegion> negCountDigits = new Array<TextureRegion>(4);
+	public Array<TextureRegion> negSumDigits = new Array<TextureRegion>(4);
+	
 	public GameController(DirectedGame game, GameScreen gameScreen) {
 		this.game = game;
 		this.gameScreen = gameScreen;
@@ -74,6 +82,12 @@ public class GameController extends InputAdapter {
 		} else {
 			zeroCount++;
 		}
+		DigitUtil.resolveDigits(posCount, posCountDigits);
+		DigitUtil.resolveDigits(posSum, posSumDigits);
+		DigitUtil.resolveDigits(zeroCount, zeroCountDigits);
+		DigitUtil.resolveDigits(negCount, negCountDigits);
+		DigitUtil.resolveDigits(negSum, negSumDigits);
+		
 	}
 
     public void update(float deltaTime) {
