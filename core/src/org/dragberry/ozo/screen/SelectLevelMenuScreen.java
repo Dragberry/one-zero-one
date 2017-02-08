@@ -29,7 +29,7 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     }
 
     @Override
-    public InputProcessor getScreenInputProcessor() {
+    public InputProcessor getInputProcessor() {
         return stage;
     }
 

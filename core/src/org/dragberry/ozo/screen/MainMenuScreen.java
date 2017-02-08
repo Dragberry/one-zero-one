@@ -25,7 +25,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 
 	@Override
-	public InputProcessor getScreenInputProcessor() {
+	public InputProcessor getInputProcessor() {
 		return stage;
 	}
 

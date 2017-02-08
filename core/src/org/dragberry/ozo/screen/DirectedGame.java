@@ -3,7 +3,6 @@ package org.dragberry.ozo.screen;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -23,6 +22,8 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.screen.popup.AbstractPopup;
+import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -39,6 +40,7 @@ public abstract class DirectedGame implements ApplicationListener {
     private boolean init;
     private AbstractGameScreen currScreen;
     private AbstractGameScreen nextScreen;
+    private AbstractPopup popup;
     private FrameBuffer currFbo;
     private FrameBuffer nextFbo;
     private FrameBuffer popupFbo;
@@ -46,6 +48,12 @@ public abstract class DirectedGame implements ApplicationListener {
     private float time;
     private float timePopup;
     private ScreenTransition screenTransition;
+    private ScreenTransition popupTransition;
+    private PopupState popupState;
+    
+    private enum PopupState {
+    	SHOWN, SHOWING, HIDING, HIDDEN
+    }
     
     private ShaderProgram blackoutShader;
     
@@ -68,6 +76,12 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 49, 99));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 30, 50));
+    
+		popupState = PopupState.HIDDEN;
+		blackoutShader = new ShaderProgram(
+     		Gdx.files.internal("shaders/blackout.vert"), 
+     		Gdx.files.internal("shaders/blackout.frag"));
+		this.popupTransition = PopupTransition.init(blackoutShader);
     }
     
     public void setScreen(AbstractGameScreen screen) {
@@ -82,103 +96,130 @@ public abstract class DirectedGame implements ApplicationListener {
         setScreen(screen, null, callerScreen);
     }
 
+    protected void initialise(int width, int height) {
+		if (!init) {
+	        currFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
+	        nextFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
+	        popupFbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
+	        batch = new SpriteBatch();
+	        init = true;
+        }
+	}
+    
     public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition, Class<? extends AbstractGameScreen> callerScreen) {
         if (callerScreen != null) {
         	this.callerScreen = callerScreen;
         }
+        initialise(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        nextScreen = screen;
+        this.screenTransition = screenTransition;
+        if (popup != null) {
+        	setPopup(null);
+        } else {
+	        showNextScreen();
+        }
+    }
+
+	protected void showNextScreen() {
+		if (nextScreen == null) {
+			return;
+		}
+		int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+		nextScreen.show(); // activate next screen
+		nextScreen.resize(width, height);
+		nextScreen.render(0); // let screen update() once
+		if (currScreen != null) {
+		    currScreen.pause();
+		}
+		nextScreen.pause();
+		Gdx.input.setInputProcessor(null); // disable input
+		time = 0;
+	}
+    
+    public void setPopup(AbstractPopup popupScreen) {
     	int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
-        if (!init) {
-            currFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
-            nextFbo = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
-            popupFbo = new FrameBuffer(Pixmap.Format.RGBA8888, width, height, false);
-            batch = new SpriteBatch();
-            blackoutShader = new ShaderProgram(
-            		Gdx.files.internal("shaders/blackout.vert"), 
-            		Gdx.files.internal("shaders/blackout.frag"));
-            init = true;
+        
+        if (popupScreen != null) {
+        	popupState = PopupState.SHOWING;
+        	popup = popupScreen;
+        	popup.show();
+        	popup.resize(width, height);
+        	popup.render(0);
+        	currScreen.pause();
+        } else {
+        	popupState = PopupState.HIDING;
         }
-        // start new transition
-        nextScreen = screen;
-        Gdx.app.debug(getClass().getName(), "setScreen()");
-        nextScreen.show(); // activate next screen
-        nextScreen.resize(width, height);
-        nextScreen.render(0); // let screen update() once
-        if (currScreen != null) {
-            currScreen.pause();
-        }
-        nextScreen.pause();
-        Gdx.input.setInputProcessor(null); // disable input
-        this.screenTransition = screenTransition;
-        time = 0;
+    	Gdx.input.setInputProcessor(null);
+    	timePopup = 0;
     }
-    
-    public void back() {
-        Gdx.input.setCatchBackKey(false);
-    	try {
-	    	if (callerScreen != null) {
-	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
-	    		constructor.newInstance(this);
-	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
-	    	} else {
-	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
-	    	}
-	    	callerScreen = null;
-    	} catch (Exception exc) {
-    		Gdx.app.error(getClass().getName(), "An error has occured during navigation! Application is terminated!", exc);
-    		Gdx.app.exit();
-    	}
-    }
-
-   private void renderPopup(float deltaTime) {
-	   currFbo.begin();
-       if (currScreen != null) {
-           currScreen.render(deltaTime);
-       }
-       currFbo.end();
-       popupFbo.begin();
-       currScreen.getPopup().render(deltaTime);
-       popupFbo.end();
-
-       float width = currFbo.getColorBufferTexture().getWidth();
-       float height = currFbo.getColorBufferTexture().getHeight();
-       Gdx.gl.glClearColor(0, 0, 0, 0);
-       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-       batch.begin();
-       batch.setShader(blackoutShader);
-       batch.setColor(1, 1, 1, 1);
-       batch.draw(currFbo.getColorBufferTexture(),
-    		   0, 0, 
-    		   0, 0, 
-    		   width, height,
-    		   1, 1, 0, 0, 0,
-    		   currFbo.getColorBufferTexture().getWidth(), currFbo.getColorBufferTexture().getHeight(),
-    		   false, true);
-       batch.setShader(null);
-       batch.setColor(1, 1, 1, 1);
-       batch.draw(popupFbo.getColorBufferTexture(), 
-    		   0, 0, 
-    		   0, 0, width, height,
-    		   1, 1, 0, 0, 0,
-    		   popupFbo.getColorBufferTexture().getWidth(), popupFbo.getColorBufferTexture().getHeight(),
-               false, true);
-       batch.end();
-   }
     
     @Override
     public void render() {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
-        if (nextScreen == null) {
+        if (nextScreen == null || popupState == PopupState.HIDING) {
             // no ongoing transition
             if (currScreen != null) {
-            	if (currScreen.hasPopup()) {
-            		// render popup
-            		renderPopup(deltaTime);
-            	} else {
-            		currScreen.render(deltaTime);
+            	float popupDuration = popupTransition.getDuration();
+				switch (popupState) {
+            		case HIDDEN:
+            			currScreen.render(deltaTime);
+            			break;
+	            	case SHOWING:
+	            		timePopup = Math.min(timePopup + deltaTime, popupDuration);
+	        			currFbo.begin();
+	        			if (currScreen != null) {
+	        				currScreen.render(deltaTime);
+	        			}
+	        			currFbo.end();
+	        			popupFbo.begin();
+	        			popup.render(deltaTime);
+	        			popupFbo.end();
+	        			popupTransition.render(batch, 
+	        					currFbo.getColorBufferTexture(),
+	        					popupFbo.getColorBufferTexture(), 
+	        					timePopup / popupDuration);
+	        			if (timePopup >= popupDuration) {
+	            			popupState = PopupState.SHOWN;
+	            			timePopup = 0;
+	            			Gdx.input.setInputProcessor(popup.getInputProcessor());
+	            		}
+	            		break;
+	            	case HIDING:
+	            		timePopup = Math.min(timePopup + deltaTime, popupDuration);
+	            		currFbo.begin();
+	        			if (currScreen != null) {
+	        				currScreen.render(deltaTime);
+	        			}
+	        			currFbo.end();
+	        			popupFbo.begin();
+	        			popup.render(deltaTime);
+	        			popupFbo.end();
+	        			popupTransition.render(batch, 
+	        					currFbo.getColorBufferTexture(),
+	        					popupFbo.getColorBufferTexture(), 
+	        					 1 - timePopup / popupDuration);
+	        			if (timePopup >= popupDuration) {
+	        				popup.hide();
+	        				popup = null;
+	            			popupState = PopupState.HIDDEN;
+	            			timePopup = 0;
+	            			currScreen.resume();
+	            			Gdx.input.setInputProcessor(currScreen.getInputProcessor());
+	            			showNextScreen();
+	            		}
+	            		break;
+	            	case SHOWN:
+	            		currFbo.end();
+	        			popupFbo.begin();
+	        			popup.render(deltaTime);
+	        			popupFbo.end();
+	        			popupTransition.render(batch, currFbo.getColorBufferTexture(), popupFbo.getColorBufferTexture(), 1);
+	            		break;
+	            	default: 
+	            		throw new IllegalArgumentException();
             	}
             }
         } else {
@@ -260,6 +301,26 @@ public abstract class DirectedGame implements ApplicationListener {
             blackoutShader.dispose();
             init = false;
         }
+    }
+    
+    public void back() {
+        Gdx.input.setCatchBackKey(false);
+        setPopup(null);
+    	try {
+	    	if (callerScreen != null) {
+	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
+	    		constructor.newInstance(this);
+	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
+	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
+	    	} else {
+	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
+	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
+	    	}
+	    	callerScreen = null;
+    	} catch (Exception exc) {
+    		Gdx.app.error(getClass().getName(), "An error has occured during navigation! Application is terminated!", exc);
+    		Gdx.app.exit();
+    	}
     }
 
     public void setCurrentLevelSettings(LevelSettings currentLevelSettings) {

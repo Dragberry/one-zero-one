@@ -24,13 +24,13 @@ public class ObjectivePopup extends AbstractPopup {
 	private Stage stage;
 	private Level<? extends LevelSettings> level;
 	
-	public ObjectivePopup(DirectedGame game, Level<? extends LevelSettings> level, AbstractGameScreen parentScreen) {
-		super(game, parentScreen);
+	public ObjectivePopup(DirectedGame game, Level<? extends LevelSettings> level) {
+		super(game);
 		this.level = level;
 	}
 
 	@Override
-	protected InputProcessor getScreenInputProcessor() {
+	public InputProcessor getInputProcessor() {
 		return stage;
 	}
 
@@ -99,7 +99,7 @@ public class ObjectivePopup extends AbstractPopup {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				level.started = true;
-				parentScreen.hidePopup();
+				game.setPopup(null);
 			}
 		});
 		return btn;

@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
 
@@ -24,12 +23,12 @@ public class ConfirmationPopup extends AbstractPopup {
 
     private Stage stage;
 
-    public ConfirmationPopup(DirectedGame game, AbstractGameScreen parentScreen) {
-        super(game, parentScreen);
+    public ConfirmationPopup(DirectedGame game) {
+        super(game);
     }
 
     @Override
-    protected InputProcessor getScreenInputProcessor() {
+	public InputProcessor getInputProcessor() {
         return stage;
     }
 
@@ -83,7 +82,7 @@ public class ConfirmationPopup extends AbstractPopup {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                parentScreen.hidePopup();
+                game.setPopup(null);
             }
         });
         return btn;

@@ -1,7 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
 
@@ -20,12 +19,12 @@ public class VictoryPopup extends AbstractPopup {
 
 	private Stage stage;
 	
-	public VictoryPopup(DirectedGame game, AbstractGameScreen parent) {
-		super(game, parent);
+	public VictoryPopup(DirectedGame game) {
+		super(game);
 	}
 
 	@Override
-	public InputProcessor getScreenInputProcessor() {
+	public InputProcessor getInputProcessor() {
 		return stage;
 	}
 

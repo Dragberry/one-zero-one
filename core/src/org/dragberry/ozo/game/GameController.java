@@ -9,7 +9,6 @@ import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.GameScreen;
 import org.dragberry.ozo.screen.popup.ConfirmationPopup;
 import org.dragberry.ozo.screen.popup.DefeatScreen;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
@@ -36,7 +35,6 @@ public class GameController extends InputAdapter {
 	private Unit selectedUnit = null;
 	
 	private DirectedGame game;
-	private GameScreen gameScreen;
 	public Level<?> level;
 	
 	public Unit[][] units;
@@ -54,9 +52,8 @@ public class GameController extends InputAdapter {
 	public Array<TextureRegion> negCountDigits = new Array<TextureRegion>(4);
 	public Array<TextureRegion> negSumDigits = new Array<TextureRegion>(4);
 
-	public GameController(DirectedGame game, GameScreen gameScreen) {
+	public GameController(DirectedGame game) {
 		this.game = game;
-		this.gameScreen = gameScreen;
 	}
 	
 	public void init(Level<?> level) {
@@ -121,14 +118,14 @@ public class GameController extends InputAdapter {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			level.started = false;
 			Gdx.app.debug(TAG, "Lost!");
-			gameScreen.showPopup(new DefeatScreen(game, gameScreen));
+			game.setPopup(new DefeatScreen(game));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
 			level.save();
 			Gdx.app.debug(TAG, "Won!");
-			gameScreen.showPopup(new VictoryPopup(game, gameScreen));
+			game.setPopup(new VictoryPopup(game));
 			return true;
 		}
 		return false;
@@ -391,7 +388,7 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				gameScreen.showPopup(new ConfirmationPopup(game, gameScreen));
+				game.setPopup(new ConfirmationPopup(game));
 				break;
 		}
 		return false;
