@@ -51,6 +51,8 @@ public abstract class DirectedGame implements ApplicationListener {
     private ScreenTransition popupTransition;
     private PopupState popupState;
     
+    private ActionExecutor onPopupClose;
+    
     private enum PopupState {
     	SHOWN, SHOWING, HIDING, HIDDEN
     }
@@ -118,6 +120,9 @@ public abstract class DirectedGame implements ApplicationListener {
         	setPopup(null);
         } else {
 	        showNextScreen();
+	        if (currScreen != null) {
+	        	currScreen.render(Gdx.graphics.getDeltaTime());
+	        }
         }
     }
 
@@ -154,6 +159,11 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     	Gdx.input.setInputProcessor(null);
     	timePopup = 0;
+    }
+    
+    public void hidePopup(ActionExecutor onPopupClose) {
+    	this.onPopupClose = onPopupClose;
+    	setPopup(null);
     }
     
     @Override
@@ -206,9 +216,12 @@ public abstract class DirectedGame implements ApplicationListener {
 	        				popup = null;
 	            			popupState = PopupState.HIDDEN;
 	            			timePopup = 0;
+	            			if (onPopupClose != null) {
+	            				onPopupClose.execute();
+	            				onPopupClose = null;
+	            			}
 	            			currScreen.resume();
 	            			Gdx.input.setInputProcessor(currScreen.getInputProcessor());
-	            			showNextScreen();
 	            		}
 	            		break;
 	            	case SHOWN:
@@ -305,7 +318,6 @@ public abstract class DirectedGame implements ApplicationListener {
     
     public void back() {
         Gdx.input.setCatchBackKey(false);
-        setPopup(null);
     	try {
 	    	if (callerScreen != null) {
 	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);

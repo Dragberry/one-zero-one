@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class CameraHelper {
 	
-	private static final String TAG = CameraHelper.class.getName();
-
 	public final static CameraHelper INSTANCE = new CameraHelper();
 	
 	private final float MAX_ZOOM_IN = 0.25f;

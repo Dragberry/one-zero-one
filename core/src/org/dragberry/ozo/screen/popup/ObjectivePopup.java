@@ -3,7 +3,6 @@ package org.dragberry.ozo.screen.popup;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.goal.Goal;
-import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.MenuSkin;

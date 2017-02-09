@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen.popup;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
 
@@ -70,7 +71,13 @@ public class DefeatScreen extends AbstractPopup {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.back();
+            	game.hidePopup(new ActionExecutor() {
+					
+					@Override
+					public void execute() {
+						game.back();
+					}
+				});
             }
         });
         return btn;
@@ -81,7 +88,13 @@ public class DefeatScreen extends AbstractPopup {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.playLevel();
+            	game.hidePopup(new ActionExecutor() {
+					
+					@Override
+					public void execute() {
+						game.playLevel();
+					}
+				});
             }
         });
         return btn;

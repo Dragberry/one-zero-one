@@ -20,8 +20,6 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
  */
 public class SelectLevelMenuScreen extends AbstractGameScreen {
 
-    private static final String TAG = SelectLevelMenuScreen.class.getName();
-
     private Stage stage;
 
     public SelectLevelMenuScreen(DirectedGame game) {

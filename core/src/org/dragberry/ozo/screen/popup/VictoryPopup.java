@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen.popup;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MenuSkin;
 
@@ -71,7 +72,13 @@ public class VictoryPopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.playNextLevel();
+				game.hidePopup(new ActionExecutor() {
+					
+					@Override
+					public void execute() {
+						game.playNextLevel();
+					}
+				});
 			}
 		});
 		return btn;
@@ -82,7 +89,13 @@ public class VictoryPopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.back();
+				game.hidePopup(new ActionExecutor() {
+					
+					@Override
+					public void execute() {
+						game.back();
+					}
+				});
 			}
 		});
 		return btn;
@@ -93,7 +106,13 @@ public class VictoryPopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.playLevel();
+				game.hidePopup(new ActionExecutor() {
+					
+					@Override
+					public void execute() {
+						game.playLevel();
+					}
+				});
 			}
 		});
 		return btn;
