@@ -7,14 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public class MainMenuScreen extends AbstractGameScreen {
-	
+
 	private static final String TAG = MainMenuScreen.class.getName();
+	public static final float BTN_HEIGHT = 100.0f;
 
 	private Stage stage;
 
@@ -44,7 +48,9 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		stage = new Stage();
+		stage = new Stage(new ScalingViewport(Scaling.stretch,
+				Constants.VIEWPORT_GUI_WIDTH,
+				Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
 
 		buttonWidth = stage.getWidth() * 0.75f;
 
@@ -66,9 +72,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 	private TextButton createNewGameBtn() {
 		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.start"), MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
+		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				Gdx.graphics.getWidth() / 2 - btn.getWidth() / 2,
-				Gdx.graphics.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 1.5f) ;
+				stage.getWidth() / 2 - btn.getWidth() / 2,
+				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 1.5f) ;
 		btn.addListener(new ClickListener() {
 			
 			@Override
@@ -83,9 +90,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 		final String freeplay = "ozo.freeplay";
 		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
+		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				Gdx.graphics.getWidth() / 2 - btn.getWidth() / 2,
-				Gdx.graphics.getHeight() / 2 - btn.getHeight() / 2);
+				stage.getWidth() / 2 - btn.getWidth() / 2,
+				stage.getHeight() / 2 - btn.getHeight() / 2);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -100,9 +108,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 	private TextButton createExitBtn() {
 		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.exit"), MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
+		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				Gdx.graphics.getWidth() / 2 - btn.getWidth() / 2,
-				Gdx.graphics.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 1.5f);
+				stage.getWidth() / 2 - btn.getWidth() / 2,
+				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 1.5f);
 		btn.addListener(new ClickListener() {
 			
 			@Override

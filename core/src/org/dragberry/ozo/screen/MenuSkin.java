@@ -25,29 +25,29 @@ public class MenuSkin {
 
     public static Skin getSkin() {
         if (SKIN == null) {
-            SKIN = new Skin();
-            SKIN.add(DEFAULT, Assets.instance.fonts.menu_l);
-
-            // Create a texture
-            Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
-            pixmap.setColor(BACKGROUND_COLOR);
-            pixmap.fill();
-            SKIN.add(BACKGROUND, new Texture(pixmap));
-
-            // Create a button style
-            TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-            textButtonStyle.up = SKIN.newDrawable(BACKGROUND, Color.GRAY);
-            textButtonStyle.down = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
-            textButtonStyle.checked = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
-            textButtonStyle.over = SKIN.newDrawable(BACKGROUND, Color.LIGHT_GRAY);
-            textButtonStyle.font = SKIN.getFont(DEFAULT);
-            SKIN.add(DEFAULT, textButtonStyle);
-
-            // Create a label skin
-            Label.LabelStyle labelStyle = new Label.LabelStyle();
-            labelStyle.background = SKIN.newDrawable(BACKGROUND, Color.GRAY);
-            labelStyle.font = SKIN.getFont(DEFAULT);
-            SKIN.add(DEFAULT, labelStyle);
+            SKIN = new Skin(Gdx.files.internal("skins/ozo/skin/uiskin.json"));
+//            SKIN.add(DEFAULT, Assets.instance.fonts.menu_l);
+//
+//            // Create a texture
+//            Pixmap pixmap = new Pixmap((int) Gdx.graphics.getWidth() / 4, (int) Gdx.graphics.getHeight() / 10, Pixmap.Format.RGB888);
+//            pixmap.setColor(BACKGROUND_COLOR);
+//            pixmap.fill();
+//            SKIN.add(BACKGROUND, new Texture(pixmap));
+//
+//            // Create a button style
+//            TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+//            textButtonStyle.up = SKIN.newDrawable(BACKGROUND, Color.GRAY);
+//            textButtonStyle.down = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
+//            textButtonStyle.checked = SKIN.newDrawable(BACKGROUND, Color.DARK_GRAY);
+//            textButtonStyle.over = SKIN.newDrawable(BACKGROUND, Color.LIGHT_GRAY);
+//            textButtonStyle.font = SKIN.getFont(DEFAULT);
+//            SKIN.add(DEFAULT, textButtonStyle);
+//
+//            // Create a label skin
+//            Label.LabelStyle labelStyle = new Label.LabelStyle();
+//            labelStyle.background = SKIN.newDrawable(BACKGROUND, Color.GRAY);
+//            labelStyle.font = SKIN.getFont(DEFAULT);
+//            SKIN.add(DEFAULT, labelStyle);
         }
         return SKIN;
     }

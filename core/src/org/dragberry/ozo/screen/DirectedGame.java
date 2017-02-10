@@ -89,14 +89,6 @@ public abstract class DirectedGame implements ApplicationListener {
     public void setScreen(AbstractGameScreen screen) {
         setScreen(screen, null, null);
     }
-    
-    public void setScreen(AbstractGameScreen screen, ScreenTransition screenTransition) {
-        setScreen(screen, screenTransition, null);
-    }
-    
-    public void setScreen(AbstractGameScreen screen, Class<? extends AbstractGameScreen> callerScreen) {
-        setScreen(screen, null, callerScreen);
-    }
 
     protected void initialise(int width, int height) {
 		if (!init) {
