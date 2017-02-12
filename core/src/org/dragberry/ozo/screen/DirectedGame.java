@@ -64,12 +64,13 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
-    	levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 2, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 10));
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -10, 33));
+    	levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 10, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 25));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -7, 49));
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.double5", -10, 5, 5));
-		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.saveUs", 5, 10));
-		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.roulette", -10, 7, 7, 7));
+		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.saveUs", 5, 25));
+		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.roulette", -7, 7, 7, 7));
 		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomRain", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.queues", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "ozo.lvl.chessboard", -10, 25));
@@ -77,8 +78,9 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 99, 99, 99));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 49, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 30, 50));
-    
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 4, 50));
+
+
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"), 

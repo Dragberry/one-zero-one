@@ -35,7 +35,7 @@ public class LevelSettings {
     }
 
 	protected void load(Preferences prefs) {
-		completed = prefs.getBoolean(COMPLETED, true);
+		completed = prefs.getBoolean(COMPLETED, false);
     	bestTime = prefs.getFloat(BEST_TIME, 0);
     	bestSteps = prefs.getInteger(BEST_STEPS, 0);
 	}

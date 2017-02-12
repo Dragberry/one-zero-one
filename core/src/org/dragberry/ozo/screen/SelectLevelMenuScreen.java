@@ -2,6 +2,7 @@ package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,9 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.game.util.Constants;
 
 /**
  * Created by maksim on 28.01.17.
@@ -46,7 +50,10 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
-        stage = new Stage();
+        stage = new Stage(new ScalingViewport(Scaling.stretch,
+                Constants.VIEWPORT_GUI_WIDTH,
+                Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
+
         rebuildStage();
     }
 
@@ -56,19 +63,21 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
 
         Label label = new Label(Assets.instance.translation.format("ozo.selectLevel"), MenuSkin.getSkin());
         label.setAlignment(Align.center);
-        table.add(label).fill().expand();
+        table.add(label).fill().expand().pad(50f, 50f, 25f, 50f);
         table.row();
 
         Table scrollTable = new Table();
-        boolean previousCompleted = true;
+        LevelState state = LevelState.COMPLETED;
         for (LevelSettings levelSettings : game.levels) {
-        	if (previousCompleted) {
-	        	scrollTable.add(createLevelBtn(levelSettings)).fillX().expand(true, false);
-	            scrollTable.row();
-	            previousCompleted = levelSettings.completed;
-        	} else {
-        		break;
-        	}
+            if (state == LevelState.COMPLETED && !levelSettings.completed) {
+                state = LevelState.OPENED;
+            } else if (levelSettings.completed) {
+                state = LevelState.COMPLETED;
+            } else {
+                state = LevelState.CLOSED;
+            }
+            scrollTable.add(createLevelBtn(state, levelSettings)).fillX().expand(true, false).pad(5, 10, 5, 10);
+            scrollTable.row();
         }
         ScrollPane scroller = new ScrollPane(scrollTable);
         table.add(scroller).fill().expand();
@@ -81,10 +90,9 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
                 game.back();
             }
         });
-        table.add(backBtn);
+        table.add(backBtn).fill(0.5f, 1f).pad(30f, 0f, 30f, 5f);
         this.stage.addActor(table);
     }
-
 
     @Override
     public void hide() {
@@ -95,16 +103,29 @@ public class SelectLevelMenuScreen extends AbstractGameScreen {
     public void pause() {
     }
 
-    private TextButton createLevelBtn(final LevelSettings levelSettings) {
-        TextButton btn = new TextButton(levelSettings.name, MenuSkin.getSkin());
-        btn.addListener(new ClickListener() {
+    private TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
+        TextButton btn = new TextButton(levelSettings.name, MenuSkin.getSkin().get(state.style, TextButton.TextButtonStyle.class));
+        if (state != LevelState.CLOSED) {
+            btn.setDisabled(true);
+            btn.addListener(new ClickListener() {
 
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
-            }
-        });
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
+                }
+            });
+        }
         return btn;
+    }
+
+    private enum LevelState {
+        CLOSED("level-closed"), OPENED("level-open"), COMPLETED("default");
+
+        private String style;
+
+        LevelState(String style) {
+            this.style = style;
+        }
     }
 
 }

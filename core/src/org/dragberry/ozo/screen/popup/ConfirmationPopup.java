@@ -1,10 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,49 +18,25 @@ import org.dragberry.ozo.screen.MenuSkin;
 
 public class ConfirmationPopup extends AbstractPopup {
 
-    private Stage stage;
-
     public ConfirmationPopup(DirectedGame game) {
         super(game);
     }
 
     @Override
-	public InputProcessor getInputProcessor() {
-        return stage;
-    }
-
-    @Override
-    public void render(float deltaTime) {
-        Gdx.gl.glClearColor(1, 1, 1, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void show() {
-        stage = new Stage();
-        rebuildStage();
-    }
-
-    private void rebuildStage() {
-        Table tbl = new Table();
-        tbl.align(Align.center);
-        final float viewportWidth = stage.getViewport().getCamera().viewportWidth;
-        final float viewportHeight = stage.getViewport().getCamera().viewportHeight;
-        tbl.setWidth(viewportWidth * 0.75f);
-        tbl.setHeight(viewportHeight / 4);
-        tbl.setPosition(viewportWidth * 0.125f, viewportHeight * 0.375f);
-        stage.addActor(tbl);
-        tbl.row().fill().expand();
-        Label msgLbl = new Label(Assets.instance.translation.get("ozo.exitConfirmationMsg"), MenuSkin.getSkin());
+    protected void rebuildStage(float viewportWidth, float viewportHeight) {
+        popupWindow.setWidth(viewportWidth * 0.75f);
+        popupWindow.setHeight(viewportHeight / 4);
+        Label msgLbl = new Label(
+                Assets.instance.translation.get("ozo.exitConfirmationMsg"),
+                MenuSkin.getSkin());
+        msgLbl.setWrap(true);
         msgLbl.setAlignment(Align.center);
-        tbl.add(msgLbl).fillX().expandX();
-        tbl.row().expand().fill();
+        popupWindow.add(msgLbl).fillX().expandX();
+        popupWindow.row().expand().fill();
         Table btns = new Table();
-        btns.add(createConfirmBtn()).fill().expand();
-        btns.add(createCancelBtn()).fill().expand();
-        tbl.add(btns);
+        btns.add(createConfirmBtn()).fill().expand().pad(10f);
+        btns.add(createCancelBtn()).fill().expand().pad(10f);
+        popupWindow.add(btns);
     }
 
     private TextButton createConfirmBtn() {
@@ -95,8 +67,4 @@ public class ConfirmationPopup extends AbstractPopup {
         return btn;
     }
 
-    @Override
-    public void hide() {
-        stage.dispose();
-    }
 }

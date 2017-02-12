@@ -5,46 +5,62 @@ filter: Nearest,Nearest
 repeat: none
 UbuntuMono-BI
   rotate: false
-  xy: 1, 1
-  size: 512, 122
-  orig: 512, 122
+  xy: 1, 83
+  size: 512, 169
+  orig: 512, 169
   offset: 0, 0
   index: -1
 default-window
   rotate: false
-  xy: 515, 94
-  size: 27, 29
-  split: 4, 3, 20, 3
-  orig: 27, 29
+  xy: 1, 6
+  size: 50, 75
+  split: 23, 23, 48, 23
+  orig: 50, 75
   offset: 0, 0
   index: -1
 default-round
   rotate: false
-  xy: 515, 59
-  size: 12, 33
-  split: 5, 5, 5, 4
-  orig: 12, 33
+  xy: 515, 202
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
   offset: 0, 0
   index: -1
-default-round-large
+default-level-opened-down
   rotate: false
-  xy: 544, 103
-  size: 20, 20
-  split: 5, 5, 5, 4
-  orig: 20, 20
+  xy: 53, 31
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
   offset: 0, 0
   index: -1
 default-round-down
   rotate: false
-  xy: 515, 37
-  size: 12, 20
-  split: 5, 5, 5, 4
-  orig: 12, 20
+  xy: 515, 150
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+default-level-closed
+  rotate: false
+  xy: 567, 202
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+default-level-opened
+  rotate: false
+  xy: 105, 31
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 529, 89
+  xy: 1, 1
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
