@@ -75,6 +75,7 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.roulette", -7, 7, 7, 7));
 		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomRain", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.queues", -10, 25));
+		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.straightFlush", -15, 6, 7, 8, 9, 10));
 		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "ozo.lvl.chessboard", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomShower", -25, 75));
 		levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, "ozo.lvl.waves", -15, 50));
@@ -82,7 +83,6 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 20, 99));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 4, 50));
-		levels.add(new NoAnnihilationLevelSettings(WavesLevel.class, "ozo.lvl.tsunami", 4, 50));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 1, 99));
 
 		popupState = PopupState.HIDDEN;
