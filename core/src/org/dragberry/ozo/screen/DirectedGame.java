@@ -17,6 +17,7 @@ import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
 import org.dragberry.ozo.game.level.QueueLevel;
+import org.dragberry.ozo.game.level.WavesLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
@@ -64,7 +65,7 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
-    	levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
+		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 10, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 25));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -7, 49));
@@ -75,6 +76,7 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.queues", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "ozo.lvl.chessboard", -10, 25));
 		levels.add(new ReachTheGoalLevelSettings(MashroomRainLevel.class, "ozo.lvl.mushroomShower", -25, 75));
+		levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, "ozo.lvl.waves", -15, 50));
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 99, 99, 99));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 49, 99));

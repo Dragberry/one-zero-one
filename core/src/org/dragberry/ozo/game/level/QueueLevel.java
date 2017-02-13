@@ -19,4 +19,6 @@ public class QueueLevel extends ReachTheGoalLevel {
 	protected Generator getDefaultGenerator(int x, int y) {
 		return QueueGeneratorHelper.getDefaultGenerator(x, y);
 	}
+
+
 }
