@@ -16,6 +16,7 @@ import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.MashroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
+import org.dragberry.ozo.game.level.NoAnnihilationWavesLevel;
 import org.dragberry.ozo.game.level.QueueLevel;
 import org.dragberry.ozo.game.level.WavesLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
@@ -79,9 +80,10 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, "ozo.lvl.waves", -15, 50));
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 99, 99, 99));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
-		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 49, 99));
+		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 20, 99));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 4, 50));
-
+		levels.add(new NoAnnihilationLevelSettings(WavesLevel.class, "ozo.lvl.tsunami", 4, 50));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 1, 99));
 
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(

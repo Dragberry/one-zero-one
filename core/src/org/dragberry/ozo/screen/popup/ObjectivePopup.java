@@ -26,7 +26,7 @@ public class ObjectivePopup extends AbstractPopup {
 	@Override
 	protected void rebuildStage(float viewportWidth, float viewportHeight) {
 		popupWindow.setWidth(viewportWidth * 0.75f);
-		popupWindow.setHeight(viewportHeight / 2);
+		popupWindow.setHeight(viewportHeight * 0.75f);
 
 		Label winLbl = new Label(Assets.instance.translation.get("ozo.toWin"), MenuSkin.getSkin());
 		winLbl.setAlignment(Align.center);
