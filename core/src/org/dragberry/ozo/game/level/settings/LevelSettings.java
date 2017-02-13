@@ -2,9 +2,11 @@ package org.dragberry.ozo.game.level.settings;
 
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.util.TimeUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.ArrayMap;
 
 /**
  * Created by maksim on 01.02.17.
@@ -54,5 +56,12 @@ public class LevelSettings {
 
 	protected Preferences loadPreferences() {
 		return Gdx.app.getPreferences(clazz.getName() + nameKey);
+	}
+	
+	public ArrayMap<String, Object> getResults() {
+		ArrayMap<String, Object> results = new ArrayMap<String, Object>();
+		results.put(Assets.instance.translation.format("ozo.bestTime"), TimeUtils.timeToString((int) bestTime));
+		results.put(Assets.instance.translation.format("ozo.bestSteps"), bestSteps);
+		return results;
 	}
 }

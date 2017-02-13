@@ -4,6 +4,7 @@ import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
+import org.dragberry.ozo.game.util.TimeUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -16,11 +17,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
 public class GuiRenderer implements Renderer {
-	
-	private static final int SECONDS_PER_MINUTE = 60;
-	private static final String EMPTY = "";
-	private static final String ZERO = "0";
-	private static final String COLON = ":";
 	
 	private final GlyphLayout goal =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goal"));
 	private final GlyphLayout goalToLose =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goalToLose"));
@@ -87,7 +83,7 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		font.draw(batch, timeStr, 25, camera.viewportHeight - timeStr.height * 4);
-		font.draw(batch, timeToString((int) getGameContoller().level.time), 25, camera.viewportHeight - timeStr.height * 2);
+		font.draw(batch, TimeUtils.timeToString((int) getGameContoller().level.time), 25, camera.viewportHeight - timeStr.height * 2);
 	}
 	
 	private void renderState(SpriteBatch batch) {
@@ -157,12 +153,6 @@ public class GuiRenderer implements Renderer {
 				false, true);
 	}
 	
-	private static String timeToString(int timeInSeconds) {
-		int minutes = timeInSeconds / SECONDS_PER_MINUTE;
-		int seconds = timeInSeconds % SECONDS_PER_MINUTE;
-		return prefixZero(minutes) + COLON + prefixZero(seconds);
-	}
-	
 	@Override
 	public void resize(int width, int height) {
         camera.viewportHeight = (Constants.VIEWPORT_GUI_WIDTH / width) * height;
@@ -170,10 +160,6 @@ public class GuiRenderer implements Renderer {
         camera.update();
 	}
 	
-	private static String prefixZero(int time) {
-		return (time < 10 ? ZERO : EMPTY) + time;
-	}
-
 	@Override
 	public OrthographicCamera getCamera() {
 		return camera;

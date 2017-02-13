@@ -3,14 +3,15 @@ package org.dragberry.ozo.screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.screen.popup.BestResultsPopup;
 
 /**
  * Created by maksim on 28.01.17.
  */
-public class SelectLevelMenuScreen extends AbstractSelectLevelMenuScreen {
+public class BestResultScreen extends AbstractSelectLevelMenuScreen {
 
-    public SelectLevelMenuScreen(DirectedGame game) {
-        super(game, "ozo.selectLevel");
+    public BestResultScreen(DirectedGame game) {
+        super(game, "ozo.bestResults");
     }
 
     @Override
@@ -19,7 +20,7 @@ public class SelectLevelMenuScreen extends AbstractSelectLevelMenuScreen {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
+                game.setPopup(new BestResultsPopup(game, levelSettings));
             }
         };
     }

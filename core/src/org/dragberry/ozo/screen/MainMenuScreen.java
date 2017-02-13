@@ -56,6 +56,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 		stage.addActor(createNewGameBtn());
 		stage.addActor(createRandomGameBtn());
+		stage.addActor(createResultsBtn());
 		stage.addActor(createExitBtn());
 	}
 
@@ -75,7 +76,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 1.5f) ;
+				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 2.5f) ;
 		btn.addListener(new ClickListener() {
 			
 			@Override
@@ -93,7 +94,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2);
+				stage.getHeight() / 2 + btn.getHeight() / 2);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -105,13 +106,31 @@ public class MainMenuScreen extends AbstractGameScreen {
 		return btn;
 	}
 	
+	private TextButton createResultsBtn() {
+		final String freeplay = "ozo.bestResults";
+		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), MenuSkin.getSkin());
+		btn.setWidth(buttonWidth);
+		btn.setHeight(BTN_HEIGHT);
+		btn.setPosition(
+				stage.getWidth() / 2 - btn.getWidth() / 2,
+				stage.getHeight() / 2 + btn.getHeight() / 2 - btn.getHeight() * 1.5f);
+		btn.addListener(new ClickListener() {
+
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new BestResultScreen(game), ScreenTransitionFade.init(), MainMenuScreen.this.getClass());
+			}
+		});
+		return btn;
+	}
+	
 	private TextButton createExitBtn() {
 		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.exit"), MenuSkin.getSkin());
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 1.5f);
+				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 2f);
 		btn.addListener(new ClickListener() {
 			
 			@Override
