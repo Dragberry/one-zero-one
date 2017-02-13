@@ -93,14 +93,15 @@ public abstract class Level<LI extends LevelSettings> {
     }
 
     public void renderGoals(SpriteBatch batch, Vector2 goalPosition ) {
+        float goalPosX = goalPosition.x;
 		for (AbstractGoal goal : goalsToWin) {
-			goal.render(batch, goalPosition.x, goalPosition.y);
-			goalPosition.x += (goal.dimension.x + 10);
+			goal.render(batch, goalPosX, goalPosition.y);
+            goalPosX += (goal.dimension.x);
 		}
-		goalPosition.x = CameraHelper.INSTANCE.cameraGui.viewportWidth - 25.0f;
+        goalPosX = CameraHelper.INSTANCE.cameraGui.viewportWidth - goalPosition.x;
 		for (AbstractGoal goal : goalsToLose) {
-			goalPosition.x -= (goal.dimension.x + 10);
-			goal.render(batch, goalPosition.x, goalPosition.y);
+            goalPosX -= (goal.dimension.x);
+			goal.render(batch, goalPosX, goalPosition.y);
 		}
     }
 

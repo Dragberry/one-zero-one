@@ -56,7 +56,7 @@ public class GuiRenderer implements Renderer {
 		font.setColor(Color.BLACK);
 		font.draw(batch, goal, 10, 15);
 		font.draw(batch, goalToLose, camera.viewportWidth - goalToLose.width - 10, 15);
-		getGameContoller().level.renderGoals(batch, new Vector2(25.0f, 40.0f));
+		getGameContoller().level.renderGoals(batch, new Vector2(10.0f, 40.0f));
 	}
 
 	private void renderLevelName(SpriteBatch batch) {

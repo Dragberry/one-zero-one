@@ -40,9 +40,13 @@ public class PopupTransition implements ScreenTransition {
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 	        batch.begin();
-	        batch.setShader(shader);
-	        shader.setUniformf("progress", progress);
-	        batch.setColor(1, 1, 1, 1);
+			if (shader.isCompiled()) {
+				batch.setShader(shader);
+				shader.setUniformf("progress", progress);
+			} else {
+				Gdx.app.debug(PopupTransition.class.getName(), shader.getLog());
+			}
+			batch.setColor(1, 1, 1, 1);
 	        batch.draw(currScreen, 0, 0, 0, 0, width, height, 1, 1, 0, 0, 0,
 	                currScreen.getWidth(), currScreen.getHeight(),
 	                false, true);

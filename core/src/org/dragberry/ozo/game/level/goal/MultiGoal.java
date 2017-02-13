@@ -92,7 +92,7 @@ public class MultiGoal extends AbstractGoal {
 		 for (SimpleGoal goal : goals) {
 			 goal.renderUnit.position.set(x, y);
 			 goal.renderUnit.render(batch);
-			 x += goal.renderUnit.dimension.x;
+			 x += (goal.renderUnit.dimension.x * GoalUnit.SCALE);
 		 }
 	}
 

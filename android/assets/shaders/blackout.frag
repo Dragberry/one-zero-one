@@ -16,7 +16,7 @@ const float OPACITY = 0.9;
 
 void main() {
 	vec4 texColor = texture2D(u_texture, v_texCoord);
-	float darkness = 1.0f - (progress * 0.8f);
+	float darkness = 1.0 - (progress * 0.8);
 	texColor.rgb = mix(texColor.rgb, texColor.rgb * darkness, OPACITY);
 	gl_FragColor = vec4(texColor.r, texColor.g, texColor.b, texColor.a);
 }
