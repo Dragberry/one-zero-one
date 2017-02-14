@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "org.dragberry.ozo"
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 25
     }
 }
