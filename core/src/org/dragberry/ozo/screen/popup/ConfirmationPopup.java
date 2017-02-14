@@ -25,6 +25,7 @@ public class ConfirmationPopup extends AbstractPopup {
     protected void rebuildStage(float viewportWidth, float viewportHeight) {
         popupWindow.setWidth(viewportWidth * 0.75f);
         popupWindow.setHeight(viewportHeight / 4);
+        popupWindow.setFillParent(true);
         Label msgLbl = new Label(
                 Assets.instance.translation.get("ozo.exitConfirmationMsg"),
                 Assets.instance.skin.skin);

@@ -7,11 +7,10 @@ public interface Constants {
     String TEXTURE_ATLAS_OBJECTS = "images/onezeroone.atlas";
     String TRANSLATION = "i18n/translation";
     String FONTS = "fonts/UbuntuMono-BI.ttf";
-    String TEXTURE_ATLAS_SKIN = "skins/ozo/skin/uiskin.atlas";
-    String SKIN = "skins/ozo/skin/uiskin.json";
+    String TEXTURE_ATLAS_SKIN = "skins/default/skin/uiskin.atlas";
+    String SKIN = "skins/default/skin/uiskin.json";
     
     Color BACKGROUND = new Color(0xC3 / 255f, 0xD5 / 255f,  0xDB / 255f, 1);
-    
     
     float VIEWPORT_WIDTH = 1280.0f;
     float VIEWPORT_GUI_WIDTH = 720.0f;
