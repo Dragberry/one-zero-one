@@ -1,9 +1,4 @@
 {
-  com.badlogic.gdx.graphics.g2d.BitmapFont: {
-    default-font: {
-      file: UbuntuMono-BI.fnt
-    }
-  },
   com.badlogic.gdx.graphics.Color: {
     green: {a: 1, b: 0, g: 1, r: 0},
     white: {a: 1, b: 1, g: 1, r: 1},
@@ -20,30 +15,30 @@
     default: {
       down: default-round-down,
       up: default-round,
-      font: default-font,
+      font: menu-font-large,
       fontColor: white
     },
     level-open: {
       down: default-level-opened,
       up: default-level-opened-down,
-      font: default-font,
+      font: menu-font-large,
       fontColor: white
     },
     level-closed: {
       down: default-level-closed,
       up: default-level-closed,
-      font: default-font,
+      font: menu-font-large,
       fontColor: white
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
     default: {
-      titleFont: default-font,
+      titleFont: menu-font-medium,
       background: default-window,
       titleFontColor: white,
     },
     dialog: {
-      titleFont: default-font,
+      titleFont: menu-font-medium,
       background: default-window,
       titleFontColor: white,
       stageBackground: dialogDim
@@ -51,7 +46,7 @@
   },
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
-      font: default-font,
+      font: menu-font-medium,
       fontColor: white
     }
   },

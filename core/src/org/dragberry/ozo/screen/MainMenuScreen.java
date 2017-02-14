@@ -35,7 +35,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	@Override
 	public void render(float deltaTime) {
-		Gdx.gl.glClearColor(MenuSkin.BACKGROUND_COLOR.r, MenuSkin.BACKGROUND_COLOR.g, MenuSkin.BACKGROUND_COLOR.b, MenuSkin.BACKGROUND_COLOR.a);
+		Gdx.gl.glClearColor(Constants.BACKGROUND.r, Constants.BACKGROUND.g, Constants.BACKGROUND.b, Constants.BACKGROUND.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();
@@ -71,7 +71,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 	
 	private TextButton createNewGameBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.start"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.start"), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
@@ -89,7 +89,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	private TextButton createRandomGameBtn() {
 		final String freeplay = "ozo.freeplay";
-		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
@@ -108,7 +108,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	
 	private TextButton createResultsBtn() {
 		final String freeplay = "ozo.bestResults";
-		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
@@ -125,7 +125,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 	
 	private TextButton createExitBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.exit"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.format("ozo.exit"), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(

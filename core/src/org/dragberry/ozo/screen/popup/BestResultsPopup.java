@@ -3,7 +3,6 @@ package org.dragberry.ozo.screen.popup;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,7 +26,7 @@ public class BestResultsPopup extends AbstractPopup {
 	protected void rebuildStage(float viewportWidth, float viewportHeight) {
 		 popupWindow.setWidth(viewportWidth * 0.75f);
 		 popupWindow.setHeight(viewportHeight / 2);
-		 Skin skin = MenuSkin.getSkin();
+		 Skin skin = Assets.instance.skin.skin;
 		 Label msgLbl = new Label(levelSettings.name, skin);
 		 msgLbl.setWrap(true);
 		 msgLbl.setAlignment(Align.center);
@@ -53,7 +52,7 @@ public class BestResultsPopup extends AbstractPopup {
 	}
 	
 	private TextButton createBackBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.back"), MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.back"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 public abstract class AbstractPopup extends AbstractGameScreen {
 
@@ -48,7 +48,7 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 	}
 
 	private void rebuildStage() {
-		popupWindow = new Window(popupTitle, MenuSkin.getSkin());
+		popupWindow = new Window(popupTitle, Assets.instance.skin.skin);
 		final float viewportWidth = stage.getViewport().getCamera().viewportWidth;
 		final float viewportHeight = stage.getViewport().getCamera().viewportHeight;
 		stage.addActor(popupWindow);

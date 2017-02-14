@@ -38,8 +38,8 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
     @Override
     public void render(float deltaTime) {
-        Gdx.gl.glClearColor(MenuSkin.BACKGROUND_COLOR.r, MenuSkin.BACKGROUND_COLOR.g, MenuSkin.BACKGROUND_COLOR.b, MenuSkin.BACKGROUND_COLOR.a);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    	Gdx.gl.glClearColor(Constants.BACKGROUND.r, Constants.BACKGROUND.g, Constants.BACKGROUND.b, Constants.BACKGROUND.a);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
         stage.draw();
     }
@@ -62,7 +62,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
         Table table = new Table();
         table.setFillParent(true);
 
-        Label label = new Label(screenTitle, MenuSkin.getSkin());
+        Label label = new Label(screenTitle, Assets.instance.skin.skin);
         label.setAlignment(Align.center);
         table.add(label).fill().expand().pad(50f, 50f, 25f, 50f);
         table.row();
@@ -84,7 +84,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
         table.add(scroller).fill().expand();
         table.row().fill().expand();
 
-        TextButton backBtn = new TextButton(Assets.instance.translation.format("ozo.back"), MenuSkin.getSkin());
+        TextButton backBtn = new TextButton(Assets.instance.translation.format("ozo.back"), Assets.instance.skin.skin);
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -105,7 +105,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     }
 
     private TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
-        TextButton btn = new TextButton(levelSettings.name, MenuSkin.getSkin().get(state.style, TextButton.TextButtonStyle.class));
+        TextButton btn = new TextButton(levelSettings.name, Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
         if (state != LevelState.CLOSED) {
             btn.setDisabled(true);
             btn.addListener(getActionListener(levelSettings));

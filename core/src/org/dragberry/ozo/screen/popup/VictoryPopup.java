@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Align;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 public class VictoryPopup extends AbstractPopup {
 
@@ -21,11 +20,11 @@ public class VictoryPopup extends AbstractPopup {
 	protected void rebuildStage(float viewportWidth, float viewportHeight) {
 		popupWindow.setWidth(viewportWidth * 0.75f);
 		popupWindow.setHeight(viewportHeight * 0.75f);
-		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), MenuSkin.getSkin());
+		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), Assets.instance.skin.skin);
 		congrLbl.setAlignment(Align.center);
 		popupWindow.add(congrLbl).fill().expand();
 		popupWindow.row();
-		Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), MenuSkin.getSkin());
+		Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), Assets.instance.skin.skin);
 		wonLbl.setAlignment(Align.center);
 		popupWindow.add(wonLbl).fill().expand();
 		popupWindow.row();
@@ -37,7 +36,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createNextBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.nextLevel"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.nextLevel"), Assets.instance.skin.skin);
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -54,7 +53,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createMainMenuBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), Assets.instance.skin.skin);
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -71,7 +70,7 @@ public class VictoryPopup extends AbstractPopup {
 	}
 
 	private TextButton createPlayAgainBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.playAgain"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.playAgain"), Assets.instance.skin.skin);
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Align;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 /**
  * Created by maksim on 01.02.17.
@@ -25,7 +24,7 @@ public class DefeatScreen extends AbstractPopup {
     protected void rebuildStage(float viewportWidth, float viewportHeight) {
         popupWindow.setWidth(viewportWidth * 0.75f);
         popupWindow.setHeight(viewportHeight / 2);
-        Label lostLbl = new Label(Assets.instance.translation.get("ozo.youLost"), MenuSkin.getSkin());
+        Label lostLbl = new Label(Assets.instance.translation.get("ozo.youLost"), Assets.instance.skin.skin);
         lostLbl.setAlignment(Align.center);
         popupWindow.add(lostLbl).fill().expand();
         popupWindow.row();
@@ -35,7 +34,7 @@ public class DefeatScreen extends AbstractPopup {
     }
 
     private TextButton createMainMenuBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -52,7 +51,7 @@ public class DefeatScreen extends AbstractPopup {
     }
 
     private TextButton createRetryBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.retry"), MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.retry"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

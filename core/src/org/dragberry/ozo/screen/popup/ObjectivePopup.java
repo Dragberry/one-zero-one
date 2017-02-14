@@ -12,7 +12,6 @@ import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 public class ObjectivePopup extends AbstractPopup {
 
@@ -28,14 +27,14 @@ public class ObjectivePopup extends AbstractPopup {
 		popupWindow.setWidth(viewportWidth * 0.75f);
 		popupWindow.setHeight(viewportHeight * 0.75f);
 
-		Label winLbl = new Label(Assets.instance.translation.get("ozo.toWin"), MenuSkin.getSkin());
+		Label winLbl = new Label(Assets.instance.translation.get("ozo.toWin"), Assets.instance.skin.skin);
 		winLbl.setAlignment(Align.center);
 		popupWindow.add(winLbl).fill().expand();
 		popupWindow.row().expand().fill();
 		Table winTbl = new Table();
 		int index = 1;
 		for (Goal goal : level.goalsToWin) {
-			Label goalLbl = new Label(" " + index++ + ". " + goal.getMessage(), MenuSkin.getSkin());
+			Label goalLbl = new Label(" " + index++ + ". " + goal.getMessage(), Assets.instance.skin.skin);
 			goalLbl.setWrap(true);
 			goalLbl.setAlignment(Align.center);
 			winTbl.add(goalLbl).fill().expand();
@@ -44,14 +43,14 @@ public class ObjectivePopup extends AbstractPopup {
 		popupWindow.add(winTbl).expand().fill();
 		popupWindow.row();
 		
-		Label loseLbl = new Label(Assets.instance.translation.get("ozo.toLose"), MenuSkin.getSkin());
+		Label loseLbl = new Label(Assets.instance.translation.get("ozo.toLose"), Assets.instance.skin.skin);
 		loseLbl.setAlignment(Align.center);
 		popupWindow.add(loseLbl).fill().expand();
 		popupWindow.row().expand().fill();
 		Table loseTbl = new Table();
 		index = 1;
 		for (Goal goal : level.goalsToLose) {
-			Label goalLbl = new Label(" " + index++ +". " + goal.getMessage(), MenuSkin.getSkin());
+			Label goalLbl = new Label(" " + index++ +". " + goal.getMessage(), Assets.instance.skin.skin);
 			goalLbl.setWrap(true);
 			goalLbl.setAlignment(Align.center);
 			loseTbl.add(goalLbl).fill().expand();
@@ -65,7 +64,7 @@ public class ObjectivePopup extends AbstractPopup {
 	}
 	
 	private TextButton createOkBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.ok"), MenuSkin.getSkin());
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.ok"), Assets.instance.skin.skin);
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

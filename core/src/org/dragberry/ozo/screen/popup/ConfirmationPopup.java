@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Align;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.MenuSkin;
 
 /**
  * Created by maksim on 02.02.17.
@@ -28,7 +27,7 @@ public class ConfirmationPopup extends AbstractPopup {
         popupWindow.setHeight(viewportHeight / 4);
         Label msgLbl = new Label(
                 Assets.instance.translation.get("ozo.exitConfirmationMsg"),
-                MenuSkin.getSkin());
+                Assets.instance.skin.skin);
         msgLbl.setWrap(true);
         msgLbl.setAlignment(Align.center);
         popupWindow.add(msgLbl).fillX().expandX();
@@ -40,7 +39,7 @@ public class ConfirmationPopup extends AbstractPopup {
     }
 
     private TextButton createConfirmBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.yes"), MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.yes"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -57,7 +56,7 @@ public class ConfirmationPopup extends AbstractPopup {
     }
 
     private TextButton createCancelBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.no"), MenuSkin.getSkin());
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.no"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
