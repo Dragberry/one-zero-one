@@ -58,10 +58,13 @@ public class MainMenuScreen extends AbstractGameScreen {
 		stage.addActor(createRandomGameBtn());
 		stage.addActor(createResultsBtn());
 		stage.addActor(createExitBtn());
+
+		game.showBannerAd();
 	}
 
 	@Override
 	public void hide() {
+		game.hideBannerAd();
 		stage.dispose();
 	}
 

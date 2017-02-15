@@ -18,9 +18,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
-public class AndroidLauncher extends AndroidApplication {
+import org.dragberry.ozo.admob.AdsController;
 
-    private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/developer?id=TheInvader360";
+public class AndroidLauncher extends AndroidApplication implements AdsController {
 
 	protected AdView adView;
 	protected View gameView;
@@ -54,7 +54,7 @@ public class AndroidLauncher extends AndroidApplication {
 		adView = new AdView(this);
 		adView.setAdSize(AdSize.SMART_BANNER);
 		adView.setAdUnitId(getString(R.string.main_menu_banner));
-//		adView.setId(); // this is an arbitrary id, allows for relative positioning in createGameView()
+		adView.setId(R.id.ad_view_id); // this is an arbitrary id, allows for relative positioning in createGameView()
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
 		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
@@ -64,7 +64,7 @@ public class AndroidLauncher extends AndroidApplication {
 	}
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
-        gameView = initializeForView(new OneZeroOneGame(), cfg);
+        gameView = initializeForView(new OneZeroOneGame(this), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
@@ -96,34 +96,24 @@ public class AndroidLauncher extends AndroidApplication {
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	@Override
+	public void showBannerAd() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				adView.setVisibility(View.VISIBLE);
+				startAdvertising(adView);
+			}
+		});
+	}
 
-        LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
-
-        Button b1 = new Button(this);
-        b1.setText("Quit");
-        b1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        ll.addView(b1);
-
-        Button b2 = new Button(this);
-        b2.setText("TheInvader360");
-        b2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY_URL)));
-                dialog.dismiss();
-            }
-        });
-        ll.addView(b2);
-
-        dialog.setContentView(ll);
-        dialog.show();
-    }
+	@Override
+	public void hideBannerAd() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				adView.setVisibility(View.INVISIBLE);
+			}
+		});
+	}
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.lang.reflect.Constructor;
 
+import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
@@ -34,6 +35,8 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
  */
 
 public abstract class DirectedGame implements ApplicationListener {
+
+	private final AdsController adsController;
 
 	public final Array<LevelSettings> levels = new Array<LevelSettings>();
 	
@@ -62,7 +65,11 @@ public abstract class DirectedGame implements ApplicationListener {
     private ShaderProgram blackoutShader;
     
     private Class<? extends AbstractGameScreen> callerScreen;
-    
+
+	public DirectedGame(AdsController adsController) {
+		this.adsController = adsController;
+	}
+
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
@@ -364,5 +371,13 @@ public abstract class DirectedGame implements ApplicationListener {
             Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);
         }
     }
+
+	public void showBannerAd() {
+		adsController.showBannerAd();
+	}
+
+	public void hideBannerAd() {
+		adsController.hideBannerAd();
+	}
 
 }
