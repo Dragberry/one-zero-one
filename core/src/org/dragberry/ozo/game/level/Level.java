@@ -51,7 +51,7 @@ public abstract class Level<LI extends LevelSettings> {
     	generators = Collections.emptyMap();
     }
 
-    public Unit generateUnit(int x, int y) {
+    public Unit generateUnit(int x, int y, Unit unit) {
     	Generator gen = null;
     	if (!generators.isEmpty()) {
     		gen = generators.get(new Generator.Id(x, y));
@@ -59,9 +59,12 @@ public abstract class Level<LI extends LevelSettings> {
     	if (gen == null) {
     		gen = getDefaultGenerator(x, y);
     	}
-        return new Unit(gen.next(), x, y);
+        if (unit == null) {
+            unit = new Unit();
+        }
+        return unit.init(gen.next(), x, y);
     }
-    
+
     protected Generator getDefaultGenerator(int x, int y) {
     	 return RandomGenerator.DEFAUTL;
     }

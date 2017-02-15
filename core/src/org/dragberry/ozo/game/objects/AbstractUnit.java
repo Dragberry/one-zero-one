@@ -20,6 +20,10 @@ public abstract class AbstractUnit extends AbstractGameObject {
 		this.value = value;
 		DigitUtil.resolveDigits(value, valueDigits);
 	}
+
+	public AbstractUnit() {
+		this(0);
+	}
 	
 	public void addValue(int valueToAdd) {
 		value += valueToAdd;

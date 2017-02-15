@@ -1,6 +1,7 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.DigitUtil;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -28,8 +29,29 @@ public class Unit extends AbstractUnit {
 	private float time;
 	private static final float GROWING_TIME = 0.2f;
 	
-	public Unit() {
-		this(0, 0, 0);
+	@Override
+	protected void init() {
+		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
+		bounds.set(position.x, position.y, dimension.x, dimension.y);
+	}
+
+	public Unit init(int value, int x, int y) {
+		this.value = value;
+		DigitUtil.resolveDigits(value, valueDigits);
+		this.previousValue = value;
+		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
+		this.x = x;
+		this.y = y;
+		origin.set(dimension.x / 2, dimension.y / 2);
+		scale.set(UNIT_INITIAL_SCALE, UNIT_INITIAL_SCALE);
+		flipY = false;
+		time = 0;
+		state = State.INITIAL;
+		selected = false;
+		selectedNeighbor = false;
+		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
+		bounds.set(position.x, position.y, dimension.x, dimension.y);
+		return this;
 	}
 	
 	@Override
@@ -71,26 +93,6 @@ public class Unit extends AbstractUnit {
 			default:
 				break;
 		}
-	}
-	
-	public Unit(int value, int x, int y) {
-		super(value);
-		this.previousValue = value;
-		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
-		this.x = x;
-		this.y = y;
-		origin.set(dimension.x / 2, dimension.y / 2);
-		scale.set(UNIT_INITIAL_SCALE, UNIT_INITIAL_SCALE);
-		flipY = false;
-		time = 0;
-		state = State.INITIAL;
-		init();
-	}
-	
-	@Override
-	protected void init() {
-		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
-		bounds.set(position.x, position.y, dimension.x, dimension.y);
 	}
 	
 	public void moveTo(Direction direction, float step) {

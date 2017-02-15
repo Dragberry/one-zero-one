@@ -29,16 +29,16 @@ public class GameController extends InputAdapter {
 	private enum State {
 		FIXED, IN_MOTION
 	}
-	
-	private State state = State.FIXED;
-	private float motionTime = 0;
-	private Unit selectedUnit = null;
+
+	private State state;
+	private float motionTime ;
+	private Unit selectedUnit;
 	
 	private DirectedGame game;
 	public Level<?> level;
 	
 	public Unit[][] units;
-	private Array<Unit> neighbors = new Array<Unit>(4);
+	private Array<Unit> neighbors;
 
 	public int negCount;
 	public int negSum;
@@ -46,27 +46,46 @@ public class GameController extends InputAdapter {
 	public int posSum;
 	public int zeroCount;
 	
-	public Array<TextureRegion> posCountDigits = new Array<TextureRegion>(4);
-	public Array<TextureRegion> posSumDigits = new Array<TextureRegion>(4);
-	public Array<TextureRegion> zeroCountDigits = new Array<TextureRegion>(4);
-	public Array<TextureRegion> negCountDigits = new Array<TextureRegion>(4);
-	public Array<TextureRegion> negSumDigits = new Array<TextureRegion>(4);
+	public Array<TextureRegion> posCountDigits;
+	public Array<TextureRegion> posSumDigits;
+	public Array<TextureRegion> zeroCountDigits;
+	public Array<TextureRegion> negCountDigits;
+	public Array<TextureRegion> negSumDigits;
 
-	public GameController(DirectedGame game) {
-		this.game = game;
-	}
-	
-	public void init(Level<?> level) {
-		this.level = level;
-		units = new Unit[level.width][level.height];
+	public static GameController instance;
+
+	public static GameController init(DirectedGame game, Level<?> level) {
+		if (instance == null) {
+			instance = new GameController();
+			instance.game = game;
+			instance.units = new Unit[level.width][level.height];
+			instance.neighbors = new Array<Unit>(4);
+
+			instance.posCountDigits = new Array<TextureRegion>(4);
+			instance.posSumDigits = new Array<TextureRegion>(4);
+			instance.zeroCountDigits = new Array<TextureRegion>(4);
+			instance.negCountDigits = new Array<TextureRegion>(4);
+			instance.negSumDigits = new Array<TextureRegion>(4);
+		} else {
+			instance.neighbors.clear();
+		}
+
+		instance.level = level;
+
+		instance.state = State.FIXED;
+		instance.motionTime = 0;
+		instance.selectedUnit = null;
+
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				Unit unit = level.generateUnit(x, y);
-				units[x][y] = unit;
-				updateStateForUnit(unit);
+				Unit unit = level.generateUnit(x, y, instance.units[x][y]);
+				Gdx.app.debug("TAG", "Unit generated from " + instance.units[x][y]);
+				instance.units[x][y] = unit;
+				instance.updateStateForUnit(unit);
 			}
 		}
-		resolveStateDigits();
+		instance.resolveStateDigits();
+		return instance;
 	}
 
 	private void updateStateForUnit(Unit unit) {
@@ -205,46 +224,62 @@ public class GameController extends InputAdapter {
 	}
 
 	private void shiftBottomUnits(Unit selectedUnit) {
+		Unit neighbor = null;
+		if (selectedUnit.y != 0) {
+			neighbor = units[selectedUnit.x][selectedUnit.y - 1];
+		}
 		for (int y = selectedUnit.y - 1; y > 0; y--) {
 			Unit unitToMove = units[selectedUnit.x][y - 1];
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		if (selectedUnit.y != 0) {
-			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0);
+		if (neighbor != null) {
+			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, neighbor);
 		}
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
+		Unit neighbor = null;
+		if (selectedUnit.y != level.height - 1) {
+			neighbor = units[selectedUnit.x][selectedUnit.y + 1];
+		}
 		for (int y = selectedUnit.y + 1; y < level.height - 1; y++) {
 			Unit unitToMove = units[selectedUnit.x][y + 1];
 			units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
-		if (selectedUnit.y != level.height - 1) {
-			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1);
+		if (neighbor != null) {
+			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, neighbor);
 		}
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
+		Unit neighbor = null;
+		if (selectedUnit.x != level.width - 1) {
+			neighbor = units[selectedUnit.x + 1][selectedUnit.y];
+		}
 		for (int x = selectedUnit.x + 1; x < level.width - 1; x++) {
 			Unit unitToMove = units[x + 1][selectedUnit.y];
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		if (selectedUnit.x != level.width - 1) {
-			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y);
+		if (neighbor != null) {
+			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, neighbor);
 		}
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
+		Unit neighbor = null;
+		if (selectedUnit.x != 0) {
+			neighbor = units[selectedUnit.x - 1][selectedUnit.y];
+		}
 		for (int x = selectedUnit.x - 1; x > 0; x--) {
 			Unit unitToMove = units[x - 1][selectedUnit.y];
 			units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
-		if (selectedUnit.x != 0) {
-			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y);
+		if (neighbor != null) {
+			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, neighbor);
 		}
 	}
 	

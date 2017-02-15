@@ -46,8 +46,7 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		gameController = new GameController(game);
-		gameController.init(level);
+		gameController = GameController.init(game, level);
 		gameRenderer = new GameRenderer(gameController);
 		objectivePopup = new ObjectivePopup(game, level);
 		game.setPopup(objectivePopup);
