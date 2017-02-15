@@ -12,7 +12,7 @@ import org.dragberry.ozo.screen.DirectedGame;
 
 public abstract class AbstractPopup extends AbstractGameScreen {
 
-	private Stage stage;
+	protected Stage stage;
 	protected Window popupWindow;
 	protected String popupTitle;
 
@@ -43,6 +43,7 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 
 	@Override
 	public void show() {
+		game.adsController.showBannerAd();
 		stage = new Stage();
 		rebuildStage();
 	}
@@ -67,6 +68,7 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 
 	@Override
 	public void hide() {
+		game.adsController.hideBannerAd();
 		stage.dispose();
 	}
 

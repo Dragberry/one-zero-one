@@ -1,8 +1,11 @@
 package org.dragberry.ozo;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -41,10 +44,11 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 		layout.setLayoutParams(params);
 
-		AdView admobView = createAdView();
-		layout.addView(admobView);
+
 		View gameView = createGameView(cfg);
 		layout.addView(gameView);
+		AdView admobView = createAdView();
+		layout.addView(admobView);
 
 		setContentView(layout);
 		startAdvertising(admobView);
@@ -55,26 +59,28 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		adView.setAdSize(AdSize.SMART_BANNER);
 		adView.setAdUnitId(getString(R.string.main_menu_banner));
 		adView.setId(R.id.ad_view_id); // this is an arbitrary id, allows for relative positioning in createGameView()
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-		adView.setLayoutParams(params);
+//		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+//		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+//		adView.setLayoutParams(params);
 		adView.setBackgroundColor(Color.BLACK);
+		adView.getHeight();
 		return adView;
 	}
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
         gameView = initializeForView(new OneZeroOneGame(this), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.BELOW, adView.getId());
-        gameView.setLayoutParams(params);
+//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//        params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
+//        params.addRule(RelativeLayout.ALIGN_TOP, adView.getId());
+//        gameView.setLayoutParams(params);
         return gameView;
     }
 
     private void startAdvertising(AdView adView) {
-        AdRequest adRequest = new AdRequest.Builder().build();
+//		AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("").build();
         adView.loadAd(adRequest);
     }
 
@@ -98,13 +104,14 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 
 	@Override
 	public void showBannerAd() {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				adView.setVisibility(View.VISIBLE);
-				startAdvertising(adView);
-			}
-		});
+		if (isBannerShown()) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					adView.setVisibility(View.VISIBLE);
+				}
+			});
+		}
 	}
 
 	@Override
@@ -115,5 +122,25 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 				adView.setVisibility(View.INVISIBLE);
 			}
 		});
+	}
+
+	@Override
+	public void showBannerAdNew() {
+		if (isBannerShown()) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					adView.setVisibility(View.VISIBLE);
+					startAdvertising(adView);
+				}
+			});
+		}
+	}
+
+	@Override
+	public boolean isBannerShown() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		return (ni != null && ni.isConnected());
 	}
 }

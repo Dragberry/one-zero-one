@@ -11,7 +11,17 @@ public class AdsControllerAdapter implements AdsController {
     }
 
     @Override
+    public void showBannerAdNew() {
+
+    }
+
+    @Override
     public void hideBannerAd() {
 
+    }
+
+    @Override
+    public boolean isBannerShown() {
+        return false;
     }
 }

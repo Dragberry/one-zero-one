@@ -8,5 +8,9 @@ public interface AdsController {
 
     void showBannerAd();
 
+    void showBannerAdNew();
+
     void hideBannerAd();
+
+    boolean isBannerShown();
 }

@@ -62,4 +62,8 @@ public class BestResultsPopup extends AbstractPopup {
         return btn;
     }
 
+	@Override
+	public void hide() {
+		stage.dispose();
+	}
 }

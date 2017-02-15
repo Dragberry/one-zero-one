@@ -36,7 +36,7 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public abstract class DirectedGame implements ApplicationListener {
 
-	private final AdsController adsController;
+	public final AdsController adsController;
 
 	public final Array<LevelSettings> levels = new Array<LevelSettings>();
 	
@@ -371,13 +371,5 @@ public abstract class DirectedGame implements ApplicationListener {
             Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);
         }
     }
-
-	public void showBannerAd() {
-		adsController.showBannerAd();
-	}
-
-	public void hideBannerAd() {
-		adsController.hideBannerAd();
-	}
 
 }
