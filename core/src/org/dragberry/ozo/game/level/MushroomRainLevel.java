@@ -8,9 +8,9 @@ import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
  * Created by maksim on 31.01.17.
  */
 
-public class MashroomRainLevel extends ReachTheGoalLevel {
+public class MushroomRainLevel extends ReachTheGoalLevel {
 
-    public MashroomRainLevel(ReachTheGoalLevelSettings levelInfo) {
+    public MushroomRainLevel(ReachTheGoalLevelSettings levelInfo) {
         super(levelInfo);
     }
 
