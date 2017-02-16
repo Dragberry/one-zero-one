@@ -14,7 +14,7 @@ public class ConstGenerator extends Generator {
 	private final int value;
 
 	@Override
-	public int next() {
+	public int next(int step, int selectedX, int selectedY) {
 		return value;
 	}
 

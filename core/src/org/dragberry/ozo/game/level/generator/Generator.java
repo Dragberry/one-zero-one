@@ -1,5 +1,7 @@
 package org.dragberry.ozo.game.level.generator;
 
+import org.dragberry.ozo.game.objects.Unit;
+
 public abstract class Generator {
 
 	public static class Id {
@@ -37,7 +39,7 @@ public abstract class Generator {
 		this.id = new Id(x, y);
 	}
 	
-	public abstract int next();
+	public abstract int next(int step, int selectedX, int selectedY);
 
 	public void reset() {
 		// empty by default

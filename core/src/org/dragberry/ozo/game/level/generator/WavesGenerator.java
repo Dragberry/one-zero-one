@@ -6,29 +6,58 @@ package org.dragberry.ozo.game.level.generator;
 
 public class WavesGenerator extends Generator {
 
-    private int step;
+    private int xBorder;
+    private int yBorder;
+
     private int previousStep;
 
-    private int unitPerStepCnt = 0;
+    private int corner;
+    private int border;
+    private int mid;
 
-    private int cornerCnt;
-    private int borderCnt;
-    private int defaultCnt;
-
-    public WavesGenerator(int x, int y) {
+    public WavesGenerator(int x, int y, int width, int height) {
         super(x, y);
+        reset(width, height);
+    }
+
+    public void reset(int width, int height) {
+        this.xBorder = width - 1;
+        this.yBorder = height - 1;
+        reset();
     }
 
     @Override
-    public int next() {
-        return 0;
-    }
-
-    public void update(int step) {
-        if (step != previousStep) {
+    public int next(int step, int selectedX, int selectedY) {
+        boolean stepChanged = step != previousStep;
+        if (stepChanged) {
             previousStep = step;
         }
-        this.step = step;
-        unitPerStepCnt++;
+        if (selectedX == 0 && selectedY == 0
+                || selectedX == 0 && selectedY == yBorder
+                || selectedX == xBorder && selectedY == 0
+                || selectedX == xBorder && selectedY == yBorder) {
+            if (stepChanged) {
+                corner = -corner;
+            }
+            return corner;
+        } else if (selectedX == 0 || selectedX == xBorder || selectedY == 0 || selectedY == yBorder) {
+            if (stepChanged) {
+                border = -border;
+            }
+            return border;
+        } else {
+            if (stepChanged) {
+                mid = -mid;
+            }
+            return mid;
+        }
+    }
+
+    @Override
+    public void reset() {
+        previousStep = 0;
+        corner = 1;
+        border = 1;
+        mid = 1;
     }
 }

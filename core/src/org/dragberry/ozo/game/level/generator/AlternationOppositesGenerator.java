@@ -17,7 +17,7 @@ public class AlternationOppositesGenerator extends Generator {
 	}
 
 	@Override
-	public int next() {
+	public int next(int step, int selectedX, int selectedY) {
 		value = -value;
 		return value;
 	}

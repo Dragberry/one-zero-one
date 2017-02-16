@@ -11,7 +11,7 @@ public class RandomGenerator extends Generator {
 	}
 
 	@Override
-	public int next() {
+	public int next(int step, int selectedX, int selectedY) {
 		return MathUtils.random(-1, 1);
 	}
 

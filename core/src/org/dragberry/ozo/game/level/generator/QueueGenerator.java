@@ -12,7 +12,7 @@ public class QueueGenerator extends Generator {
 	}
 
 	@Override
-	public int next() {
+	public int next(int step, int selectedX, int selectedY) {
 		int current = value;
 		if (++value > 1) {
 			value = -1;

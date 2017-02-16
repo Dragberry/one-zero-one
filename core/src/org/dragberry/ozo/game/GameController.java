@@ -40,11 +40,11 @@ public class GameController extends InputAdapter {
 	public Unit[][] units;
 	private Array<Unit> neighbors;
 
-	public int negCount;
-	public int negSum;
-	public int posCount;
-	public int posSum;
-	public int zeroCount;
+	private int negCount;
+	private int negSum;
+	private int posCount;
+	private int posSum;
+	private int zeroCount;
 	
 	public Array<TextureRegion> posCountDigits;
 	public Array<TextureRegion> posSumDigits;
@@ -68,6 +68,11 @@ public class GameController extends InputAdapter {
 			instance.negSumDigits = new Array<TextureRegion>(4);
 		} else {
 			instance.neighbors.clear();
+			instance.negCount = 0;
+			instance.negSum = 0;
+			instance.posCount = 0;
+			instance.posSum = 0;
+			instance.zeroCount = 0;
 		}
 
 		instance.level = level;
@@ -78,7 +83,7 @@ public class GameController extends InputAdapter {
 
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				Unit unit = level.generateUnit(x, y, instance.units[x][y]);
+				Unit unit = level.generateUnit(x, y, instance.selectedUnit, instance.units[x][y]);
 				instance.units[x][y] = unit;
 				instance.updateStateForUnit(unit);
 			}
@@ -231,7 +236,7 @@ public class GameController extends InputAdapter {
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
 		if (neighbor != null) {
-			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, neighbor);
+			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
 		}
 	}
     
@@ -246,7 +251,7 @@ public class GameController extends InputAdapter {
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
 		if (neighbor != null) {
-			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, neighbor);
+			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, selectedUnit, neighbor);
 		}
 	}
 
@@ -261,7 +266,7 @@ public class GameController extends InputAdapter {
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
 		if (neighbor != null) {
-			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, neighbor);
+			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, selectedUnit, neighbor);
 		}
 	}
 
@@ -276,7 +281,7 @@ public class GameController extends InputAdapter {
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
 		if (neighbor != null) {
-			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, neighbor);
+			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
 		}
 	}
 	
