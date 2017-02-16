@@ -79,7 +79,6 @@ public class GameController extends InputAdapter {
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
 				Unit unit = level.generateUnit(x, y, instance.units[x][y]);
-				Gdx.app.debug("TAG", "Unit generated from " + instance.units[x][y]);
 				instance.units[x][y] = unit;
 				instance.updateStateForUnit(unit);
 			}
@@ -136,14 +135,12 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			level.started = false;
-			Gdx.app.debug(TAG, "Lost!");
 			game.setPopup(new DefeatScreen(game));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
 			level.save();
-			Gdx.app.debug(TAG, "Won!");
 			game.setPopup(new VictoryPopup(game));
 			return true;
 		}
@@ -334,7 +331,6 @@ public class GameController extends InputAdapter {
     	}
     	if (selectedUnit == currentSelectedUnit) {
     		// step execution is started
-    		Gdx.app.debug(TAG, "Motion has been started");
     		state = State.IN_MOTION;
     		return;
     	}

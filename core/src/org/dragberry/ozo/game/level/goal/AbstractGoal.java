@@ -16,9 +16,14 @@ public abstract class AbstractGoal implements Goal {
     public String getMessage() {
     	return msg;
     }
+
     @Override
     public void update(float deltaTime) {
         // empty by default
     }
 
+    @Override
+    public void reset() {
+        // empty by default
+    }
 }

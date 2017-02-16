@@ -18,4 +18,6 @@ public interface Goal {
 	void render(SpriteBatch batch, float x, float y);
 
     void update(float deltaTime);
+
+    void reset();
 }

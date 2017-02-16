@@ -22,6 +22,7 @@ public class GuiRenderer implements Renderer {
 	private final GlyphLayout goalToLose =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goalToLose"));
 	private final GlyphLayout timeStr = new GlyphLayout(Assets.instance.fonts.gui_l, Assets.instance.translation.format("ozo.time"));
 	private final GlyphLayout stepsStr = new GlyphLayout(Assets.instance.fonts.gui_l, Assets.instance.translation.format("ozo.steps"));
+	private GlyphLayout steps;
 
 	private OrthographicCamera camera;
 	
@@ -56,7 +57,7 @@ public class GuiRenderer implements Renderer {
 		font.setColor(Color.BLACK);
 		font.draw(batch, goal, 10, 15);
 		font.draw(batch, goalToLose, camera.viewportWidth - goalToLose.width - 10, 15);
-		getGameContoller().level.renderGoals(batch, new Vector2(10.0f, 40.0f));
+		getGameContoller().level.renderGoals(batch, 10.0f, 40.0f);
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
@@ -75,7 +76,7 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.setColor(Color.BLACK);
 		font.draw(batch, stepsStr, camera.viewportWidth - stepsStr.width - 10, camera.viewportHeight - stepsStr.height * 4);
-		GlyphLayout steps = new GlyphLayout(font, String.valueOf(gameController.level.steps));
+		steps = new GlyphLayout(font, String.valueOf(gameController.level.steps));
 		font.draw(batch, steps, camera.viewportWidth - 25 - steps.width, camera.viewportHeight - steps.height * 2);
 	}
 	

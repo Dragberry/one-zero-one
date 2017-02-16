@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.Assets;
@@ -36,9 +38,12 @@ import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public abstract class DirectedGame implements ApplicationListener {
 
+	private final static String TAG = DirectedGame.class.getName();
+
 	public final AdsController adsController;
 
 	public final Array<LevelSettings> levels = new Array<LevelSettings>();
+	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
 	
     private LevelSettings currentLevelSettings;
 
@@ -328,14 +333,14 @@ public abstract class DirectedGame implements ApplicationListener {
 	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
 	    		constructor.newInstance(this);
 	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(getClass().getName(), "Navigate to " + callerScreen);
+	    		Gdx.app.debug(TAG, "Navigate to " + callerScreen);
 	    	} else {
 	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(getClass().getName(), "Navigate to " + MainMenuScreen.class);
+	    		Gdx.app.debug(TAG, "Navigate to " + MainMenuScreen.class);
 	    	}
 	    	callerScreen = null;
     	} catch (Exception exc) {
-    		Gdx.app.error(getClass().getName(), "An error has occured during navigation! Application is terminated!", exc);
+    		Gdx.app.error(TAG, "An error has occured during navigation! Application is terminated!", exc);
     		Gdx.app.exit();
     	}
     }
@@ -364,11 +369,19 @@ public abstract class DirectedGame implements ApplicationListener {
         Gdx.input.setCatchBackKey(true);
         this.currentLevelSettings = currentLevelSettings;
         try {
-            Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
-            Level<? extends LevelSettings> level = constructor.newInstance(currentLevelSettings);
+			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.nameKey);
+			if (level == null) {
+				Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.nameKey);
+				Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
+				level = constructor.newInstance(currentLevelSettings);
+				levelsCache.put(currentLevelSettings.nameKey, level);
+			} else {
+				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.nameKey);
+				level.reset();
+			}
             setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
-            Gdx.app.error(getClass().getName(), "An exception has occured during level creation", exc);
+            Gdx.app.error(TAG, "An exception has occured during level creation", exc);
         }
     }
 

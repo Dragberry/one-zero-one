@@ -6,7 +6,7 @@ import org.dragberry.ozo.game.level.goal.JustReachGoal.Operator;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 
 public class NoAnnihilationLevel extends Level<NoAnnihilationLevelSettings> {
-	
+
 	public NoAnnihilationLevel(NoAnnihilationLevelSettings levelInfo) {
 		super(levelInfo);
 		addGoalToWin(new JustReachGoal(levelInfo.goal, Operator.EQUALS));

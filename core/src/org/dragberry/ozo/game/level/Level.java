@@ -1,7 +1,6 @@
 package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Collections;
@@ -10,6 +9,7 @@ import java.util.Map;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
+import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
@@ -95,16 +95,16 @@ public abstract class Level<LI extends LevelSettings> {
         return reached;
     }
 
-    public void renderGoals(SpriteBatch batch, Vector2 goalPosition ) {
-        float goalPosX = goalPosition.x;
+    public void renderGoals(SpriteBatch batch, float goalPositionX, float goalPositionY ) {
+        float goalPosX = goalPositionX;
 		for (AbstractGoal goal : goalsToWin) {
-			goal.render(batch, goalPosX, goalPosition.y);
+			goal.render(batch, goalPosX, goalPositionY);
             goalPosX += (goal.dimension.x);
 		}
-        goalPosX = CameraHelper.INSTANCE.cameraGui.viewportWidth - goalPosition.x;
+        goalPosX = CameraHelper.INSTANCE.cameraGui.viewportWidth - goalPositionX;
 		for (AbstractGoal goal : goalsToLose) {
             goalPosX -= (goal.dimension.x);
-			goal.render(batch, goalPosX, goalPosition.y);
+			goal.render(batch, goalPosX, goalPositionY);
 		}
     }
 
@@ -125,4 +125,19 @@ public abstract class Level<LI extends LevelSettings> {
 		settings.completed = true;
 		settings.save();
 	}
+
+    public void reset() {
+        time = 0;
+        steps = 0;
+        started = false;
+        for (Goal goal: goalsToWin) {
+            goal.reset();
+        }
+        for (Goal goal: goalsToLose) {
+            goal.reset();
+        }
+        for (Generator generator : generators.values()) {
+            generator.reset();
+        }
+    }
 }

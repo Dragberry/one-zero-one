@@ -18,7 +18,7 @@ public class LevelSettings {
 	private static final String COMPLETED = "completed";
 	
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
-    private final String nameKey;
+    public final String nameKey;
     public final String name;
     
     public boolean completed;

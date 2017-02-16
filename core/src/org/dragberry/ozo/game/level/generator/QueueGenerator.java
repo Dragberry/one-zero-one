@@ -1,11 +1,13 @@
 package org.dragberry.ozo.game.level.generator;
 
 public class QueueGenerator extends Generator {
-	
+
+	private final int initialValue;
 	private int value;
 
 	public QueueGenerator(int initialValue, int x, int y) {
 		super(x, y);
+		this.initialValue = initialValue;
 		this.value = initialValue;
 	}
 
@@ -18,4 +20,8 @@ public class QueueGenerator extends Generator {
 		return current;
 	}
 
+	@Override
+	public void reset() {
+		value = initialValue;
+	}
 }

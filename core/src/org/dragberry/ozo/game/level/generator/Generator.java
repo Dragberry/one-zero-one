@@ -38,4 +38,8 @@ public abstract class Generator {
 	}
 	
 	public abstract int next();
+
+	public void reset() {
+		// empty by default
+	}
 }
