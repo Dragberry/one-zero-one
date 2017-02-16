@@ -9,9 +9,11 @@ public interface Constants {
     String FONTS = "fonts/UbuntuMono-BI.ttf";
     String TEXTURE_ATLAS_SKIN = "skins/default/skin/uiskin.atlas";
     String SKIN = "skins/default/skin/uiskin.json";
-    
+
     Color BACKGROUND = new Color(0xC3 / 255f, 0xD5 / 255f,  0xDB / 255f, 1);
-    
+    Color BACKGROUND_GAME = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
+    Color COLOR_UNIT_TEXT = new Color(0xF0 / 255f, 0xE6 / 255f,  0x8C / 255f, 1);
+
     float VIEWPORT_WIDTH = 1280.0f;
     float VIEWPORT_GUI_WIDTH = 720.0f;
 

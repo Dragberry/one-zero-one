@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Array;
 
 public abstract class AbstractUnit extends AbstractGameObject {
 
-	protected TextureRegion regBall;
 	protected int value;
 	protected boolean flipY;
 	protected Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
@@ -42,19 +41,19 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	@Override
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
-		batch.setColor(sign.color);
-		regBall = Assets.instance.unit.ball;
 
-		batch.draw(regBall.getTexture(),
+		batch.setColor(Color.WHITE);
+		batch.draw(sign.regBall.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
 				scale.x, scale.y,
 				rotation,
-				regBall.getRegionX(), regBall.getRegionY(),
-				regBall.getRegionWidth(), regBall.getRegionHeight(),
-				false, false);
-		
+				sign.regBall.getRegionX(), sign.regBall.getRegionY(),
+				sign.regBall.getRegionWidth(), sign.regBall.getRegionHeight(),
+				false, flipY);
+
+		batch.setColor(Constants.COLOR_UNIT_TEXT);
 		DigitUtil.draw(batch, valueDigits,
 				position.x + dimension.x / 2, position.y + dimension.y / 2,
 				scale.x, scale.y,
@@ -64,14 +63,16 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	}
 	
 	protected enum Sign {
-		MINUS(Constants.NEGATIVE, "-"),
-		ZERO(Constants.NEUTRAL, ""),
-		PLUS(Constants.POSITIVE, "+");
-		
+		MINUS(Assets.instance.unit.ballRed, Constants.NEGATIVE, "-"),
+		ZERO(Assets.instance.unit.ballBlue, Constants.NEUTRAL, ""),
+		PLUS(Assets.instance.unit.ballGreen, Constants.POSITIVE, "+");
+
+		public TextureRegion regBall;
 		public Color color;
 		public String sign;
 		
-		Sign(Color color, String sign) {
+		Sign(TextureRegion regBall, Color color, String sign) {
+			this.regBall = regBall;
 			this.color = color;
 			this.sign = sign;
 		}

@@ -92,14 +92,16 @@ public class GuiRenderer implements Renderer {
 		TextureRegion ball;
 
 		// Blue ball
-		ball = Assets.instance.unit.ball;
-		batch.setColor(Constants.NEUTRAL);
-		batch.draw(ball,
+		ball = Assets.instance.unit.ballBlue;
+		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 - ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
-				0);
+				0,
+				ball.getRegionX(), ball.getRegionY(),
+				ball.getRegionWidth(), ball.getRegionHeight(),
+				false, true);
 		DigitUtil.draw(batch, gameController.zeroCountDigits,
 				camera.viewportWidth / 2, camera.viewportHeight - offset + ball.getRegionHeight() / 2,
 				1, 1,
@@ -108,14 +110,16 @@ public class GuiRenderer implements Renderer {
 		
 
 		// Green ball
-		ball = Assets.instance.unit.infoBall;
-		batch.setColor(Constants.POSITIVE);
-		batch.draw(ball,
+		ball = Assets.instance.unit.ballGreen;
+		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 - ball.getRegionWidth() * 1.5f, camera.viewportHeight - offset,
 				0, 0,
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
-				0);
+				0,
+				ball.getRegionX(), ball.getRegionY(),
+				ball.getRegionWidth(), ball.getRegionHeight(),
+				false, true);
 		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.digits.minus.getRegionHeight();
 		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.8f * Assets.instance.digits.minus.getRegionHeight();
 		float posX = camera.viewportWidth / 2 - ball.getRegionWidth();
@@ -132,13 +136,16 @@ public class GuiRenderer implements Renderer {
 				false, true);
 
 		// Red ball
-		batch.setColor(Constants.NEGATIVE);
-		batch.draw(ball,
+		ball = Assets.instance.unit.ballRed;
+		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 + ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				1, 1,
-				0);
+				0,
+				ball.getRegionX(), ball.getRegionY(),
+				ball.getRegionWidth(), ball.getRegionHeight(),
+				false, true);
 		
 		float negX = camera.viewportWidth / 2 + ball.getRegionWidth();
 		

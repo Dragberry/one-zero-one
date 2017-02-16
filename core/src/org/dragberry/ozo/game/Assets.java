@@ -89,11 +89,16 @@ public class Assets implements Disposable, AssetErrorListener {
 	}
 	
 	public class AssetUnit {
-		public final AtlasRegion ball;
+		public final AtlasRegion ballRed;
+		public final AtlasRegion ballBlue;
+		public final AtlasRegion ballGreen;
+
 		public final AtlasRegion infoBall;
 		
 		public AssetUnit(TextureAtlas atlas) {
-			ball = atlas.findRegion("ball");
+			ballRed = atlas.findRegion("ball_red");
+			ballBlue = atlas.findRegion("ball_blue");
+			ballGreen = atlas.findRegion("ball_green");
 			infoBall = atlas.findRegion("info_ball");
 		}
 	}

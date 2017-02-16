@@ -40,17 +40,17 @@ public class WavesGenerator extends Generator {
                 corner = -corner;
             }
             return corner;
-        } else if (selectedX == 0 || selectedX == xBorder || selectedY == 0 || selectedY == yBorder) {
+        }
+        if (selectedX == 0 || selectedX == xBorder || selectedY == 0 || selectedY == yBorder) {
             if (stepChanged) {
                 border = -border;
             }
             return border;
-        } else {
-            if (stepChanged) {
-                mid = -mid;
-            }
-            return mid;
         }
+        if (stepChanged) {
+            mid = -mid;
+        }
+        return mid;
     }
 
     @Override
