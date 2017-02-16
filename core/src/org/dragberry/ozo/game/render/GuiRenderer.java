@@ -88,7 +88,7 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderState(SpriteBatch batch) {
-		float offset = 105f;
+		float offset = Assets.instance.unit.ballBlue.getRegionHeight();
 		TextureRegion ball;
 
 		// Blue ball
@@ -104,7 +104,7 @@ public class GuiRenderer implements Renderer {
 				false, true);
 		DigitUtil.draw(batch, gameController.zeroCountDigits,
 				camera.viewportWidth / 2, camera.viewportHeight - offset + ball.getRegionHeight() / 2,
-				1, 1,
+				1.2f, 1.2f,
 				0,
 				false, true);
 		
@@ -126,12 +126,12 @@ public class GuiRenderer implements Renderer {
 		
 		DigitUtil.draw(batch, gameController.posCountDigits,
 				posX, countY,
-				0.6f, 0.6f,
+				0.8f, 0.8f,
 				0,
 				false, true);
 		DigitUtil.draw(batch, gameController.posSumDigits,
 				posX, sumY,
-				0.6f, 0.6f,
+				0.8f, 0.8f,
 				0,
 				false, true);
 
@@ -151,12 +151,12 @@ public class GuiRenderer implements Renderer {
 		
 		DigitUtil.draw(batch, gameController.negCountDigits,
 				negX, countY,
-				0.6f, 0.6f,
+				0.8f, 0.8f,
 				0,
 				false, true);
 		DigitUtil.draw(batch, gameController.negSumDigits,
 				negX, sumY,
-				0.6f, 0.6f,
+				0.8f, 0.8f,
 				0,
 				false, true);
 	}

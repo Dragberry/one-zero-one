@@ -63,7 +63,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 		}
 		int value;
 		for (Unit unit : neighbors) {
-			value = unit.getValue();
+			value = unit.previousValue;
 			if (value > 0) {
 				pos += value;
 			} else if (value < 0) {
@@ -97,5 +97,6 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	public void reset() {
 		this.posUnit.setValue(goal);
 		this.negUnit.setValue(-goal);
+		this.annihilationCounter = 0;
 	}
 }

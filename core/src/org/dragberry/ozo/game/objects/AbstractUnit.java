@@ -56,7 +56,8 @@ public abstract class AbstractUnit extends AbstractGameObject {
 		batch.setColor(Constants.COLOR_UNIT_TEXT);
 		DigitUtil.draw(batch, valueDigits,
 				position.x + dimension.x / 2, position.y + dimension.y / 2,
-				scale.x, scale.y,
+				valueDigits.size > 3 ? scale.x * 0.8f : scale.y,
+				valueDigits.size > 3 ? scale.x * 0.8f : scale.y,
 				rotation,
 				false, flipY);
 		

@@ -36,9 +36,9 @@ public class Unit extends AbstractUnit {
 	}
 
 	public Unit init(int value, int x, int y) {
+		this.previousValue = this.value;
 		this.value = value;
 		DigitUtil.resolveDigits(value, valueDigits);
-		this.previousValue = value;
 		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		this.x = x;
 		this.y = y;
