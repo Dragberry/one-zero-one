@@ -10,28 +10,28 @@ ball_blue
   orig: 128, 128
   offset: 0, 0
   index: -1
-ball_green
+ball_red
   rotate: false
   xy: 131, 76
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ball_red
+ball_green
   rotate: false
   xy: 261, 76
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-n+
+n-
   rotate: false
   xy: 1, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n-
+n3
   rotate: false
   xy: 391, 181
   size: 17, 23
@@ -45,63 +45,63 @@ n0
   orig: 17, 23
   offset: 0, 0
   index: -1
-n1
+n6
   rotate: false
   xy: 20, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n2
+n+
   rotate: false
   xy: 391, 156
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n3
+n8
   rotate: false
   xy: 410, 181
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n4
+n2
   rotate: false
   xy: 1, 1
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n5
+n7
   rotate: false
   xy: 20, 26
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n6
+n4
   rotate: false
   xy: 39, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n7
+n9
   rotate: false
   xy: 391, 131
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n8
+n1
   rotate: false
   xy: 410, 156
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n9
+n5
   rotate: false
   xy: 429, 181
   size: 17, 23

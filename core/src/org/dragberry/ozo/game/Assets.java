@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -184,8 +185,10 @@ public class Assets implements Disposable, AssetErrorListener {
 	
 	public class AssetSkin {
 		public final Skin skin;
+		public final TextureRegion logo;
 		
 		public AssetSkin(AssetManager manager, TextureAtlas atlas) {
+			logo = atlas.findRegion("logo");
 			ObjectMap<String, Object> resources = new ObjectMap<String, Object>();
 			resources.put("menu-font-medium", fonts.menu_m);
 			resources.put("menu-font-large", fonts.menu_l);

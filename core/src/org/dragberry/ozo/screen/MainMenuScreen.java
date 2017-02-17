@@ -3,6 +3,7 @@ package org.dragberry.ozo.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -37,6 +38,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 	public void render(float deltaTime) {
 		Gdx.gl.glClearColor(Constants.BACKGROUND.r, Constants.BACKGROUND.g, Constants.BACKGROUND.b, Constants.BACKGROUND.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.getBatch().begin();
+		TextureRegion logo = Assets.instance.skin.logo;
+		stage.getBatch().draw(logo, (stage.getWidth() - logo.getRegionWidth()) / 2, 50f);
+		stage.getBatch().end();
 		stage.act();
 		stage.draw();
 	}
@@ -78,7 +83,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 2.5f) ;
+				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 3.5f) ;
 		btn.addListener(new ClickListener() {
 			
 			@Override
@@ -96,7 +101,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 + btn.getHeight() / 2);
+				stage.getHeight() / 2 + btn.getHeight() * 1.5f);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -115,7 +120,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 + btn.getHeight() / 2 - btn.getHeight() * 1.5f);
+				stage.getHeight() / 2 + btn.getHeight() / 2 - btn.getHeight() * 0.5f);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -132,7 +137,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
 				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 2f);
+				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 1f);
 		btn.addListener(new ClickListener() {
 			
 			@Override

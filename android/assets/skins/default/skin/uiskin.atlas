@@ -3,17 +3,24 @@ uiskin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+logo
+  rotate: false
+  xy: 1, 130
+  size: 640, 352
+  orig: 640, 352
+  offset: 0, 0
+  index: -1
 default-window
   rotate: false
-  xy: 1, 28
+  xy: 1, 53
   size: 50, 75
   split: 23, 23, 48, 23
   orig: 50, 75
   offset: 0, 0
   index: -1
-default-level-closed
+default-round
   rotate: false
-  xy: 53, 53
+  xy: 643, 432
   size: 50, 50
   split: 23, 23, 23, 23
   orig: 50, 50
@@ -21,15 +28,7 @@ default-level-closed
   index: -1
 default-level-opened-down
   rotate: false
-  xy: 105, 53
-  size: 50, 50
-  split: 23, 23, 23, 23
-  orig: 50, 50
-  offset: 0, 0
-  index: -1
-default-level-opened
-  rotate: false
-  xy: 157, 53
+  xy: 1, 1
   size: 50, 50
   split: 23, 23, 23, 23
   orig: 50, 50
@@ -37,15 +36,23 @@ default-level-opened
   index: -1
 default-round-down
   rotate: false
-  xy: 53, 1
+  xy: 53, 78
   size: 50, 50
   split: 23, 23, 23, 23
   orig: 50, 50
   offset: 0, 0
   index: -1
-default-round
+default-level-closed
   rotate: false
-  xy: 105, 1
+  xy: 643, 380
+  size: 50, 50
+  split: 23, 23, 23, 23
+  orig: 50, 50
+  offset: 0, 0
+  index: -1
+default-level-opened
+  rotate: false
+  xy: 695, 432
   size: 50, 50
   split: 23, 23, 23, 23
   orig: 50, 50

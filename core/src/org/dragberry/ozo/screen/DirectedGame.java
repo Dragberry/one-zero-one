@@ -93,8 +93,8 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, "ozo.lvl.waves", -15, 50));
 		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 50, 50, 50));
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
-		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 20, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 4, 50));
+		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 9, 99));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 9, 99));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 9, 99));
 
 		popupState = PopupState.HIDDEN;
