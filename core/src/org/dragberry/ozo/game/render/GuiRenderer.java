@@ -17,7 +17,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
 public class GuiRenderer implements Renderer {
-	
+
+	private static final float DIGIT_STATE_SCALE = 0.8f;
 	private final GlyphLayout goal =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goal"));
 	private final GlyphLayout goalToLose =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goalToLose"));
 	private final GlyphLayout timeStr = new GlyphLayout(Assets.instance.fonts.gui_l, Assets.instance.translation.format("ozo.time"));
@@ -102,9 +103,17 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionX(), ball.getRegionY(),
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
+		float posX = camera.viewportWidth / 2;
+		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.digits.minus.getRegionHeight();
+		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.digits.minus.getRegionHeight();
 		DigitUtil.draw(batch, gameController.zeroCountDigits,
-				camera.viewportWidth / 2, camera.viewportHeight - offset + ball.getRegionHeight() / 2,
-				1.2f, 1.2f,
+				posX, upY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
+				0,
+				false, true);
+		DigitUtil.draw(batch, gameController.lostNumbersDigits,
+				posX, downY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
 		
@@ -120,18 +129,15 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionX(), ball.getRegionY(),
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
-		float countY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.digits.minus.getRegionHeight();
-		float sumY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + 0.8f * Assets.instance.digits.minus.getRegionHeight();
-		float posX = camera.viewportWidth / 2 - ball.getRegionWidth();
-		
+		posX = camera.viewportWidth / 2 - ball.getRegionWidth();
 		DigitUtil.draw(batch, gameController.posCountDigits,
-				posX, countY,
-				0.8f, 0.8f,
+				posX, upY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
 		DigitUtil.draw(batch, gameController.posSumDigits,
-				posX, sumY,
-				0.8f, 0.8f,
+				posX, downY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
 
@@ -147,16 +153,16 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
 		
-		float negX = camera.viewportWidth / 2 + ball.getRegionWidth();
+		posX = camera.viewportWidth / 2 + ball.getRegionWidth();
 		
 		DigitUtil.draw(batch, gameController.negCountDigits,
-				negX, countY,
-				0.8f, 0.8f,
+				posX, upY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
 		DigitUtil.draw(batch, gameController.negSumDigits,
-				negX, sumY,
-				0.8f, 0.8f,
+				posX, downY,
+				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
 	}

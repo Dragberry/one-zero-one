@@ -49,6 +49,7 @@ public class GameController extends InputAdapter {
 	public Array<TextureRegion> posCountDigits;
 	public Array<TextureRegion> posSumDigits;
 	public Array<TextureRegion> zeroCountDigits;
+	public Array<TextureRegion> lostNumbersDigits;
 	public Array<TextureRegion> negCountDigits;
 	public Array<TextureRegion> negSumDigits;
 
@@ -64,6 +65,7 @@ public class GameController extends InputAdapter {
 			instance.posCountDigits = new Array<TextureRegion>(4);
 			instance.posSumDigits = new Array<TextureRegion>(4);
 			instance.zeroCountDigits = new Array<TextureRegion>(4);
+			instance.lostNumbersDigits = new Array<TextureRegion>(4);
 			instance.negCountDigits = new Array<TextureRegion>(4);
 			instance.negSumDigits = new Array<TextureRegion>(4);
 		} else {
@@ -109,6 +111,7 @@ public class GameController extends InputAdapter {
 		DigitUtil.resolveDigits(posCount, posCountDigits, false);
 		DigitUtil.resolveDigits(posSum, posSumDigits);
 		DigitUtil.resolveDigits(zeroCount, zeroCountDigits, false);
+		DigitUtil.resolveDigits(level.lostNumbers, lostNumbersDigits, false);
 		DigitUtil.resolveDigits(negCount, negCountDigits, false);
 		DigitUtil.resolveDigits(negSum, negSumDigits);
 	}
@@ -145,8 +148,13 @@ public class GameController extends InputAdapter {
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
-			level.save();
-			game.setPopup(new VictoryPopup(game));
+			VictoryPopup victoryPopup = null;
+			if (level.save()) {
+				victoryPopup = new VictoryPopup(game, level.settings);
+			} else {
+				victoryPopup = new VictoryPopup(game);
+			}
+			game.setPopup(victoryPopup);
 			return true;
 		}
 		return false;
@@ -187,7 +195,7 @@ public class GameController extends InputAdapter {
 			unitToMove.moveTo(Direction.EAST, step);
 		}
     }
-    
+
     private void finishStepExecution() {
     	// sum neighbors
     	selectedUnit.previousValue = selectedUnit.getValue();
@@ -211,7 +219,30 @@ public class GameController extends InputAdapter {
     	selectedUnit = null;
     }
 
+	private void updateLostNumbers() {
+		int pos = 0;
+		int neg = 0;
+		if (selectedUnit.previousValue > 0) {
+			pos += selectedUnit.previousValue;
+		} else if (selectedUnit.previousValue < 0) {
+			neg += -selectedUnit.previousValue;
+		}
+		int value;
+		for (Unit unit : neighbors) {
+			value = unit.previousValue;
+			if (value > 0) {
+				pos += value;
+			} else if (value < 0) {
+				neg += -value;
+			}
+		}
+		if (neg != 0 && pos != 0) {
+			level.lostNumbers += pos < neg ? pos : neg;
+		}
+	}
+
 	private void refreshState() {
+		updateLostNumbers();
 		negCount = 0;
 		negSum = 0;
 		posCount = 0;

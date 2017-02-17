@@ -34,6 +34,7 @@ public abstract class Level<LI extends LevelSettings> {
 
     public float time = 0;
     public int steps = 0;
+    public int lostNumbers = 0;
 	public boolean started = false;
     
     public Level(LI settings) {
@@ -120,18 +121,36 @@ public abstract class Level<LI extends LevelSettings> {
         }
     }
 
-	public void save() {
-		settings.bestSteps =
-				Math.min(settings.bestSteps == 0 ? steps : settings.bestSteps, steps);
-		settings.bestTime =
-				Math.min(settings.bestTime == 0 ? time : settings.bestTime, time);
+	public boolean refreshBestResults() {
+        boolean changed = false;
+        if (settings.bestSteps == 0 || steps < settings.bestSteps) {
+            settings.bestSteps = steps;
+            changed = true;
+        }
+        if (settings.bestTime == 0 || time < settings.bestTime) {
+            settings.bestTime = time;
+            changed = true;
+        }
+        if (settings.lostNumbers == -1 || settings.lostNumbers > lostNumbers) {
+            settings.lostNumbers = lostNumbers;
+            changed = true;
+        }
 		settings.completed = true;
-		settings.save();
-	}
+	    return changed;
+    }
+
+    public boolean save() {
+        boolean changed = refreshBestResults();
+        if (changed) {
+            settings.save();
+        }
+        return changed;
+    }
 
     public void reset() {
         time = 0;
         steps = 0;
+        lostNumbers = 0;
         started = false;
         for (Goal goal: goalsToWin) {
             goal.reset();

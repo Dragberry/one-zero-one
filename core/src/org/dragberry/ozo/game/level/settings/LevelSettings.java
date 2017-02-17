@@ -15,6 +15,7 @@ public class LevelSettings {
 	
     private static final String BEST_STEPS = "bestSteps";
 	private static final String BEST_TIME = "bestTime";
+	private static final String BEST_LOST_NUMBERS = "bestLostNumbers";
 	private static final String COMPLETED = "completed";
 	
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
@@ -24,6 +25,7 @@ public class LevelSettings {
     public boolean completed;
     public float bestTime;
     public int bestSteps;
+	public int lostNumbers;
 
     public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String nameKey) {
         this.clazz = clazz;
@@ -40,6 +42,7 @@ public class LevelSettings {
 		completed = prefs.getBoolean(COMPLETED, false);
     	bestTime = prefs.getFloat(BEST_TIME, 0);
     	bestSteps = prefs.getInteger(BEST_STEPS, 0);
+		lostNumbers = prefs.getInteger(BEST_LOST_NUMBERS, -1);
 	}
 	
 	public void save() {
@@ -48,10 +51,11 @@ public class LevelSettings {
 		prefs.flush();
 	}
     
-	private void update(Preferences prefs) {
+	protected void update(Preferences prefs) {
 		prefs.putBoolean(COMPLETED, completed);
 		prefs.putFloat(BEST_TIME, bestTime);
 		prefs.putInteger(BEST_STEPS, bestSteps);
+		prefs.putInteger(BEST_LOST_NUMBERS, lostNumbers);
 	}
 
 	protected Preferences loadPreferences() {
@@ -62,6 +66,7 @@ public class LevelSettings {
 		ArrayMap<String, Object> results = new ArrayMap<String, Object>();
 		results.put(Assets.instance.translation.format("ozo.bestTime"), TimeUtils.timeToString((int) bestTime));
 		results.put(Assets.instance.translation.format("ozo.bestSteps"), bestSteps);
+		results.put(Assets.instance.translation.format("ozo.bestLostNumbers"), lostNumbers);
 		return results;
 	}
 }

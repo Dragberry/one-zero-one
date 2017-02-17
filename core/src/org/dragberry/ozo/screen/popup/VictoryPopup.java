@@ -2,18 +2,28 @@ package org.dragberry.ozo.screen.popup;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ObjectMap;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
 
 public class VictoryPopup extends AbstractPopup {
 
-	public VictoryPopup(DirectedGame game) {
+	private LevelSettings settings;
+
+	public VictoryPopup(DirectedGame game, LevelSettings settings) {
 		super(game);
+		this.settings = settings;
+	}
+
+	public VictoryPopup(DirectedGame game) {
+		this(game, null);
 	}
 
 	@Override
@@ -23,11 +33,28 @@ public class VictoryPopup extends AbstractPopup {
 		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), Assets.instance.skin.skin);
 		congrLbl.setAlignment(Align.center);
 		popupWindow.add(congrLbl).fill().expand();
-		popupWindow.row();
-		Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), Assets.instance.skin.skin);
-		wonLbl.setAlignment(Align.center);
-		popupWindow.add(wonLbl).fill().expand();
-		popupWindow.row();
+		popupWindow.row().pad(10f);
+
+		if (settings == null) {
+			Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), Assets.instance.skin.skin);
+			wonLbl.setAlignment(Align.center);
+			popupWindow.add(wonLbl).fill().expand();
+			popupWindow.row();
+		} else {
+			Label bestResultLbl = new Label(Assets.instance.translation.get("ozo.newRecord"), Assets.instance.skin.skin);
+			bestResultLbl.setAlignment(Align.center);
+			bestResultLbl.setWrap(true);
+			popupWindow.add(bestResultLbl).fill().expand();
+			popupWindow.row();
+			Table resultTable = new Table();
+			for (ObjectMap.Entry<String, Object> result : settings.getResults().entries()) {
+				resultTable.add(new Label(result.key, Assets.instance.skin.skin)).fill().expand().pad(10f);
+				resultTable.add(new Label(result.value.toString(), Assets.instance.skin.skin)).fill().expand().pad(10f);
+				resultTable.row();
+			}
+			popupWindow.add(resultTable).row();
+		}
+
 		popupWindow.add(createNextBtn()).fill().expand().pad(10f);
 		popupWindow.row();
 		popupWindow.add(createPlayAgainBtn()).fill().expand().pad(10f);
