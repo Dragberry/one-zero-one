@@ -9,10 +9,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.ChessboardLevel;
@@ -31,6 +27,10 @@ import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
+
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by maksim on 29.01.17.

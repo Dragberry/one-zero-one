@@ -65,6 +65,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 //		adView.setLayoutParams(params);
 		adView.setBackgroundColor(Color.BLACK);
 		adView.getHeight();
+		adView.setVisibility(View.INVISIBLE);
 		return adView;
 	}
 
@@ -141,6 +142,18 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	public boolean isBannerShown() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
-		return (ni != null && ni.isConnected());
+		if (ni != null) {
+			boolean typeMatched = false;
+			switch (ni.getType()) {
+				case ConnectivityManager.TYPE_MOBILE:
+				case ConnectivityManager.TYPE_WIFI:
+				case ConnectivityManager.TYPE_WIMAX:
+				case ConnectivityManager.TYPE_ETHERNET:
+					typeMatched = true;
+					break;
+			}
+			return typeMatched && ni.isConnected() && !ni.isRoaming();
+		}
+		return false;
 	}
 }

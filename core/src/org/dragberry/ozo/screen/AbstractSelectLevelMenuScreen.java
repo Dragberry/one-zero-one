@@ -85,7 +85,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
             } else if (levelSettings.completed) {
                 state = LevelState.COMPLETED;
             } else {
-                state = LevelState.CLOSED;
+                state = LevelState.OPENED;
             }
             scrollTable.add(createLevelBtn(state, levelSettings)).fillX().expand(true, false).pad(5, 10, 5, 10);
             scrollTable.row();
