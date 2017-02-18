@@ -24,6 +24,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	private Stage stage;
 
 	private float buttonWidth;
+	private float firstBtnY;
 
 	public MainMenuScreen(DirectedGame game) {
 		super(game);
@@ -40,7 +41,13 @@ public class MainMenuScreen extends AbstractGameScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.getBatch().begin();
 		TextureRegion logo = Assets.instance.skin.logo;
-		stage.getBatch().draw(logo, (stage.getWidth() - logo.getRegionWidth()) / 2, 50f);
+		float zoom = 0.8f;
+		stage.getBatch().draw(logo,
+				(stage.getWidth() - logo.getRegionWidth() * zoom) / 2,
+				firstBtnY + logo.getRegionHeight() * 0.5f,
+				0, 0,
+				logo.getRegionWidth(), logo.getRegionHeight(),
+				zoom, zoom, 0f);
 		stage.getBatch().end();
 		stage.act();
 		stage.draw();
@@ -58,6 +65,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 				Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
 
 		buttonWidth = stage.getWidth() * 0.75f;
+		firstBtnY = stage.getHeight() / 2;
 
 		stage.addActor(createNewGameBtn());
 		stage.addActor(createRandomGameBtn());
@@ -82,8 +90,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 + btn.getHeight() * 3.5f) ;
+				stage.getWidth() / 2 - btn.getWidth() / 2, firstBtnY) ;
 		btn.addListener(new ClickListener() {
 			
 			@Override
@@ -100,8 +107,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 + btn.getHeight() * 1.5f);
+				stage.getWidth() / 2 - btn.getWidth() / 2, firstBtnY - BTN_HEIGHT * 1.5f);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -119,8 +125,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 + btn.getHeight() / 2 - btn.getHeight() * 0.5f);
+				stage.getWidth() / 2 - btn.getWidth() / 2, firstBtnY - BTN_HEIGHT * 3f);
 		btn.addListener(new ClickListener() {
 
 			@Override
@@ -136,8 +141,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
-				stage.getWidth() / 2 - btn.getWidth() / 2,
-				stage.getHeight() / 2 - btn.getHeight() / 2 - btn.getHeight() * 1f);
+				stage.getWidth() / 2 - btn.getWidth() / 2, firstBtnY - BTN_HEIGHT * 4.5f);
 		btn.addListener(new ClickListener() {
 			
 			@Override

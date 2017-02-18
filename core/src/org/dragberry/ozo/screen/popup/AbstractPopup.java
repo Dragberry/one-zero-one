@@ -5,8 +5,11 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.AbstractGameScreen;
 import org.dragberry.ozo.screen.DirectedGame;
 
@@ -44,7 +47,10 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 	@Override
 	public void show() {
 		game.adsController.showBannerAd();
-		stage = new Stage();
+		stage = new Stage(new ScalingViewport(Scaling.stretch,
+				Constants.VIEWPORT_GUI_WIDTH,
+				Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
+
 		rebuildStage();
 	}
 
