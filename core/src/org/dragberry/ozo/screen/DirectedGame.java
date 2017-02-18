@@ -166,7 +166,9 @@ public abstract class DirectedGame implements ApplicationListener {
         	popup.show();
         	popup.resize(width, height);
         	popup.render(0);
-        	currScreen.pause();
+			if (currScreen != null) {
+				currScreen.pause();
+			}
         } else {
         	popupState = PopupState.HIDING;
         }
