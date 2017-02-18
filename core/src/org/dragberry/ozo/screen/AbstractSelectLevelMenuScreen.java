@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -40,6 +41,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     public void render(float deltaTime) {
     	Gdx.gl.glClearColor(Constants.BACKGROUND.r, Constants.BACKGROUND.g, Constants.BACKGROUND.b, Constants.BACKGROUND.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         stage.act();
         stage.draw();
     }
@@ -52,9 +54,16 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         game.adsController.showBannerAd();
-        stage = new Stage(new ScalingViewport(Scaling.stretch,
+        stage = new CustomStage(new ScalingViewport(Scaling.stretch,
                 Constants.VIEWPORT_GUI_WIDTH,
-                Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
+                Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()),
+                new ActionExecutor() {
+
+                    @Override
+                    public void execute() {
+                        game.back();
+                    }
+                });
 
         rebuildStage();
     }
@@ -76,7 +85,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
             } else if (levelSettings.completed) {
                 state = LevelState.COMPLETED;
             } else {
-                state = LevelState.OPENED;
+                state = LevelState.CLOSED;
             }
             scrollTable.add(createLevelBtn(state, levelSettings)).fillX().expand(true, false).pad(5, 10, 5, 10);
             scrollTable.row();

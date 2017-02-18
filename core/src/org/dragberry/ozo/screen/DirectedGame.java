@@ -78,7 +78,7 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
+//		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 10, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 25));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -7, 49));
@@ -95,13 +95,16 @@ public abstract class DirectedGame implements ApplicationListener {
 		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
 		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 9, 99));
 		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 9, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 9, 99));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.storm", 9, 99));
+		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 99, 999));
 
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
      		Gdx.files.internal("shaders/blackout.frag"));
 		this.popupTransition = PopupTransition.init(blackoutShader);
+
+		Gdx.input.setCatchBackKey(true);
     }
     
     public void setScreen(AbstractGameScreen screen) {
@@ -327,7 +330,6 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void back() {
-        Gdx.input.setCatchBackKey(false);
     	try {
 	    	if (callerScreen != null) {
 	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
@@ -366,7 +368,6 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playLevel(LevelSettings currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
-        Gdx.input.setCatchBackKey(true);
         this.currentLevelSettings = currentLevelSettings;
         try {
 			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.nameKey);

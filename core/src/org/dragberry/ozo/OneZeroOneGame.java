@@ -23,7 +23,7 @@ public class OneZeroOneGame extends DirectedGame {
 	@Override
 	public void create() {
 		super.create();
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_NONE);
 		setScreen(new MainMenuScreen(this));
 		Gdx.app.debug(TAG, "OneZeroOneGame has been created");
 	}

@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -60,9 +61,17 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		stage = new Stage(new ScalingViewport(Scaling.stretch,
+		stage = new CustomStage(new ScalingViewport(Scaling.stretch,
 				Constants.VIEWPORT_GUI_WIDTH,
-				Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
+				Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()),
+				new ActionExecutor() {
+
+					@Override
+					public void execute() {
+						Gdx.app.debug(TAG, "Exit from the application");
+						Gdx.app.exit();
+					}
+				});
 
 		buttonWidth = stage.getWidth() * 0.75f;
 		firstBtnY = stage.getHeight() / 2;

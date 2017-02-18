@@ -54,10 +54,26 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				false, flipY);
 
 		batch.setColor(Constants.COLOR_UNIT_TEXT);
+		float zoomFactor;
+		switch (valueDigits.size) {
+			case 1:
+			case 2:
+			case 3:
+				zoomFactor = 1;
+				break;
+			case 4:
+				zoomFactor = 0.8f;
+				break;
+			case 5:
+				zoomFactor = 0.6f;
+				break;
+			default:
+				zoomFactor = 0.4f;
+		}
 		DigitUtil.draw(batch, valueDigits,
 				position.x + dimension.x / 2, position.y + dimension.y / 2,
-				valueDigits.size > 3 ? scale.x * 0.8f : scale.y,
-				valueDigits.size > 3 ? scale.x * 0.8f : scale.y,
+				scale.x * zoomFactor ,
+				scale.y * zoomFactor,
 				rotation,
 				false, flipY);
 		
