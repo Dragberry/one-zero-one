@@ -21,6 +21,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import java.util.Locale;
+
 public class Assets implements Disposable, AssetErrorListener {
 
 	private static final String TAG = Assets.class.getName();
@@ -146,15 +148,14 @@ public class Assets implements Disposable, AssetErrorListener {
 				case 1440:
 					return new AssetFonts(17, 18, 25, 27, 50, 54);
 				default:
-					float factor = screenWidth /  Constants.VIEWPORT_WIDTH;
 					float factorGui = screenWidth /  Constants.VIEWPORT_GUI_WIDTH;
 					return new AssetFonts(
 							(int)(24 * factorGui),
 							(int)(28 * factorGui),
 							(int)(36 * factorGui),
 							(int)(40 * factorGui),
-							(int)(28 * factor),
-							(int)(36 * factor));
+							(int)(40 * factorGui),
+							(int)(46 * factorGui));
 			}
 		}
 
