@@ -10,10 +10,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LevelRenderer implements Renderer {
-	
+
+	private static final float LONG_ASPECT_RATIO = 3f / 5f;
+
 	private OrthographicCamera camera;
 	private GameController gameController;
-	
+
 	public LevelRenderer(GameController gameController) {
 		this.gameController = gameController;
 		init();
@@ -53,6 +55,7 @@ public class LevelRenderer implements Renderer {
 
 	private void setZoom() {
 		float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
+		boolean longScreen = screenAspectRatio < LONG_ASPECT_RATIO;
         float gameAspectRatio = gameController.level.width / gameController.level.height;
         float zoom = 0;
         if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
@@ -60,7 +63,7 @@ public class LevelRenderer implements Renderer {
         } else {
         	zoom = gameController.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
         }
-		CameraHelper.INSTANCE.setZoom(zoom);
+		CameraHelper.INSTANCE.setZoom(longScreen ? zoom : zoom * 1.15f);
 	}
 	
 	@Override

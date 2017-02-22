@@ -45,7 +45,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		float zoom = 0.8f;
 		stage.getBatch().draw(logo,
 				(stage.getWidth() - logo.getRegionWidth() * zoom) / 2,
-				firstBtnY + logo.getRegionHeight() * 0.5f,
+				firstBtnY + logo.getRegionHeight() * 0.4f,
 				0, 0,
 				logo.getRegionWidth(), logo.getRegionHeight(),
 				zoom, zoom, 0f);
