@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LevelRenderer implements Renderer {
 
-	private static final float LONG_ASPECT_RATIO = 3f / 5f;
+	private static final float LONG_ASPECT_RATIO = 1f / 1.6f;
 
 	private OrthographicCamera camera;
 	private GameController gameController;
@@ -55,7 +55,7 @@ public class LevelRenderer implements Renderer {
 
 	private void setZoom() {
 		float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
-		boolean longScreen = screenAspectRatio < LONG_ASPECT_RATIO;
+		boolean longScreen = screenAspectRatio <= LONG_ASPECT_RATIO;
         float gameAspectRatio = gameController.level.width / gameController.level.height;
         float zoom = 0;
         if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
