@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 
+import org.dragberry.ozo.LevelProvider;
 import org.dragberry.ozo.admob.AdsController;
+import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
@@ -78,6 +80,7 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
+		LevelProvider levelProvider = new LevelProvider();
 //		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 10, JustReachGoal.Operator.MORE));
 		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 25));

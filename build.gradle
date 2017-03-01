@@ -22,6 +22,10 @@ allprojects {
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.8.0'
+
+        springAndroidRestVersion = "1.0.1.RELEASE"
+        jacksonDatabindVersion = "2.8.7"
+        ozoBackendVersion = "1.0.0"
     }
 
     repositories {
@@ -83,6 +87,9 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile "org.springframework.android:spring-android-rest-template:$springAndroidRestVersion"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
+        compile group: "org.dragberry.ozo", name:"ozo-common", version:"$ozoBackendVersion"
     }
 }
 

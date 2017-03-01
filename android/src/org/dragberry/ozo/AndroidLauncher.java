@@ -59,10 +59,6 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 		adView.setAdSize(AdSize.SMART_BANNER);
 		adView.setAdUnitId(getString(R.string.main_menu_banner));
 		adView.setId(R.id.ad_view_id); // this is an arbitrary id, allows for relative positioning in createGameView()
-//		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//		params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-//		params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-//		adView.setLayoutParams(params);
 		adView.setBackgroundColor(Color.BLACK);
 		adView.getHeight();
 		adView.setVisibility(View.INVISIBLE);
@@ -72,15 +68,10 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
     private View createGameView(AndroidApplicationConfiguration cfg) {
         gameView = initializeForView(new OneZeroOneGame(this), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-//        params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
-//        params.addRule(RelativeLayout.ALIGN_TOP, adView.getId());
-//        gameView.setLayoutParams(params);
         return gameView;
     }
 
     private void startAdvertising(AdView adView) {
-//		AdRequest adRequest = new AdRequest.Builder().build();
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("").build();
         adView.loadAd(adRequest);
     }

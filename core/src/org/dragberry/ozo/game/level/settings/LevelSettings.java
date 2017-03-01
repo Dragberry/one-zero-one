@@ -1,5 +1,7 @@
 package org.dragberry.ozo.game.level.settings;
 
+import org.dragberry.ozo.common.levelresult.LevelResultName;
+import org.dragberry.ozo.common.levelresult.LevelResults;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.util.TimeUtils;
@@ -68,5 +70,11 @@ public class LevelSettings {
 		results.put(Assets.instance.translation.format("ozo.bestSteps"), bestSteps);
 		results.put(Assets.instance.translation.format("ozo.bestLostNumbers"), lostNumbers);
 		return results;
+	}
+
+	public void updateResults(LevelResults results) {
+		Preferences prefs = loadPreferences();
+		update(prefs);
+		prefs.flush();
 	}
 }
