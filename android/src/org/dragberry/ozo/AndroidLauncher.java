@@ -74,7 +74,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
-        gameView = initializeForView(new OneZeroOneGame(this), cfg);
+        gameView = initializeForView(new OneZeroOneGame(this, this), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         return gameView;
     }
@@ -177,28 +177,27 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 
 	@Override
-	public void executeTask(final HttpTask<?, ?> httpTask) {
-
+	public <T, R>  void executeTask(final HttpTask<T, R> httpTask) {
 		if (isConnected()) {
-			new HttpRequestTask(httpTask).execute();
+			new HttpRequestTask<>(httpTask).execute();
 		}
 	}
 
-	private class HttpRequestTask extends AsyncTask<Void, Void, Object> {
+	private class HttpRequestTask<P, R> extends AsyncTask<Void, Void, R> {
 
-		private final HttpTask<? super Object, ? super Object> httpTask;
+		private final HttpTask<P, R> httpTask;
 
-		public HttpRequestTask(HttpTask<? super Object, ? super Object> httpTask) {
+		public HttpRequestTask(HttpTask<P, R> httpTask) {
 			this.httpTask = httpTask;
 		}
 
 		@Override
-		protected Object doInBackground(Void... params) {
+		protected R doInBackground(Void... params) {
 			return httpTask.execute();
 		}
 
 		@Override
-		protected void onPostExecute(Object result) {
+		protected void onPostExecute(R result) {
 			httpTask.onComplete(result);
 		}
 	}

@@ -18,9 +18,6 @@ import java.util.Map;
  */
 public class LevelSettings {
 	
-    private static final String BEST_STEPS = "bestSteps";
-	private static final String BEST_TIME = "bestTime";
-	private static final String BEST_LOST_NUMBERS = "bestLostNumbers";
 	private static final String COMPLETED = "completed";
 	
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
@@ -31,6 +28,8 @@ public class LevelSettings {
     public float bestTime;
     public int bestSteps;
 	public int lostNumbers;
+
+	public final LevelResults results = new LevelResults();
 
     public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String nameKey) {
         this.clazz = clazz;
@@ -45,9 +44,18 @@ public class LevelSettings {
 
 	protected void load(Preferences prefs) {
 		completed = prefs.getBoolean(COMPLETED, false);
-    	bestTime = prefs.getFloat(BEST_TIME, 0);
-    	bestSteps = prefs.getInteger(BEST_STEPS, 0);
-		lostNumbers = prefs.getInteger(BEST_LOST_NUMBERS, -1);
+
+		loadSingleResult(LevelResultName.TIME, prefs);
+		loadSingleResult(LevelResultName.STEPS, prefs);
+		loadSingleResult(LevelResultName.LOST_UNITS, prefs);
+	}
+
+	private void loadSingleResult(LevelResultName name, Preferences prefs) {
+		LevelSingleResult<Integer> result = new LevelSingleResult<Integer>();
+		result.setPersonal(prefs.getInteger(name.personal(), -1));
+		result.setWorlds(prefs.getInteger(name.worlds(), -1));
+		result.setOwner(prefs.getString(name.owner()));
+		results.getResults().put(name, result);
 	}
 	
 	public void save() {
@@ -58,9 +66,17 @@ public class LevelSettings {
     
 	protected void update(Preferences prefs) {
 		prefs.putBoolean(COMPLETED, completed);
-		prefs.putFloat(BEST_TIME, bestTime);
-		prefs.putInteger(BEST_STEPS, bestSteps);
-		prefs.putInteger(BEST_LOST_NUMBERS, lostNumbers);
+
+		updateSingleResult(LevelResultName.TIME, prefs);
+		updateSingleResult(LevelResultName.STEPS, prefs);
+		updateSingleResult(LevelResultName.LOST_UNITS, prefs);
+	}
+
+	private void updateSingleResult(LevelResultName name, Preferences prefs) {
+		LevelSingleResult<Integer> result = results.getResults().get(name);
+		prefs.putInteger(name.personal(), result.getPersonal());
+		prefs.putInteger(name.worlds(), result.getWorlds());
+		prefs.putString(name.owner(), result.getOwner());
 	}
 
 	protected Preferences loadPreferences() {
@@ -69,17 +85,32 @@ public class LevelSettings {
 	
 	public ArrayMap<String, Object> getResults() {
 		ArrayMap<String, Object> results = new ArrayMap<String, Object>();
-		results.put(Assets.instance.translation.format("ozo.bestTime"), TimeUtils.timeToString((int) bestTime));
-		results.put(Assets.instance.translation.format("ozo.bestSteps"), bestSteps);
-		results.put(Assets.instance.translation.format("ozo.bestLostNumbers"), lostNumbers);
+		results.put(Assets.instance.translation.format(LevelResultName.TIME.personal()), TimeUtils.timeToString((int) bestTime));
+		results.put(Assets.instance.translation.format(LevelResultName.STEPS.personal()), bestSteps);
+		results.put(Assets.instance.translation.format(LevelResultName.LOST_UNITS.personal()), lostNumbers);
 		return results;
 	}
 
 	public void updateResults(LevelResults results) {
+		Preferences prefs = loadPreferences();
 		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> entry : results.getResults().entrySet()) {
+			LevelResultName name = entry.getKey();
+			LevelSingleResult<Integer> result = entry.getValue()
+;
+			int personal = prefs.getInteger(name.personal(), -1);
+			int worlds = prefs.getInteger(name.worlds(), -1);
+			String owner = prefs.getString(name.owner());
+
+			if (personal == -1 || personal < entry.getValue().getPersonal()) {
+
+			}
+
+			// / world result
+			// world result owner
+			// your result
+
 		}
 
-		Preferences prefs = loadPreferences();
 		update(prefs);
 		prefs.flush();
 	}

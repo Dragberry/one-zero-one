@@ -13,6 +13,7 @@ import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
@@ -31,6 +32,7 @@ public abstract class DirectedGame implements ApplicationListener {
 	private final static String TAG = DirectedGame.class.getName();
 
 	public final AdsController adsController;
+	public final HttpClient httpClient;
 
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
@@ -61,8 +63,9 @@ public abstract class DirectedGame implements ApplicationListener {
     
     private Class<? extends AbstractGameScreen> callerScreen;
 
-	public DirectedGame(AdsController adsController) {
+	public DirectedGame(AdsController adsController, HttpClient httpClient) {
 		this.adsController = adsController;
+		this.httpClient = httpClient;
 	}
 
     @Override

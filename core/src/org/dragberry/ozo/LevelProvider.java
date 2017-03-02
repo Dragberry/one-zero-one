@@ -2,6 +2,7 @@ package org.dragberry.ozo;
 
 import static org.dragberry.ozo.common.level.Levels.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
@@ -29,6 +30,8 @@ import java.util.Map;
 
 public class LevelProvider {
 
+    private static final String TAG = LevelProvider.class.getName();
+
     public final Array<LevelSettings> levels = new Array<LevelSettings>();
 
     public LevelProvider() {
@@ -55,12 +58,14 @@ public class LevelProvider {
     }
 
     public void loadResults(HttpClient httpClient) {
+        Gdx.app.debug(TAG, "loadResults...");
         if (httpClient.isConnected()) {
             httpClient.executeTask(
-                    new HttpTask<Void, AllLevelResults>(AllLevelResults.class, "/results/user/{0}", "userId") {
+                    new HttpTask<Void, AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels", "id0") {
 
                 @Override
                 public void onComplete(AllLevelResults result) {
+                    Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = new AllLevelResults().getLevelResults();
 
                     for (LevelSettings levelSettings : levels) {

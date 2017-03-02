@@ -10,5 +10,5 @@ public interface HttpClient {
 
     boolean isConnected();
 
-    void executeTask(HttpTask<?, ?> httpTask);
+    <T, R>  void executeTask(HttpTask<T, R> httpTask);
 }
