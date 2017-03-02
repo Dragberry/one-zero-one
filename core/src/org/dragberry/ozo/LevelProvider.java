@@ -5,9 +5,7 @@ import static org.dragberry.ozo.common.level.Levels.*;
 import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
-import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelResults;
-import org.dragberry.ozo.common.levelresult.LevelSingleResult;
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.MushroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
@@ -19,7 +17,10 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.http.HttpClient;
+import org.dragberry.ozo.http.HttpTask;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -31,6 +32,7 @@ public class LevelProvider {
     public final Array<LevelSettings> levels = new Array<LevelSettings>();
 
     public LevelProvider() {
+//		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -5, 25));
         levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -7, 49));
@@ -52,17 +54,23 @@ public class LevelProvider {
 
     }
 
-    public void loadResults() {
-        // TODO load result from server, if connection is available
-        Map<String, LevelResults> allLevelResults = new AllLevelResults().getLevelResults();
+    public void loadResults(HttpClient httpClient) {
+        if (httpClient.isConnected()) {
+            httpClient.executeTask(
+                    new HttpTask<Void, AllLevelResults>(AllLevelResults.class, "/results/user/{0}", "userId") {
 
-        for (LevelSettings levelSettings : levels) {
-            LevelResults results = allLevelResults.get(levelSettings.nameKey);
-            levelSettings.updateResults(results);
-            levelSettings.save();
+                @Override
+                public void onComplete(AllLevelResults result) {
+                    Map<String, LevelResults> allResults = new AllLevelResults().getLevelResults();
+
+                    for (LevelSettings levelSettings : levels) {
+                        LevelResults results = allResults.get(levelSettings.nameKey);
+                        levelSettings.updateResults(results);
+                        levelSettings.save();
+                    }
+                }
+            });
         }
     }
-
-
 
 }

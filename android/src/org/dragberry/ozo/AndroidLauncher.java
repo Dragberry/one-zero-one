@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,8 +23,15 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import org.dragberry.ozo.admob.AdsController;
+import org.dragberry.ozo.common.levelresult.AllLevelResults;
+import org.dragberry.ozo.http.HttpClient;
+import org.dragberry.ozo.http.HttpTask;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
-public class AndroidLauncher extends AndroidApplication implements AdsController {
+import java.io.Serializable;
+
+public class AndroidLauncher extends AndroidApplication implements AdsController, HttpClient {
 
 	protected AdView adView;
 	protected View gameView;
@@ -146,5 +154,52 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 			return typeMatched && ni.isConnected() && !ni.isRoaming();
 		}
 		return false;
+	}
+
+
+	@Override
+	public boolean isConnected() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni != null) {
+			boolean typeMatched = false;
+			switch (ni.getType()) {
+				case ConnectivityManager.TYPE_MOBILE:
+				case ConnectivityManager.TYPE_WIFI:
+				case ConnectivityManager.TYPE_WIMAX:
+				case ConnectivityManager.TYPE_ETHERNET:
+					typeMatched = true;
+					break;
+			}
+			return typeMatched && ni.isConnected() && !ni.isRoaming();
+		}
+		return false;
+	}
+
+	@Override
+	public void executeTask(final HttpTask<?, ?> httpTask) {
+
+		if (isConnected()) {
+			new HttpRequestTask(httpTask).execute();
+		}
+	}
+
+	private class HttpRequestTask extends AsyncTask<Void, Void, Object> {
+
+		private final HttpTask<? super Object, ? super Object> httpTask;
+
+		public HttpRequestTask(HttpTask<? super Object, ? super Object> httpTask) {
+			this.httpTask = httpTask;
+		}
+
+		@Override
+		protected Object doInBackground(Void... params) {
+			return httpTask.execute();
+		}
+
+		@Override
+		protected void onPostExecute(Object result) {
+			httpTask.onComplete(result);
+		}
 	}
 }

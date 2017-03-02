@@ -7,24 +7,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.LevelProvider;
 import org.dragberry.ozo.admob.AdsController;
-import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.Level;
-import org.dragberry.ozo.game.level.MushroomRainLevel;
-import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
-import org.dragberry.ozo.game.level.NoAnnihilationWavesLevel;
-import org.dragberry.ozo.game.level.QueueLevel;
-import org.dragberry.ozo.game.level.WavesLevel;
-import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
-import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
-import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
@@ -44,7 +32,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public final AdsController adsController;
 
-	public final Array<LevelSettings> levels = new Array<LevelSettings>();
+	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
 	
     private LevelSettings currentLevelSettings;
@@ -80,27 +68,8 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
-		LevelProvider levelProvider = new LevelProvider();
-//		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.letsStart", -10, 10, JustReachGoal.Operator.MORE));
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.littleBitHarder", -5, 25));
-		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.needMore", -7, 49));
-		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.double5", -10, 5, 5));
-		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.saveUs", 5, 25));
-		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.roulette", -7, 7, 7, 7));
-		levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, "ozo.lvl.mushroomRain", -10, 25));
-		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.queues", -15, 50));
-		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.straightFlush", -15, 6, 7, 8, 9, 10));
-		levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, "ozo.lvl.chessboard", -20, 50));
-		levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, "ozo.lvl.mushroomShower", -25, 75));
-		levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, "ozo.lvl.waves", -15, 50));
-		levels.add(new ReachMultiGoalLevelSettings("ozo.lvl.casinoRoyale", -99, 50, 50, 50));
-		levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, "ozo.lvl.regularity", -33, 99));
-		levels.add(new NoAnnihilationLevelSettings("ozo.lvl.unsafePlace", 9, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, "ozo.lvl.unsafeRegularity", 9, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.storm", 9, 99));
-		levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, "ozo.lvl.tsunami", 99, 999));
-
+		levelProvider = new LevelProvider();
+	 	levelProvider.loadResults(httpClient);
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
@@ -357,9 +326,9 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playNextLevel() {
-    	int currLevelIndex = levels.indexOf(currentLevelSettings, true);
-    	if (currLevelIndex < levels.size - 1) {
-    		setCurrentLevelSettings(levels.get(currLevelIndex + 1));
+    	int currLevelIndex = levelProvider.levels.indexOf(currentLevelSettings, true);
+    	if (currLevelIndex < levelProvider.levels.size - 1) {
+    		setCurrentLevelSettings(levelProvider.levels.get(currLevelIndex + 1));
     		playLevel();
     	} else {
     		back();

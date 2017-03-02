@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level.settings;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelResults;
+import org.dragberry.ozo.common.levelresult.LevelSingleResult;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.util.TimeUtils;
@@ -9,6 +10,8 @@ import org.dragberry.ozo.game.util.TimeUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.ArrayMap;
+
+import java.util.Map;
 
 /**
  * Created by maksim on 01.02.17.
@@ -73,6 +76,9 @@ public class LevelSettings {
 	}
 
 	public void updateResults(LevelResults results) {
+		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> entry : results.getResults().entrySet()) {
+		}
+
 		Preferences prefs = loadPreferences();
 		update(prefs);
 		prefs.flush();
