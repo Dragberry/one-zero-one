@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Collections;
 import java.util.Map;
 
+import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
@@ -139,6 +140,10 @@ public abstract class Level<LI extends LevelSettings> {
 	    return changed;
     }
 
+    public boolean checkLocalResults() {
+        return true;
+    }
+
     public boolean save() {
         boolean changed = refreshBestResults();
         if (changed) {
@@ -161,5 +166,11 @@ public abstract class Level<LI extends LevelSettings> {
         for (Generator generator : generators.values()) {
             generator.reset();
         }
+    }
+
+    public NewLevelResultsRequest createNewResultsRequest() {
+        NewLevelResultsRequest request = new NewLevelResultsRequest();
+
+        return request;
     }
 }

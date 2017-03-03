@@ -14,12 +14,11 @@ public abstract class HttpTask<P, R> {
 
     private static final String TAG = HttpTask.class.getName();
 
-    private static final String URL_ROOT = "http://192.168.0.104:8080/ozo-backend-war";
+    protected static final String URL_ROOT = "http://10.0.2.2:8087/ozo-backend-war";
+//    protected static final String URL_ROOT = "http://192.168.0.104:8080/ozo-backend-war";
 
-    private final String url;
-    private final Class<R> resultClass;
-
-    private P parameter;
+    protected final String url;
+    protected final Class<R> resultClass;
 
     public HttpTask(Class<R> resultClass, String urlTemplate, Object... urlParams) {
         this.url = MessageFormat.format(URL_ROOT + urlTemplate, urlParams);
@@ -29,19 +28,12 @@ public abstract class HttpTask<P, R> {
     public final R execute() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        Gdx.app.debug(TAG, "do GET request: " + url);
-        return restTemplate.getForObject(url, resultClass);
+        return doRequest(restTemplate);
     }
+
+    protected abstract R doRequest(RestTemplate restTemplate);
 
     public abstract void onComplete(R result);
-
-    public P getParameter() {
-        return parameter;
-    }
-
-    public void setParameter(P parameter) {
-        this.parameter = parameter;
-    }
 
     public Class<R> getResultClass() {
         return resultClass;

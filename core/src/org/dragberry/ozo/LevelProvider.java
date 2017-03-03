@@ -18,10 +18,9 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
-import org.dragberry.ozo.http.HttpTask;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -61,15 +60,15 @@ public class LevelProvider {
         Gdx.app.debug(TAG, "loadResults...");
         if (httpClient.isConnected()) {
             httpClient.executeTask(
-                    new HttpTask<Void, AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels", "id0") {
+                    new GetHttpTask<AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels", "id0") {
 
                 @Override
                 public void onComplete(AllLevelResults result) {
                     Gdx.app.debug(TAG, "task completed...");
-                    Map<String, LevelResults> allResults = new AllLevelResults().getLevelResults();
+                    Map<String, LevelResults> allResults = result.getLevelResults();
 
                     for (LevelSettings levelSettings : levels) {
-                        LevelResults results = allResults.get(levelSettings.nameKey);
+                        LevelResults results = allResults.get(levelSettings.levelId);
                         levelSettings.updateResults(results);
                         levelSettings.save();
                     }

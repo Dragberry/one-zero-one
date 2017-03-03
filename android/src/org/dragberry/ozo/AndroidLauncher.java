@@ -26,15 +26,26 @@ import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.HttpTask;
+import org.dragberry.ozo.platform.Platform;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 
-public class AndroidLauncher extends AndroidApplication implements AdsController, HttpClient {
+public class AndroidLauncher extends AndroidApplication implements Platform, AdsController, HttpClient {
 
 	protected AdView adView;
 	protected View gameView;
+
+	@Override
+	public AdsController getAdsController() {
+		return this;
+	}
+
+	@Override
+	public HttpClient getHttpClient() {
+		return this;
+	}
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -74,7 +85,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 	}
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
-        gameView = initializeForView(new OneZeroOneGame(this, this), cfg);
+        gameView = initializeForView(new OneZeroOneGame(this), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         return gameView;
     }

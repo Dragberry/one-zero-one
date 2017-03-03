@@ -1,7 +1,6 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -53,7 +52,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
-        game.adsController.showBannerAd();
+        game.platform.getAdsController().showBannerAd();
         stage = new CustomStage(new ScalingViewport(Scaling.stretch,
                 Constants.VIEWPORT_GUI_WIDTH,
                 Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()),
@@ -74,7 +73,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
         Label label = new Label(screenTitle, Assets.instance.skin.skin);
         label.setAlignment(Align.center);
-        table.add(label).fill().expand().pad(game.adsController.isBannerShown() ? 125f : 50f, 50f, 25f, 50f);
+        table.add(label).fill().expand().pad(game.platform.getAdsController().isBannerShown() ? 125f : 50f, 50f, 25f, 50f);
         table.row();
 
         Table scrollTable = new Table();

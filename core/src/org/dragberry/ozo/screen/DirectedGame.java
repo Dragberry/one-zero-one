@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import org.dragberry.ozo.LevelProvider;
-import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
-import org.dragberry.ozo.http.HttpClient;
+import org.dragberry.ozo.platform.Platform;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
@@ -31,8 +30,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	private final static String TAG = DirectedGame.class.getName();
 
-	public final AdsController adsController;
-	public final HttpClient httpClient;
+	public final Platform platform;
 
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
@@ -63,16 +61,15 @@ public abstract class DirectedGame implements ApplicationListener {
     
     private Class<? extends AbstractGameScreen> callerScreen;
 
-	public DirectedGame(AdsController adsController, HttpClient httpClient) {
-		this.adsController = adsController;
-		this.httpClient = httpClient;
+	public DirectedGame(Platform platform) {
+		this.platform = platform;
 	}
 
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
 		levelProvider = new LevelProvider();
-	 	levelProvider.loadResults(httpClient);
+	 	levelProvider.loadResults(platform.getHttpClient());
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
@@ -347,14 +344,14 @@ public abstract class DirectedGame implements ApplicationListener {
     public void playLevel(LevelSettings currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
         this.currentLevelSettings = currentLevelSettings;
         try {
-			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.nameKey);
+			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.levelId);
 			if (level == null) {
-				Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.nameKey);
+				Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
 				Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
 				level = constructor.newInstance(currentLevelSettings);
-				levelsCache.put(currentLevelSettings.nameKey, level);
+				levelsCache.put(currentLevelSettings.levelId, level);
 			} else {
-				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.nameKey);
+				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);
 				level.reset();
 			}
             setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);

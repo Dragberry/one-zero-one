@@ -2,12 +2,17 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
+import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
+import org.dragberry.ozo.common.levelresult.NewLevelResultResponse;
+import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
+import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
+import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.popup.ConfirmationPopup;
 import org.dragberry.ozo.screen.popup.DefeatScreen;
@@ -148,12 +153,24 @@ public class GameController extends InputAdapter {
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
-			VictoryPopup victoryPopup = null;
-			if (level.save()) {
-				victoryPopup = new VictoryPopup(game, level.settings);
-			} else {
-				victoryPopup = new VictoryPopup(game);
-			}
+
+			NewLevelResultsRequest request = level.createNewResultsRequest();
+			request.setLevelId(level.settings.levelId);
+			request.setUserId("id0");
+
+			final VictoryPopup victoryPopup = new VictoryPopup(game, level.settings);
+
+			game.platform.getHttpClient().executeTask(
+					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+							request, NewLevelResultsResponse.class, "/level/result/new") {
+
+						@Override
+						public void onComplete(NewLevelResultsResponse result) {
+							level.settings.updateResults(result);
+							victoryPopup.rebuildStage();
+						}
+					});
+
 			game.setPopup(victoryPopup);
 			return true;
 		}

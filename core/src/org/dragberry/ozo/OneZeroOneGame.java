@@ -4,6 +4,8 @@ import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.admob.AdsControllerAdapter;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.HttpClientAdapter;
+import org.dragberry.ozo.platform.Platform;
+import org.dragberry.ozo.platform.PlatformAdapter;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.MainMenuScreen;
 
@@ -14,12 +16,12 @@ public class OneZeroOneGame extends DirectedGame {
 	
 	private static final  String TAG = OneZeroOneGame.class.getName();
 
-	public OneZeroOneGame(AdsController adsController, HttpClient httpClient) {
-		super(adsController, httpClient);
+	public OneZeroOneGame(Platform platform) {
+		super(platform);
 	}
 
 	public OneZeroOneGame() {
-		this(new AdsControllerAdapter(), new HttpClientAdapter());
+		this(new PlatformAdapter());
 	}
 
 	@Override
