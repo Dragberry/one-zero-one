@@ -8,22 +8,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 
+import org.dragberry.ozo.common.levelresult.LevelResultName;
+import org.dragberry.ozo.common.levelresult.NewLevelResultResponse;
+import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
 
+import java.util.Map;
+
 public class VictoryPopup extends AbstractPopup {
 
-	private LevelSettings settings;
+	private NewLevelResultsResponse results;
 
-	public VictoryPopup(DirectedGame game, LevelSettings settings) {
+	public VictoryPopup(DirectedGame game, NewLevelResultsResponse results) {
 		super(game);
-		this.settings = settings;
-	}
-
-	public VictoryPopup(DirectedGame game) {
-		this(game, null);
+		this.results = results;
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class VictoryPopup extends AbstractPopup {
 		popupWindow.add(congrLbl).fill().expand();
 		popupWindow.row().pad(10f);
 
-		if (settings == null) {
+		if (results.getResults().isEmpty()) {
 			Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), Assets.instance.skin.skin);
 			wonLbl.setAlignment(Align.center);
 			popupWindow.add(wonLbl).fill().expand();
@@ -47,9 +48,9 @@ public class VictoryPopup extends AbstractPopup {
 			popupWindow.add(bestResultLbl).fill().expand();
 			popupWindow.row();
 			Table resultTable = new Table();
-			for (ObjectMap.Entry<String, Object> result : settings.getResults().entries()) {
-				resultTable.add(new Label(result.key, Assets.instance.skin.skin)).fill().expand().pad(10f);
-				resultTable.add(new Label(result.value.toString(), Assets.instance.skin.skin)).fill().expand().pad(10f);
+
+			for (Map.Entry<LevelResultName, NewLevelResultResponse<Integer>> result : results.getResults().entrySet()) {
+				resultTable.add(new Label(result.getKey().name(), Assets.instance.skin.skin)).fill().expand().pad(10f);
 				resultTable.row();
 			}
 			popupWindow.add(resultTable).row();

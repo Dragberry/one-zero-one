@@ -27,6 +27,7 @@ import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.HttpTask;
 import org.dragberry.ozo.platform.Platform;
+import org.dragberry.ozo.platform.User;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,6 +41,17 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 	@Override
 	public AdsController getAdsController() {
 		return this;
+	}
+
+	@Override
+	public User getUser() {
+
+		return new User() {
+			@Override
+			public String getId() {
+				return "id0";
+			}
+		};
 	}
 
 	@Override

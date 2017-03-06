@@ -35,15 +35,15 @@ public class BestResultsPopup extends AbstractPopup {
 		 
 		 if (levelSettings.completed) {
 			 Table resultTable = new Table();
-			 for (Entry<String, Object> result : levelSettings.getResults().entries()) {
-				 Label lbl = new Label(result.key, skin);
-				 lbl.setWrap(true);
-				 resultTable.add(lbl).colspan(2).fill().expand().pad(10f);
-				 lbl = new Label(result.value.toString(), skin);
-				 lbl.setWrap(true);
-				 resultTable.add(lbl).colspan(1).fill().expand().pad(10f);
-				 resultTable.row();
-			 }
+//			 for (Entry<String, Object> result : levelSettings.getResults().entries()) {
+//				 Label lbl = new Label(result.key, skin);
+//				 lbl.setWrap(true);
+//				 resultTable.add(lbl).colspan(2).fill().expand().pad(10f);
+//				 lbl = new Label(result.value.toString(), skin);
+//				 lbl.setWrap(true);
+//				 resultTable.add(lbl).colspan(1).fill().expand().pad(10f);
+//				 resultTable.row();
+//			 }
 			 popupWindow.add(resultTable).row();
 		 } else {
 			 Label uncompleteLbl = new Label(

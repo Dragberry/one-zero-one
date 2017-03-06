@@ -9,6 +9,8 @@ import org.dragberry.ozo.http.HttpClient;
 
 public interface Platform {
 
+    User getUser();
+
     HttpClient getHttpClient();
 
     AdsController getAdsController();

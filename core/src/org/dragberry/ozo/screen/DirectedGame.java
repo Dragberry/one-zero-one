@@ -68,8 +68,8 @@ public abstract class DirectedGame implements ApplicationListener {
     @Override
     public void create() {
     	Assets.instance.init(new AssetManager());
-		levelProvider = new LevelProvider();
-	 	levelProvider.loadResults(platform.getHttpClient());
+		levelProvider = new LevelProvider(platform);
+	 	levelProvider.loadResults();
 		popupState = PopupState.HIDDEN;
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),

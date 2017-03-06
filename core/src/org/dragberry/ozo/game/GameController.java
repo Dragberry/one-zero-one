@@ -154,15 +154,19 @@ public class GameController extends InputAdapter {
 		if (level.isWon(units, selectedUnit, neighbors)) {
 			level.started = false;
 
-			NewLevelResultsRequest request = level.createNewResultsRequest();
-			request.setLevelId(level.settings.levelId);
-			request.setUserId("id0");
+			NewLevelResultsRequest newResults = level.formNewResults();
+			newResults.setLevelId(level.settings.levelId);
+			newResults.setUserId(game.platform.getUser().getId());
+			Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
 
-			final VictoryPopup victoryPopup = new VictoryPopup(game, level.settings);
+			NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
+			level.settings.updateResults(response);
+
+			final VictoryPopup victoryPopup = new VictoryPopup(game, response);
 
 			game.platform.getHttpClient().executeTask(
 					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-							request, NewLevelResultsResponse.class, "/level/result/new") {
+							newResults, NewLevelResultsResponse.class, "/level/result/new") {
 
 						@Override
 						public void onComplete(NewLevelResultsResponse result) {

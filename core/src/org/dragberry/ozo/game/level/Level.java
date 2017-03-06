@@ -1,25 +1,30 @@
 package org.dragberry.ozo.game.level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.Collections;
-import java.util.Map;
-
+import org.dragberry.ozo.common.levelresult.LevelResultName;
+import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.level.goal.Goal;
+import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
-import org.dragberry.ozo.game.level.settings.LevelSettings;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Created by maksim on 30.01.17.
  */
 
 public abstract class Level<LI extends LevelSettings> {
+
+    private final static String TAG = Level.class.getName();
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
@@ -122,34 +127,16 @@ public abstract class Level<LI extends LevelSettings> {
         }
     }
 
-	public boolean refreshBestResults() {
-        boolean changed = false;
-        if (settings.bestSteps == 0 || steps < settings.bestSteps) {
-            settings.bestSteps = steps;
-            changed = true;
-        }
-        if (settings.bestTime == 0 || time < settings.bestTime) {
-            settings.bestTime = time;
-            changed = true;
-        }
-        if (settings.lostNumbers == -1 || settings.lostNumbers > lostNumbers) {
-            settings.lostNumbers = lostNumbers;
-            changed = true;
-        }
-		settings.completed = true;
-	    return changed;
-    }
-
-    public boolean checkLocalResults() {
-        return true;
-    }
-
-    public boolean save() {
-        boolean changed = refreshBestResults();
-        if (changed) {
-            settings.save();
-        }
-        return changed;
+    public NewLevelResultsRequest formNewResults() {
+        NewLevelResultsRequest results = new NewLevelResultsRequest();
+        results.getResults().put(LevelResultName.TIME,
+                new NewLevelResultRequest<Integer>((int) time));
+        results.getResults().put(LevelResultName.STEPS,
+                new NewLevelResultRequest<Integer>(steps));
+        results.getResults().put(LevelResultName.LOST_UNITS,
+                new NewLevelResultRequest<Integer>(lostNumbers));
+        Gdx.app.debug(TAG, "Form new results");
+        return results;
     }
 
     public void reset() {

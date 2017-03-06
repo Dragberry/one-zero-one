@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.common.levelresult.LevelResults;
+import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
+import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.level.ChessboardLevel;
 import org.dragberry.ozo.game.level.MushroomRainLevel;
 import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
@@ -20,6 +22,8 @@ import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
+import org.dragberry.ozo.http.PostHttpTask;
+import org.dragberry.ozo.platform.Platform;
 
 import java.util.Map;
 
@@ -33,8 +37,11 @@ public class LevelProvider {
 
     public final Array<LevelSettings> levels = new Array<LevelSettings>();
 
-    public LevelProvider() {
-//		levels.add(new ReachTheGoalLevelSettings("ozo.lvl.test", -10, 2, JustReachGoal.Operator.MORE));
+    private final Platform platform;
+
+    public LevelProvider(Platform platform) {
+        this.platform = platform;
+		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -5, 25));
         levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -7, 49));
@@ -56,10 +63,14 @@ public class LevelProvider {
 
     }
 
-    public void loadResults(HttpClient httpClient) {
+    public void loadResults() {
         Gdx.app.debug(TAG, "loadResults...");
-        if (httpClient.isConnected()) {
-            httpClient.executeTask(
+        for (LevelSettings levelSettings : levels) {
+            levelSettings.load();
+        }
+
+        if (platform.getHttpClient().isConnected()) {
+            platform.getHttpClient().executeTask(
                     new GetHttpTask<AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels", "id0") {
 
                 @Override
@@ -67,10 +78,24 @@ public class LevelProvider {
                     Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = result.getLevelResults();
 
-                    for (LevelSettings levelSettings : levels) {
+                    for (final LevelSettings levelSettings : levels) {
                         LevelResults results = allResults.get(levelSettings.levelId);
-                        levelSettings.updateResults(results);
+                        NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
+                        newResultsRequest.setUserId(platform.getUser().getId());
                         levelSettings.save();
+                        if (!newResultsRequest.getResults().isEmpty()) {
+                            Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
+                            platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+                                    newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
+
+                                @Override
+                                public void onComplete(NewLevelResultsResponse result) {
+                                    Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
+                                    levelSettings.updateResults(result);
+                                    levelSettings.save();
+                                }
+                            });
+                        }
                     }
                 }
             });

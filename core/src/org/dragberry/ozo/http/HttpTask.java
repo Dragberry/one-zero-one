@@ -14,8 +14,8 @@ public abstract class HttpTask<P, R> {
 
     private static final String TAG = HttpTask.class.getName();
 
-    protected static final String URL_ROOT = "http://10.0.2.2:8087/ozo-backend-war";
-//    protected static final String URL_ROOT = "http://192.168.0.104:8080/ozo-backend-war";
+//    protected static final String URL_ROOT = "http://10.0.2.2:8087/ozo-backend-war";
+    protected static final String URL_ROOT = "http://192.168.0.104:8080/ozo-backend-war";
 
     protected final String url;
     protected final Class<R> resultClass;
