@@ -24,7 +24,8 @@ public class LevelSettings {
 	private static final String TAG = LevelSettings.class.getName();
 
 	private static final String COMPLETED = "completed";
-	
+	public static final String EMPTY = "";
+
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
     public final String levelId;
     public final String name;
@@ -47,6 +48,7 @@ public class LevelSettings {
 	protected void load(Preferences prefs) {
 		completed = prefs.getBoolean(COMPLETED, false);
 
+		Gdx.app.debug(TAG, "load results for " + levelId);
 		loadSingleResult(LevelResultName.TIME, prefs);
 		loadSingleResult(LevelResultName.STEPS, prefs);
 		loadSingleResult(LevelResultName.LOST_UNITS, prefs);
@@ -59,6 +61,7 @@ public class LevelSettings {
 		String worlds = prefs.getString(name.worlds());
 		result.setWorlds(worlds.isEmpty() ? null : Integer.valueOf(worlds));
 		result.setOwner(prefs.getString(name.owner()));
+		Gdx.app.debug(TAG, "loadSingleResult: " + name + "=" + result);
 		results.getResults().put(name, result);
 	}
 	
@@ -71,6 +74,7 @@ public class LevelSettings {
 	protected void update(Preferences prefs) {
 		prefs.putBoolean(COMPLETED, completed);
 
+		Gdx.app.debug(TAG, "update results for " + levelId);
 		updateSingleResult(LevelResultName.TIME, prefs);
 		updateSingleResult(LevelResultName.STEPS, prefs);
 		updateSingleResult(LevelResultName.LOST_UNITS, prefs);
@@ -78,13 +82,14 @@ public class LevelSettings {
 
 	private void updateSingleResult(LevelResultName name, Preferences prefs) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
-		prefs.putString(name.personal(), result.getPersonal() == null ? null : result.getPersonal().toString());
-		prefs.putString(name.worlds(), result.getWorlds() == null ? null : result.getWorlds().toString());
-		prefs.putString(name.owner(), result.getOwner());
+		prefs.putString(name.personal(), result.getPersonal() == null ? EMPTY : result.getPersonal().toString());
+		prefs.putString(name.worlds(), result.getWorlds() == null ? EMPTY : result.getWorlds().toString());
+		prefs.putString(name.owner(), result.getOwner() == null ? EMPTY : result.getOwner());
+		Gdx.app.debug(TAG, "updateSingleResult: " + name + "=" + result);
 	}
 
 	protected Preferences loadPreferences() {
-		return Gdx.app.getPreferences(clazz.getName() + levelId);
+		return Gdx.app.getPreferences(clazz.getName() + "." + levelId);
 	}
 	
 	/**
@@ -112,22 +117,26 @@ public class LevelSettings {
 		return response;
 	}
 
-	private void checkSingleLocalResult(NewLevelResultsRequest newResults, NewLevelResultsResponse respone, LevelResultName name) {
-
-
+	private void checkSingleLocalResult(NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
 		NewLevelResultRequest<Integer> newResult = newResults.getResults().get(name);
 		NewLevelResultResponse<Integer> resultResponse = new NewLevelResultResponse<Integer>();
-		if (result.getWorlds() != null && newResult.getValue() < result.getWorlds()) {
+
+		if (result.getWorlds() == null && result.getPersonal() == null) {
 			resultResponse.setWorlds(true);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
-			respone.getResults().put(LevelResultName.TIME, resultResponse);
+			response.getResults().put(name, resultResponse);
+		} else if (result.getWorlds() != null && newResult.getValue() < result.getWorlds()) {
+			resultResponse.setWorlds(true);
+			resultResponse.setPersonal(true);
+			resultResponse.setValue(newResult.getValue());
+			response.getResults().put(name, resultResponse);
 		} else if (result.getPersonal() != null && newResult.getValue() < result.getPersonal()) {
 			resultResponse.setWorlds(false);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
-			respone.getResults().put(LevelResultName.TIME, resultResponse);
+			response.getResults().put(name, resultResponse);
 		}
 	}
 

@@ -221,7 +221,12 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 
 		@Override
 		protected void onPostExecute(R result) {
-			httpTask.onComplete(result);
+			if (result == null) {
+				httpTask.onFail();
+			} else {
+				httpTask.onComplete(result);
+			}
 		}
+
 	}
 }

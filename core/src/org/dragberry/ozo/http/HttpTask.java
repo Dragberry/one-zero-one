@@ -27,20 +27,23 @@ public abstract class HttpTask<P, R> {
 
     public final R execute() {
         RestTemplate restTemplate = new RestTemplate();
+
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        return doRequest(restTemplate);
+        try {
+            return doRequest(restTemplate);
+        } catch (Exception exc) {
+            Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
+        }
+        return null;
     }
 
     protected abstract R doRequest(RestTemplate restTemplate);
 
     public abstract void onComplete(R result);
 
-    public Class<R> getResultClass() {
-        return resultClass;
+    public void onFail() {
+        // on fail
     }
 
-    public String getUrl() {
-        return url;
-    }
 
 }
