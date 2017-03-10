@@ -1,10 +1,10 @@
 package org.dragberry.ozo.game.render;
 
+import org.dragberry.ozo.common.level.TimeUtils;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
-import org.dragberry.ozo.game.util.TimeUtils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
 public class GuiRenderer implements Renderer {
