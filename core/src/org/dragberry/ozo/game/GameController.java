@@ -160,6 +160,7 @@ public class GameController extends InputAdapter {
 			Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
 
 			NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
+			level.settings.completed = true;
 			level.settings.updateResults(response);
 
 			final VictoryPopup victoryPopup = new VictoryPopup(game, response);

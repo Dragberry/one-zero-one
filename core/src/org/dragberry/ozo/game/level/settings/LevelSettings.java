@@ -149,6 +149,11 @@ public class LevelSettings {
 		NewLevelResultsRequest newResultsRequest = new NewLevelResultsRequest();
 		newResultsRequest.setLevelId(levelId);
 
+		// Make level completed, if the level is not completed, but the new results are not empty
+		if (!completed && !newResults.getResults().isEmpty()) {
+			completed = true;
+		}
+
 		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> entry : newResults.getResults().entrySet()) {
 			LevelResultName resultName = entry.getKey();
 			LevelSingleResult<Integer> newResult = entry.getValue();

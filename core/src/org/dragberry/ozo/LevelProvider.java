@@ -71,7 +71,8 @@ public class LevelProvider {
 
         if (platform.getHttpClient().isConnected()) {
             platform.getHttpClient().executeTask(
-                    new GetHttpTask<AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels", "id0") {
+                    new GetHttpTask<AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels",
+                            platform.getUser().getId()) {
 
                 @Override
                 public void onComplete(AllLevelResults result) {
