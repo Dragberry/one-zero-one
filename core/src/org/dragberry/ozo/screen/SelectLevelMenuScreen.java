@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 
@@ -14,14 +15,18 @@ public class SelectLevelMenuScreen extends AbstractSelectLevelMenuScreen {
     }
 
     @Override
-    protected ClickListener getActionListener(final LevelSettings levelSettings) {
-    	return new ClickListener() {
+    protected void addButtonListener(LevelState state, TextButton btn, final LevelSettings levelSettings) {
+        if (state != LevelState.CLOSED) {
+            btn.addListener(new ClickListener() {
 
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
-            }
-        };
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
+                }
+            });
+        }
     }
+
+
 
 }

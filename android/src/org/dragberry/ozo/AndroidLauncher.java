@@ -1,19 +1,14 @@
 package org.dragberry.ozo;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -23,20 +18,17 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import org.dragberry.ozo.admob.AdsController;
-import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.HttpTask;
 import org.dragberry.ozo.platform.Platform;
 import org.dragberry.ozo.platform.User;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.Serializable;
+import org.dragberry.ozo.platform.UserImpl;
 
 public class AndroidLauncher extends AndroidApplication implements Platform, AdsController, HttpClient {
 
-	protected AdView adView;
-	protected View gameView;
+	private AdView adView;
+	private View gameView;
+	private User user = new UserImpl();
 
 	@Override
 	public AdsController getAdsController() {
@@ -45,13 +37,7 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 
 	@Override
 	public User getUser() {
-
-		return new User() {
-			@Override
-			public String getId() {
-				return "id0";
-			}
-		};
+		return user;
 	}
 
 	@Override

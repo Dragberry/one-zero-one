@@ -2,6 +2,7 @@ package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,9 +10,12 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import org.dragberry.ozo.LevelProvider;
+import org.dragberry.ozo.common.CommonConstants;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.http.HttpClient;
+import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.platform.Platform;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
@@ -29,6 +33,9 @@ import java.util.Map;
 public abstract class DirectedGame implements ApplicationListener {
 
 	private final static String TAG = DirectedGame.class.getName();
+
+	private static final String USER_ID = "userID";
+	private static final String SETTINGS_EXTENSION = ".settings";
 
 	public final Platform platform;
 
@@ -65,12 +72,44 @@ public abstract class DirectedGame implements ApplicationListener {
 		this.platform = platform;
 	}
 
+	/**
+	 * Loads game settings
+	 * If user id hasn't stored yet, send a POST request to create a new user
+	 * @param platform
+     */
+	public void loadGameSettings(final Platform platform) {
+		Gdx.app.debug(TAG, "load game settings...");
+		final Preferences prefs = Gdx.app.getPreferences(getClass() + SETTINGS_EXTENSION);
+		String userId = prefs.getString(USER_ID);
+		if (userId.isEmpty()) {
+			Gdx.app.debug(TAG, "User id is not exist for taht application. Sending request to create new user");
+			platform.getHttpClient().executeTask(new PostHttpTask<String, String>(
+					CommonConstants.DEFAULT_USER_ID, String.class, HttpClient.URL.NEW_USER) {
+
+				@Override
+				public void onComplete(String result) {
+					Gdx.app.debug(TAG, "New user has been created with id=" + result);
+					prefs.putString(USER_ID, result);
+					prefs.flush();
+					platform.getUser().setUserId(result);
+				}
+			});
+		}
+	}
+
     @Override
     public void create() {
-    	Assets.instance.init(new AssetManager());
+		Assets.instance.init(new AssetManager());
+
+		loadGameSettings(platform);
+
 		levelProvider = new LevelProvider(platform);
 	 	levelProvider.loadResults();
+
+
+
 		popupState = PopupState.HIDDEN;
+
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
      		Gdx.files.internal("shaders/blackout.frag"));

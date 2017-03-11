@@ -12,6 +12,7 @@ import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
+import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.popup.ConfirmationPopup;
@@ -167,7 +168,7 @@ public class GameController extends InputAdapter {
 
 			game.platform.getHttpClient().executeTask(
 					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-							newResults, NewLevelResultsResponse.class, "/level/result/new") {
+							newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
 
 						@Override
 						public void onComplete(NewLevelResultsResponse result) {

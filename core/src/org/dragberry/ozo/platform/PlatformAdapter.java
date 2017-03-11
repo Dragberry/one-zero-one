@@ -15,15 +15,11 @@ public class PlatformAdapter implements Platform {
 
     private HttpClient httpClient = new HttpClientAdapter();
 
+    private User user = new UserImpl();
+
     @Override
     public User getUser() {
-       return new User() {
-
-           @Override
-           public String getId() {
-               return "id0";
-           }
-       };
+       return user;
     }
 
     @Override

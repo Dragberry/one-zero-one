@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.popup.BestResultsPopup;
@@ -15,14 +16,14 @@ public class BestResultScreen extends AbstractSelectLevelMenuScreen {
     }
 
     @Override
-    protected ClickListener getActionListener(final LevelSettings levelSettings) {
-    	return new ClickListener() {
+    protected void addButtonListener(LevelState state, TextButton btn, final LevelSettings levelSettings) {
+        btn.addListener(new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setPopup(new BestResultsPopup(game, levelSettings));
             }
-        };
+        });
     }
 
 }

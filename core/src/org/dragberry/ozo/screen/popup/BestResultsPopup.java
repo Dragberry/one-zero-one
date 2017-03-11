@@ -36,41 +36,43 @@ public class BestResultsPopup extends AbstractPopup {
 		 msgLbl.setAlignment(Align.center);
 		 popupWindow.add(msgLbl).fillX().expandX();
 		 popupWindow.row().expand().fill();
-		 
-		 if (levelSettings.completed) {
-			 Table resultTable = new Table();
-			 Label lbl = new Label("", skin);
-			 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
-			 lbl = new Label(Assets.instance.translation.get("ozo.personal"), skin);
-			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
-			 lbl = new Label(Assets.instance.translation.get("ozo.world"), skin);
-			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
-			 resultTable.row();
 
-			 for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> result : levelSettings.results.getResults().entrySet()) {
-				 LevelResultName name = result.getKey();
-				 lbl = new Label(Assets.instance.translation.get(name.key()), skin);
-				 lbl.setWrap(true);
-				 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
-				 LevelSingleResult<Integer> value = result.getValue();
-				 lbl = new Label(name.toString(value.getPersonal()), skin);
-				 lbl.setWrap(true);
-				 lbl.setAlignment(Align.center);
-				 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
-				 lbl = new Label(name.toString(value.getWorlds()), skin);
-				 lbl.setWrap(true);
-				 lbl.setAlignment(Align.center);
-				 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
-				 resultTable.row();
-			 }
-			 popupWindow.add(resultTable).row();
-		 } else {
-			 Label uncompleteLbl = new Label(
-					 Assets.instance.translation.get("ozo.levelUncomplete"), skin);
-			 uncompleteLbl.setWrap(true);
-			 uncompleteLbl.setAlignment(Align.center);
-			 popupWindow.add(uncompleteLbl).fillX().expandX().row();
+		if (!levelSettings.completed) {
+			Label uncompleteLbl = new Label(
+					Assets.instance.translation.get("ozo.levelUncomplete"), skin);
+			uncompleteLbl.setWrap(true);
+			uncompleteLbl.setAlignment(Align.center);
+			popupWindow.add(uncompleteLbl).fillX().expandX();
+			popupWindow.row().expand().fill();
+		}
+
+
+		 Table resultTable = new Table();
+		 Label lbl = new Label("", skin);
+		 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
+		 lbl = new Label(Assets.instance.translation.get("ozo.personal"), skin);
+		 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
+		 lbl = new Label(Assets.instance.translation.get("ozo.world"), skin);
+		 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
+		 resultTable.row();
+
+		 for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> result : levelSettings.results.getResults().entrySet()) {
+			 LevelResultName name = result.getKey();
+			 lbl = new Label(Assets.instance.translation.get(name.key()), skin);
+			 lbl.setWrap(true);
+			 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
+			 LevelSingleResult<Integer> value = result.getValue();
+			 lbl = new Label(name.toString(value.getPersonal()), skin);
+			 lbl.setWrap(true);
+			 lbl.setAlignment(Align.center);
+			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
+			 lbl = new Label(name.toString(value.getWorlds()), skin);
+			 lbl.setWrap(true);
+			 lbl.setAlignment(Align.center);
+			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
+			 resultTable.row();
 		 }
+		 popupWindow.add(resultTable).row();
 		 popupWindow.add(createBackBtn());
 	}
 	

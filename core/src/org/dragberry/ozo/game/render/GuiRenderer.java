@@ -1,6 +1,6 @@
 package org.dragberry.ozo.game.render;
 
-import org.dragberry.ozo.common.level.TimeUtils;
+import org.dragberry.ozo.common.util.TimeUtils;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.util.Constants;

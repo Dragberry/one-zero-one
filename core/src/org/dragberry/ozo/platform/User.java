@@ -6,4 +6,6 @@ package org.dragberry.ozo.platform;
 public interface User {
 
     String getId();
+
+    void setUserId(String userId);
 }

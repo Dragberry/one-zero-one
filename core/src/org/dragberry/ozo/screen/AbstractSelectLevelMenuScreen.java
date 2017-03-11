@@ -115,16 +115,13 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
     private TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
         TextButton btn = new TextButton(levelSettings.name, Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
-        if (state != LevelState.CLOSED) {
-            btn.setDisabled(true);
-            btn.addListener(getActionListener(levelSettings));
-        }
+        addButtonListener(state, btn, levelSettings);
         return btn;
     }
-    
-    protected abstract ClickListener getActionListener(LevelSettings levelSettings);
 
-    private enum LevelState {
+    protected abstract void addButtonListener(LevelState state, TextButton btn, LevelSettings levelSettings);
+    
+    protected enum LevelState {
         CLOSED("level-closed"), OPENED("level-open"), COMPLETED("default");
 
         private String style;

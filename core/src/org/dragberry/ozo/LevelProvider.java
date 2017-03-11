@@ -43,11 +43,11 @@ public class LevelProvider {
         this.platform = platform;
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -5, 25));
-        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -7, 49));
+        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 25));
+        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -11, 33));
         levels.add(new ReachMultiGoalLevelSettings(L004_DOUBLE_5, -10, 5, 5));
         levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, L005_MUSHROOM_RAIN ,-10, 25));
-        levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 5, 25));
+        levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 10, 20));
         levels.add(new ReachMultiGoalLevelSettings(L007_ROULETTE, -7, 7, 7, 7));
         levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, L008_QUEUES, -15, 50));
         levels.add(new ReachMultiGoalLevelSettings(L009_STRAIGHT_FLASH, -15, 6, 7, 8, 9, 10));
@@ -71,7 +71,7 @@ public class LevelProvider {
 
         if (platform.getHttpClient().isConnected()) {
             platform.getHttpClient().executeTask(
-                    new GetHttpTask<AllLevelResults>(AllLevelResults.class, "/results/user/{0}/levels",
+                    new GetHttpTask<AllLevelResults>(AllLevelResults.class, HttpClient.URL.GET_ALL_RESULTS,
                             platform.getUser().getId()) {
 
                 @Override
