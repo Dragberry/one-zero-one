@@ -2,8 +2,6 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
-import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
-import org.dragberry.ozo.common.levelresult.NewLevelResultResponse;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.level.Level;
@@ -16,7 +14,7 @@ import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.popup.ConfirmationPopup;
-import org.dragberry.ozo.screen.popup.DefeatScreen;
+import org.dragberry.ozo.screen.popup.DefeatPopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
 
 import com.badlogic.gdx.Gdx;
@@ -149,7 +147,7 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			level.started = false;
-			game.setPopup(new DefeatScreen(game));
+			game.setPopup(new DefeatPopup(game));
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {

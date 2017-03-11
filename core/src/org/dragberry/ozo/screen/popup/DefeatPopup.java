@@ -14,9 +14,9 @@ import org.dragberry.ozo.screen.DirectedGame;
  * Created by maksim on 01.02.17.
  */
 
-public class DefeatScreen extends AbstractPopup {
+public class DefeatPopup extends AbstractPopup {
 
-    public DefeatScreen(DirectedGame game) {
+    public DefeatPopup(DirectedGame game) {
         super(game);
     }
 

@@ -2,17 +2,18 @@ package org.dragberry.ozo.screen.popup;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.NewLevelResultResponse;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
 
@@ -29,30 +30,44 @@ public class VictoryPopup extends AbstractPopup {
 
 	@Override
 	protected void rebuildStage(float viewportWidth, float viewportHeight) {
+
 		popupWindow.setWidth(viewportWidth * 0.75f);
 		popupWindow.setHeight(viewportHeight * 0.75f);
-		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), Assets.instance.skin.skin);
+
+		Skin skin = Assets.instance.skin.skin;
+		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), skin);
 		congrLbl.setAlignment(Align.center);
 		popupWindow.add(congrLbl).fill().expand();
 		popupWindow.row().pad(10f);
 
 		if (results.getResults().isEmpty()) {
-			Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), Assets.instance.skin.skin);
+			Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), skin);
 			wonLbl.setAlignment(Align.center);
 			popupWindow.add(wonLbl).fill().expand();
 			popupWindow.row();
 		} else {
-			Label bestResultLbl = new Label(Assets.instance.translation.get("ozo.newRecord"), Assets.instance.skin.skin);
+			Label bestResultLbl = new Label(Assets.instance.translation.get("ozo.newRecord"), skin);
 			bestResultLbl.setAlignment(Align.center);
 			bestResultLbl.setWrap(true);
 			popupWindow.add(bestResultLbl).fill().expand();
-			popupWindow.row();
+			popupWindow.row().expand().fill();
+
 			Table resultTable = new Table();
 
+			ArrayMap<LevelResultName, Integer> worlds = new ArrayMap<LevelResultName, Integer>(results.getResults().size());
+			ArrayMap<LevelResultName, Integer> personal = new ArrayMap<LevelResultName, Integer>(results.getResults().size());
+
 			for (Map.Entry<LevelResultName, NewLevelResultResponse<Integer>> result : results.getResults().entrySet()) {
-				resultTable.add(new Label(result.getKey().name(), Assets.instance.skin.skin)).fill().expand().pad(10f);
-				resultTable.row();
+				if (result.getValue().isWorlds()) {
+					worlds.put(result.getKey(), result.getValue().getValue());
+				} else if (result.getValue().isPersonal()) {
+					personal.put(result.getKey(), result.getValue().getValue());;
+				}
 			}
+
+			populateRecords("ozo.world", worlds, resultTable);
+			populateRecords("ozo.personal", personal, resultTable);
+
 			popupWindow.add(resultTable).row();
 		}
 
@@ -61,6 +76,29 @@ public class VictoryPopup extends AbstractPopup {
 		popupWindow.add(createPlayAgainBtn()).fill().expand().pad(10f);
 		popupWindow.row();
 		popupWindow.add(createMainMenuBtn()).fill().expand().pad(10f);
+	}
+
+	private static void populateRecords(String titleKey, ArrayMap<LevelResultName, Integer> records, Table table) {
+		if (records.size > 0) {
+			Label lbl = null;
+			Skin skin = Assets.instance.skin.skin;
+			lbl = new Label(Assets.instance.translation.get(titleKey) + ":", skin);
+			lbl.setWrap(true);
+			table.add(lbl).fill().expand().pad(5f);
+			table.row();
+			for (ObjectMap.Entry<LevelResultName, Integer> record : records) {
+				lbl = new Label(Assets.instance.translation.get(record.key.key()), skin);
+				lbl.setWrap(true);
+				table.add(lbl).fill().expand().pad(5f, 75f, 5f, 5f);
+
+				lbl = new Label(record.key.toString(record.value), skin);
+				lbl.setWrap(true);
+				lbl.setAlignment(Align.center);
+				table.add(lbl).fill().expand().pad(5f, 0f, 5f, 10f);
+				table.row();
+			}
+
+		}
 	}
 
 	private TextButton createNextBtn() {
