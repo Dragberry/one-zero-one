@@ -19,4 +19,9 @@ public class UserImpl implements User {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public boolean isDefault() {
+        return CommonConstants.DEFAULT_USER_ID.equals(userId);
+    }
 }

@@ -15,8 +15,11 @@ public interface HttpClient {
 
 
         String NEW_USER = "/user/new";
+
         String GET_ALL_RESULTS = "/results/user/{0}/levels";
         String NEW_RESULT = "/level/result/new";
+
+        String NEW_AUDIT_EVENT = "/audit/events/new/";
     }
 
 

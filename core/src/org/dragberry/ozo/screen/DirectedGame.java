@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 import org.dragberry.ozo.LevelProvider;
 import org.dragberry.ozo.common.CommonConstants;
+import org.dragberry.ozo.common.audit.AuditEventRequest;
+import org.dragberry.ozo.common.audit.AuditEventType;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
@@ -92,8 +94,12 @@ public abstract class DirectedGame implements ApplicationListener {
 					prefs.putString(USER_ID, result);
 					prefs.flush();
 					platform.getUser().setUserId(result);
+
+					logAuditEvent(createSimpleAuditRequest(AuditEventType.LAUNCH_APPLICATION));
 				}
 			});
+		} else {
+			platform.getUser().setUserId(userId);
 		}
 	}
 
@@ -103,10 +109,10 @@ public abstract class DirectedGame implements ApplicationListener {
 
 		loadGameSettings(platform);
 
+		logAuditEvent(createSimpleAuditRequest(AuditEventType.LAUNCH_APPLICATION));
+
 		levelProvider = new LevelProvider(platform);
 	 	levelProvider.loadResults();
-
-
 
 		popupState = PopupState.HIDDEN;
 
@@ -116,7 +122,20 @@ public abstract class DirectedGame implements ApplicationListener {
 		this.popupTransition = PopupTransition.init(blackoutShader);
 
 		Gdx.input.setCatchBackKey(true);
+
     }
+
+	public void exit() {
+		logAuditEvent(createSimpleAuditRequest(AuditEventType.EXIT_APPLICATION));
+		Gdx.app.exit();
+	}
+
+	private AuditEventRequest createSimpleAuditRequest(AuditEventType eventType) {
+		AuditEventRequest req = new AuditEventRequest();
+		req.setUserId(platform.getUser().getId());
+		req.setType(eventType);
+		return req;
+	}
     
     public void setScreen(AbstractGameScreen screen) {
         setScreen(screen, null, null);
@@ -356,7 +375,7 @@ public abstract class DirectedGame implements ApplicationListener {
 	    	callerScreen = null;
     	} catch (Exception exc) {
     		Gdx.app.error(TAG, "An error has occured during navigation! Application is terminated!", exc);
-    		Gdx.app.exit();
+    		exit();
     	}
     }
 
@@ -381,7 +400,8 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public void playLevel(LevelSettings currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
-        this.currentLevelSettings = currentLevelSettings;
+        logAuditEvent(createSimpleAuditRequest(AuditEventType.START_LEVEL));
+		this.currentLevelSettings = currentLevelSettings;
         try {
 			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.levelId);
 			if (level == null) {
@@ -398,5 +418,18 @@ public abstract class DirectedGame implements ApplicationListener {
             Gdx.app.error(TAG, "An exception has occured during level creation", exc);
         }
     }
+
+	public void logAuditEvent(final AuditEventRequest request) {
+		if (!platform.getUser().isDefault()) {
+			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, Void>(
+					request, Void.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {
+
+				@Override
+				public void onComplete(Void result) {
+					Gdx.app.debug(TAG, "Audit event was logged: " + request);
+				}
+			});
+		}
+	}
 
 }

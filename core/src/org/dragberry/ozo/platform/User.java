@@ -8,4 +8,6 @@ public interface User {
     String getId();
 
     void setUserId(String userId);
+
+    boolean isDefault();
 }

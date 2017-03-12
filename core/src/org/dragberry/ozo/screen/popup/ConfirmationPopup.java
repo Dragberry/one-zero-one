@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.DirectedGame;
@@ -17,8 +18,11 @@ import org.dragberry.ozo.screen.DirectedGame;
 
 public class ConfirmationPopup extends AbstractPopup {
 
-    public ConfirmationPopup(DirectedGame game) {
+    private LevelAttemptAuditEventRequest levelAttempt;
+
+    public ConfirmationPopup(DirectedGame game, LevelAttemptAuditEventRequest levelAttempt) {
         super(game);
+        this.levelAttempt = levelAttempt;
     }
 
     @Override
@@ -47,6 +51,7 @@ public class ConfirmationPopup extends AbstractPopup {
 					
 					@Override
 					public void execute() {
+                        game.logAuditEvent(levelAttempt);
 						game.back();
 					}
 				});

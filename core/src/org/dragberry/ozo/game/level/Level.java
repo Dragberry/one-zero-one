@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
+import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
@@ -28,7 +29,7 @@ public abstract class Level<LI extends LevelSettings> {
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
-	
+
     public final Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     public final Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
     
@@ -155,9 +156,4 @@ public abstract class Level<LI extends LevelSettings> {
         }
     }
 
-    public NewLevelResultsRequest createNewResultsRequest() {
-        NewLevelResultsRequest request = new NewLevelResultsRequest();
-
-        return request;
-    }
 }

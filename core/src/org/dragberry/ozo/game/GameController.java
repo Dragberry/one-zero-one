@@ -2,6 +2,9 @@ package org.dragberry.ozo.game;
 
 import java.text.MessageFormat;
 
+import org.dragberry.ozo.common.audit.AuditEventType;
+import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
+import org.dragberry.ozo.common.audit.LevelAttemptStatus;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.level.Level;
@@ -29,7 +32,7 @@ import com.badlogic.gdx.utils.Array;
 public class GameController extends InputAdapter {
 
 	private static final String TAG = GameController.class.getName();
-	
+
 	private enum State {
 		FIXED, IN_MOTION
 	}
@@ -57,6 +60,8 @@ public class GameController extends InputAdapter {
 	public Array<TextureRegion> negCountDigits;
 	public Array<TextureRegion> negSumDigits;
 
+	public LevelAttemptAuditEventRequest attempt;
+
 	public static GameController instance;
 
 	public static GameController init(DirectedGame game, Level<?> level) {
@@ -72,6 +77,9 @@ public class GameController extends InputAdapter {
 			instance.lostNumbersDigits = new Array<TextureRegion>(4);
 			instance.negCountDigits = new Array<TextureRegion>(4);
 			instance.negSumDigits = new Array<TextureRegion>(4);
+
+			instance.attempt = new LevelAttemptAuditEventRequest();
+			instance.attempt.setUserId(game.platform.getUser().getId());
 		} else {
 			instance.neighbors.clear();
 			instance.negCount = 0;
@@ -144,10 +152,22 @@ public class GameController extends InputAdapter {
 		CameraHelper.INSTANCE.update(deltaTime);
     }
 
+	private void populateLevelAttempt(LevelAttemptStatus status) {
+		attempt.setType(AuditEventType.FINISH_LEVEL);
+		attempt.setLevelId(level.settings.levelId);
+		attempt.setLostUnits(level.lostNumbers);
+		attempt.setTime((int) level.time);
+		attempt.setSteps(level.steps);
+		attempt.setStatus(status);
+	}
+
 	private boolean isGameFinished() {
 		if (level.isLost(units, selectedUnit, neighbors)) {
 			level.started = false;
 			game.setPopup(new DefeatPopup(game));
+
+			populateLevelAttempt(LevelAttemptStatus.FAILED);
+			game.logAuditEvent(attempt);
 			return true;
 		}
 		if (level.isWon(units, selectedUnit, neighbors)) {
@@ -176,12 +196,15 @@ public class GameController extends InputAdapter {
 					});
 
 			game.setPopup(victoryPopup);
+
+			populateLevelAttempt(LevelAttemptStatus.SUCCESS);
+			game.logAuditEvent(attempt);
 			return true;
 		}
 		return false;
 	}
 
-    private void updateMotion(float deltaTime) {
+	private void updateMotion(float deltaTime) {
     	float step = deltaTime * Constants.UNIT_SPEED;
 		shiftTopUnits(step);
 		shiftRightUnits(step);
@@ -234,6 +257,7 @@ public class GameController extends InputAdapter {
 		refreshState();
     	level.steps++;
     	if (isGameFinished()) {
+
 			return;
 		}
     	selectedUnit.unselect();
@@ -476,7 +500,8 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				game.setPopup(new ConfirmationPopup(game));
+				populateLevelAttempt(LevelAttemptStatus.INTERRUPTED);
+				game.setPopup(new ConfirmationPopup(game, attempt));
 				break;
 		}
 		return false;

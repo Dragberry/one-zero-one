@@ -69,7 +69,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 					@Override
 					public void execute() {
 						Gdx.app.debug(TAG, "Exit from the application");
-						Gdx.app.exit();
+						game.exit();
 					}
 				});
 
@@ -161,7 +161,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 					break;
 				default:
 					Gdx.app.debug(TAG, "Exit from the application");
-					Gdx.app.exit();
+					game.exit();
 					break;
 					
 				}
