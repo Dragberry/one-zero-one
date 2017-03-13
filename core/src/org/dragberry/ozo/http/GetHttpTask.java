@@ -17,9 +17,9 @@ public abstract class GetHttpTask<R> extends HttpTask<Void, R> {
     }
 
     @Override
-    protected R doRequest(RestTemplate restTemplate) {
+    protected R doRequest() {
         Gdx.app.debug(TAG, "do GET request: " + url);
-        return restTemplate.getForObject(url, resultClass);
+        return getRestTemplate().getForObject(url, resultClass);
     }
 
     @Override

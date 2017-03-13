@@ -14,6 +14,7 @@ public abstract class HttpTask<P, R> {
 
     private static final String TAG = HttpTask.class.getName();
 
+    public static RestTemplate restTemplate;
 
     protected final String url;
     protected final Class<R> resultClass;
@@ -24,18 +25,15 @@ public abstract class HttpTask<P, R> {
     }
 
     public final R execute() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         try {
-            return doRequest(restTemplate);
+            return doRequest();
         } catch (Exception exc) {
             Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
         }
         return null;
     }
 
-    protected abstract R doRequest(RestTemplate restTemplate);
+    protected abstract R doRequest();
 
     public abstract void onComplete(R result);
 
@@ -43,5 +41,12 @@ public abstract class HttpTask<P, R> {
         // on fail
     }
 
+    protected static RestTemplate getRestTemplate() {
+        if (restTemplate == null) {
+            restTemplate = new RestTemplate();
+            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        }
+        return restTemplate;
+    }
 
 }

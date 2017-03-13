@@ -20,9 +20,9 @@ public abstract class PostHttpTask<P, R> extends HttpTask<P, R> {
     }
 
     @Override
-    protected R doRequest(RestTemplate restTemplate) {
+    protected R doRequest() {
         Gdx.app.debug(TAG, "do POST request: " + url);
-        return restTemplate.postForObject(url, parameter, resultClass);
+        return getRestTemplate().postForObject(url, parameter, resultClass);
     }
 
     @Override

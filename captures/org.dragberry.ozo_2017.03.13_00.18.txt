@@ -1,0 +1,217 @@
+CURRENT STATS:
+System memory usage:
+  SOn /Norm: 1 samples:
+    Cached: 173MB min, 173MB avg, 173MB max
+    Free: 41MB min, 41MB avg, 41MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 141MB min, 141MB avg, 141MB max
+    Native: 30MB min, 30MB avg, 30MB max
+
+Per-Package Stats:
+  * org.dragberry.ozo / u0a280 / v4:
+      * org.dragberry.ozo / u0a280 / v4:
+               TOTAL: 19% (110MB-110MB-110MB/99MB-99MB-99MB over 1)
+                 Top: 19% (110MB-110MB-110MB/99MB-99MB-99MB over 1)
+            Receiver: 0,01%
+            Bg TOTAL: 74% (80MB-88MB-98MB/70MB-78MB-87MB over 5)
+          (Last Act): 74% (80MB-88MB-98MB/70MB-78MB-87MB over 5)
+
+Summary:
+  * org.dragberry.ozo / u0a280 / v4:
+           TOTAL: 19% (110MB-110MB-110MB/99MB-99MB-99MB over 1)
+             Top: 19% (110MB-110MB-110MB/99MB-99MB-99MB over 1)
+        Receiver: 0,01%
+        Bg TOTAL: 74% (80MB-88MB-98MB/70MB-78MB-87MB over 5)
+      (Last Act): 74% (80MB-88MB-98MB/70MB-78MB-87MB over 5)
+
+Run time Stats:
+  SOff/Norm: +4m31s605ms (running)
+  SOn /Norm: +1m15s165ms
+      TOTAL: +5m46s770ms
+
+Memory usage:
+  Kernel : 141MB (8 samples)
+  Native : 30MB (8 samples)
+  Persist: 220MB (18 samples)
+  Top    : 47MB (33 samples)
+  ImpFg  : 40MB (50 samples)
+  ImpBg  : 6,2MB (3 samples)
+  Service: 135MB (92 samples)
+  Receivr: 34KB (41 samples)
+  Home   : 34MB (6 samples)
+  LastAct: 70MB (11 samples)
+  CchAct : 2,5MB (7 samples)
+  CchEmty: 110MB (41 samples)
+  Cached : 173MB (8 samples)
+  Free   : 41MB (8 samples)
+  TOTAL  : 1,0GB
+
+          Start time: 2017-03-13 00:12:43
+  Total elapsed time: +5m46s793ms (partial) libart.so
+
+AGGREGATED OVER LAST 24 HOURS:
+System memory usage:
+  SOff/Norm: 14 samples:
+    Cached: 27MB min, 107MB avg, 183MB max
+    Free: 23MB min, 48MB avg, 97MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 138MB min, 154MB avg, 175MB max
+    Native: 22MB min, 28MB avg, 43MB max
+  SOn /Norm: 21 samples:
+    Cached: 0,00 min, 94MB avg, 173MB max
+    Free: 14MB min, 37MB avg, 72MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 137MB min, 157MB avg, 186MB max
+    Native: 25MB min, 28MB avg, 30MB max
+       Mod : 1 samples:
+    Cached: 232MB min, 232MB avg, 232MB max
+    Free: 80MB min, 80MB avg, 80MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 130MB min, 130MB avg, 130MB max
+    Native: 23MB min, 23MB avg, 23MB max
+
+Per-Package Stats:
+  * org.dragberry.ozo / u0a277 / v4:
+      * org.dragberry.ozo / u0a277 / v4:
+            Bg TOTAL: 2,0% (34MB-34MB-34MB/30MB-30MB-30MB over 2)
+            (Cached): 2,0% (34MB-34MB-34MB/30MB-30MB-30MB over 2)
+  * org.dragberry.ozo / u0a278 / v4:
+      * org.dragberry.ozo / u0a278 / v4:
+               TOTAL: 0,13% (2,7MB-38MB-74MB/2,4MB-35MB-67MB over 2)
+                 Top: 0,13% (2,7MB-38MB-74MB/2,4MB-35MB-67MB over 2)
+            Bg TOTAL: 2,8% (54MB-61MB-68MB/41MB-47MB-53MB over 2)
+            (Cached): 2,8% (54MB-61MB-68MB/41MB-47MB-53MB over 2)
+  * org.dragberry.ozo / u0a279 / v4:
+      * org.dragberry.ozo / u0a279 / v4:
+               TOTAL: 4,3% (12MB-98MB-137MB/11MB-93MB-130MB over 11)
+                 Top: 4,3% (12MB-98MB-137MB/11MB-93MB-130MB over 11)
+            Bg TOTAL: 1,0% (87MB-92MB-98MB/82MB-87MB-91MB over 2)
+            (Cached): 1,0% (87MB-92MB-98MB/82MB-87MB-91MB over 2)
+  * org.dragberry.ozo / u0a280 / v4:
+      * org.dragberry.ozo / u0a280 / v4:
+               TOTAL: 8,5% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+                 Top: 8,5% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+            Bg TOTAL: 9,0% (43MB-79MB-109MB/39MB-72MB-103MB over 37)
+          (Last Act): 8,6% (43MB-78MB-109MB/39MB-71MB-103MB over 36)
+            (Cached): 0,35% (106MB-106MB-106MB/99MB-99MB-99MB over 1)
+
+Summary:
+  * org.dragberry.ozo / u0a280 / v4:
+           TOTAL: 8,5% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+             Top: 8,5% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+        Bg TOTAL: 9,0% (43MB-79MB-109MB/39MB-72MB-103MB over 37)
+      (Last Act): 8,6% (43MB-78MB-109MB/39MB-71MB-103MB over 36)
+        (Cached): 0,35% (106MB-106MB-106MB/99MB-99MB-99MB over 1)
+  * org.dragberry.ozo / u0a279 / v4:
+           TOTAL: 4,3% (12MB-98MB-137MB/11MB-93MB-130MB over 11)
+             Top: 4,3% (12MB-98MB-137MB/11MB-93MB-130MB over 11)
+        Bg TOTAL: 1,0% (87MB-92MB-98MB/82MB-87MB-91MB over 2)
+        (Cached): 1,0% (87MB-92MB-98MB/82MB-87MB-91MB over 2)
+  * org.dragberry.ozo / u0a278 / v4:
+           TOTAL: 0,13% (2,7MB-38MB-74MB/2,4MB-35MB-67MB over 2)
+             Top: 0,13% (2,7MB-38MB-74MB/2,4MB-35MB-67MB over 2)
+        Bg TOTAL: 2,8% (54MB-61MB-68MB/41MB-47MB-53MB over 2)
+        (Cached): 2,8% (54MB-61MB-68MB/41MB-47MB-53MB over 2)
+  * org.dragberry.ozo / u0a277 / v4:
+        Bg TOTAL: 2,0% (34MB-34MB-34MB/30MB-30MB-30MB over 2)
+        (Cached): 2,0% (34MB-34MB-34MB/30MB-30MB-30MB over 2)
+
+Run time Stats:
+  SOff/Norm: +10h55m56s462ms
+  SOn /Norm: +2h52m37s175ms
+       Mod : +1m24s187ms
+      TOTAL: +13h49m57s824ms
+
+Memory usage:
+  Kernel : 155MB (251 samples)
+  Native : 28MB (251 samples)
+  Persist: 203MB (487 samples)
+  Top    : 106MB (1681 samples)
+  ImpFg  : 52MB (3184 samples)
+  ImpBg  : 29MB (1676 samples)
+  Backup : 150 (191 samples)
+  Service: 139MB (8741 samples)
+  Receivr: 553KB (10202 samples)
+  Home   : 27MB (265 samples)
+  LastAct: 25MB (671 samples)
+  CchAct : 9,5MB (291 samples)
+  CchCAct: 6,0MB (292 samples)
+  CchEmty: 170MB (5390 samples)
+  Cached : 104MB (251 samples)
+  Free   : 45MB (251 samples)
+  TOTAL  : 1,1GB
+  ServRst: 1,6MB (5431 samples)
+
+          Start time: 2017-03-12 03:25:30
+  Total elapsed time: +20h30m17s155ms (partial) libart.so
+
+AGGREGATED OVER LAST 3 HOURS:
+System memory usage:
+  SOff/Norm: 4 samples:
+    Cached: 110MB min, 147MB avg, 183MB max
+    Free: 28MB min, 50MB avg, 97MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 146MB min, 154MB avg, 158MB max
+    Native: 29MB min, 34MB avg, 43MB max
+  SOn /Norm: 6 samples:
+    Cached: 51MB min, 107MB avg, 173MB max
+    Free: 26MB min, 39MB avg, 51MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 141MB min, 150MB avg, 158MB max
+    Native: 25MB min, 28MB avg, 30MB max
+
+Per-Package Stats:
+  * org.dragberry.ozo / u0a279 / v4:
+      * org.dragberry.ozo / u0a279 / v4:
+               TOTAL: 17% (70MB-89MB-130MB/66MB-84MB-124MB over 4)
+                 Top: 17% (70MB-89MB-130MB/66MB-84MB-124MB over 4)
+            Bg TOTAL: 0,08%
+            (Cached): 0,08%
+  * org.dragberry.ozo / u0a280 / v4:
+      * org.dragberry.ozo / u0a280 / v4:
+               TOTAL: 38% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+                 Top: 38% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+            Bg TOTAL: 40% (43MB-79MB-109MB/39MB-72MB-103MB over 37)
+          (Last Act): 38% (43MB-78MB-109MB/39MB-71MB-103MB over 36)
+            (Cached): 1,5% (106MB-106MB-106MB/99MB-99MB-99MB over 1)
+
+Summary:
+  * org.dragberry.ozo / u0a280 / v4:
+           TOTAL: 38% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+             Top: 38% (4,6MB-106MB-132MB/4,3MB-99MB-125MB over 31)
+        Bg TOTAL: 40% (43MB-79MB-109MB/39MB-72MB-103MB over 37)
+      (Last Act): 38% (43MB-78MB-109MB/39MB-71MB-103MB over 36)
+        (Cached): 1,5% (106MB-106MB-106MB/99MB-99MB-99MB over 1)
+  * org.dragberry.ozo / u0a279 / v4:
+           TOTAL: 17% (70MB-89MB-130MB/66MB-84MB-124MB over 4)
+             Top: 17% (70MB-89MB-130MB/66MB-84MB-124MB over 4)
+        Bg TOTAL: 0,08%
+        (Cached): 0,08%
+
+Run time Stats:
+  SOff/Norm: +2h24m24s848ms
+  SOn /Norm: +42m35s207ms
+      TOTAL: +3h7m0s55ms
+
+Memory usage:
+  Kernel : 153MB (70 samples)
+  Native : 33MB (70 samples)
+  Persist: 209MB (127 samples)
+  Top    : 68MB (581 samples)
+  ImpFg  : 50MB (828 samples)
+  ImpBg  : 6,4MB (552 samples)
+  Backup : 846 (203 samples)
+  Service: 155MB (1925 samples)
+  Receivr: 188KB (2346 samples)
+  Home   : 32MB (61 samples)
+  LastAct: 41MB (118 samples)
+  CchAct : 4,6MB (96 samples)
+  CchCAct: 313KB (32 samples)
+  CchEmty: 195MB (1270 samples)
+  Cached : 138MB (70 samples)
+  Free   : 47MB (70 samples)
+  TOTAL  : 1,1GB
+  ServRst: 4,0MB (1291 samples)
+
+          Start time: 2017-03-12 21:11:31
+  Total elapsed time: +3h7m0s56ms (partial) libart.so

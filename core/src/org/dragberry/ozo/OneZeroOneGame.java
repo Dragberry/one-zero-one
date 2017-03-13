@@ -16,12 +16,12 @@ public class OneZeroOneGame extends DirectedGame {
 	
 	private static final  String TAG = OneZeroOneGame.class.getName();
 
-	public OneZeroOneGame(Platform platform) {
-		super(platform);
+	public OneZeroOneGame(Platform platform, boolean auditEnabled) {
+		super(platform, auditEnabled);
 	}
 
 	public OneZeroOneGame() {
-		this(new PlatformAdapter());
+		this(new PlatformAdapter(), false);
 	}
 
 	@Override

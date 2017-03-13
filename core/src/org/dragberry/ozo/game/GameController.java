@@ -191,7 +191,6 @@ public class GameController extends InputAdapter {
 						@Override
 						public void onComplete(NewLevelResultsResponse result) {
 							level.settings.updateResults(result);
-							victoryPopup.rebuildStage();
 						}
 					});
 

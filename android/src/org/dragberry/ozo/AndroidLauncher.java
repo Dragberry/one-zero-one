@@ -83,7 +83,7 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 	}
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
-        gameView = initializeForView(new OneZeroOneGame(this), cfg);
+        gameView = initializeForView(new OneZeroOneGame(this, true), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         return gameView;
     }

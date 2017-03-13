@@ -41,6 +41,8 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public final Platform platform;
 
+	private boolean auditEnabled;
+
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
 	
@@ -70,8 +72,9 @@ public abstract class DirectedGame implements ApplicationListener {
     
     private Class<? extends AbstractGameScreen> callerScreen;
 
-	public DirectedGame(Platform platform) {
+	public DirectedGame(Platform platform, boolean auditEnabled) {
 		this.platform = platform;
+		this.auditEnabled = auditEnabled;
 	}
 
 	/**
@@ -420,7 +423,7 @@ public abstract class DirectedGame implements ApplicationListener {
     }
 
 	public void logAuditEvent(final AuditEventRequest request) {
-		if (!platform.getUser().isDefault()) {
+		if (auditEnabled && !platform.getUser().isDefault()) {
 			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, Void>(
 					request, Void.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {
 
