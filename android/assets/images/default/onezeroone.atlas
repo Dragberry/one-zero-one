@@ -3,21 +3,28 @@ onezeroone.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-ball_blue
+background
+  rotate: false
+  xy: 1, 206
+  size: 400, 800
+  orig: 400, 800
+  offset: 0, 0
+  index: -1
+unit_neg
   rotate: false
   xy: 1, 76
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ball_red
+unit_pos
   rotate: false
   xy: 131, 76
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-ball_green
+unit_neutral
   rotate: false
   xy: 261, 76
   size: 128, 128
@@ -26,84 +33,84 @@ ball_green
   index: -1
 n-
   rotate: false
-  xy: 1, 51
+  xy: 403, 983
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n3
   rotate: false
-  xy: 391, 181
+  xy: 1, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n0
   rotate: false
-  xy: 1, 26
+  xy: 403, 958
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n6
   rotate: false
-  xy: 20, 51
+  xy: 422, 983
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n+
   rotate: false
-  xy: 391, 156
+  xy: 1, 26
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n8
   rotate: false
-  xy: 410, 181
+  xy: 20, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n2
   rotate: false
-  xy: 1, 1
+  xy: 403, 933
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n7
   rotate: false
-  xy: 20, 26
+  xy: 422, 958
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n4
   rotate: false
-  xy: 39, 51
+  xy: 441, 983
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n9
   rotate: false
-  xy: 391, 131
+  xy: 1, 1
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n1
   rotate: false
-  xy: 410, 156
+  xy: 20, 26
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n5
   rotate: false
-  xy: 429, 181
+  xy: 39, 51
   size: 17, 23
   orig: 17, 23
   offset: 0, 0

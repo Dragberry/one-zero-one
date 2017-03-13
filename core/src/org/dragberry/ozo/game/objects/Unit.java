@@ -10,7 +10,7 @@ public class Unit extends AbstractUnit {
 	public enum Direction {
 		NORTH, SOUTH, EAST, WEST
 	}
-	
+
 	private static final float UNIT_INITIAL_SCALE = 0.01f;
 	private static final float UNIT_UNSELECTED_SCALE = 0.8f;
 	private static final float UNIT_SELECTED_SCALE = 1.0f;
@@ -18,17 +18,17 @@ public class Unit extends AbstractUnit {
 	public int x;
 	public int y;
 	public int previousValue;
-	
+
 	private boolean selected;
 	private boolean selectedNeighbor;
-	
+
 	public enum State {
 		FIXED, GROW_UP, GROW_DOWN, INITIAL
 	}
 	private State state;
 	private float time;
 	private static final float GROWING_TIME = 0.2f;
-	
+
 	@Override
 	protected void init() {
 		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
@@ -53,7 +53,7 @@ public class Unit extends AbstractUnit {
 		bounds.set(position.x, position.y, dimension.x, dimension.y);
 		return this;
 	}
-	
+
 	@Override
 	public void update(float deltaTime) {
 		switch (state) {
@@ -94,7 +94,7 @@ public class Unit extends AbstractUnit {
 				break;
 		}
 	}
-	
+
 	public void moveTo(Direction direction, float step) {
 		float border;
 		switch (direction) {
@@ -130,13 +130,13 @@ public class Unit extends AbstractUnit {
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	public void moveTo(int gameX, int gameY) {
 		this.x = gameX;
 		this.y = gameY;
 		init();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Unit[" + x + "][" + y + "]=" + value;
@@ -151,7 +151,7 @@ public class Unit extends AbstractUnit {
 		state = State.GROW_UP;
 		time = 0;
 	}
-	
+
 	public void unselect() {
 		selected = false;
 		state = State.GROW_DOWN;
@@ -166,13 +166,13 @@ public class Unit extends AbstractUnit {
 		selectedNeighbor = true;
 		state = State.GROW_UP;
 		time = 0;
-		
+
 	}
-	
+
 	public void unselectedNeighbor() {
 		selectedNeighbor = false;
 		state = State.GROW_DOWN;
 		time = 0;
 	}
-	
+
 }

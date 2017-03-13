@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 
 public class GuiRenderer implements Renderer {
@@ -89,11 +88,11 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderState(SpriteBatch batch) {
-		float offset = Assets.instance.unit.ballBlue.getRegionHeight();
+		float offset = Assets.instance.level.unit.neutral.getRegionHeight();
 		TextureRegion ball;
 
 		// Blue ball
-		ball = Assets.instance.unit.ballBlue;
+		ball = Assets.instance.level.unit.neutral;
 		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 - ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,
@@ -104,8 +103,8 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
 		float posX = camera.viewportWidth / 2;
-		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.digits.minus.getRegionHeight();
-		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.digits.minus.getRegionHeight();
+		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.level.digits.minus.getRegionHeight();
+		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.level.digits.minus.getRegionHeight();
 		DigitUtil.draw(batch, gameController.zeroCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
@@ -119,7 +118,7 @@ public class GuiRenderer implements Renderer {
 		
 
 		// Green ball
-		ball = Assets.instance.unit.ballGreen;
+		ball = Assets.instance.level.unit.positive;
 		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 - ball.getRegionWidth() * 1.5f, camera.viewportHeight - offset,
 				0, 0,
@@ -142,7 +141,7 @@ public class GuiRenderer implements Renderer {
 				false, true);
 
 		// Red ball
-		ball = Assets.instance.unit.ballRed;
+		ball = Assets.instance.level.unit.negative;
 		batch.draw(ball.getTexture(),
 				camera.viewportWidth / 2 + ball.getRegionWidth() / 2, camera.viewportHeight - offset,
 				0, 0,

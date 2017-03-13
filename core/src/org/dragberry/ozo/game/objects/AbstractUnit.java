@@ -80,9 +80,9 @@ public abstract class AbstractUnit extends AbstractGameObject {
 	}
 	
 	protected enum Sign {
-		MINUS(Assets.instance.unit.ballRed, Constants.NEGATIVE, "-"),
-		ZERO(Assets.instance.unit.ballBlue, Constants.NEUTRAL, ""),
-		PLUS(Assets.instance.unit.ballGreen, Constants.POSITIVE, "+");
+		MINUS(Assets.instance.level.unit.negative, Constants.NEGATIVE, "-"),
+		ZERO(Assets.instance.level.unit.neutral, Constants.NEUTRAL, ""),
+		PLUS(Assets.instance.level.unit.positive, Constants.POSITIVE, "+");
 
 		public TextureRegion regBall;
 		public Color color;
