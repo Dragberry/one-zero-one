@@ -15,8 +15,8 @@ public final class DigitUtil {
 			float scaleX, float scaleY,
 			float rotation,
 			boolean flipX, boolean flipY) {
-		int digitWidth = Assets.instance.digits.plus.getRegionWidth();
-		int digitHeight= Assets.instance.digits.plus.getRegionHeight();
+		int digitWidth = Assets.instance.level.digits.plus.getRegionWidth();
+		int digitHeight= Assets.instance.level.digits.plus.getRegionHeight();
 		float offsetX = digitWidth * texRegions.size / 2;
 		float posY = positionY - digitHeight / 2;
 		TextureRegion digit;
@@ -45,10 +45,10 @@ public final class DigitUtil {
 		resolveNextDigit(value, texRegions);
 		if (signed) {
 			if (value < 0) {
-				texRegions.add(Assets.instance.digits.minus);
+				texRegions.add(Assets.instance.level.digits.minus);
 			}
 			if (value > 0) {
-				texRegions.add(Assets.instance.digits.plus);
+				texRegions.add(Assets.instance.level.digits.plus);
 			}
 		}
 		texRegions.reverse();
@@ -56,7 +56,7 @@ public final class DigitUtil {
 
 	private static void resolveNextDigit(int value, Array<TextureRegion> texRegions) {
 		int digit = value % 10;
-		texRegions.add(Assets.instance.digits.digits[Math.abs(digit)]);
+		texRegions.add(Assets.instance.level.digits.digits[Math.abs(digit)]);
 		value /= 10;
 		if (value != 0) {
 			resolveNextDigit(value, texRegions);

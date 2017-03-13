@@ -42,9 +42,9 @@ public class Assets implements Disposable, AssetErrorListener {
 	public static final Assets instance = new Assets();
 	
 	private AssetManager assetManager;
+
+	public AssetLevel level;
 	
-	public AssetUnit unit;
-	public AssetDigits digits;
 	public AssetFonts fonts;
 	public I18NBundle translation;
 	public AssetSkin skin;
@@ -64,8 +64,7 @@ public class Assets implements Disposable, AssetErrorListener {
 		}
 		
 		TextureAtlas atlas = getTextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS);
-		unit = new AssetUnit(atlas);
-		digits = new AssetDigits(atlas);
+		level = new AssetLevel(atlas);
 		fonts = AssetFonts.create(Gdx.graphics.getWidth());
 		skin = new AssetSkin(assetManager, getTextureAtlas(Constants.TEXTURE_ATLAS_SKIN));
 		translation = assetManager.get(Constants.TRANSLATION, I18NBundle.class);
@@ -90,33 +89,43 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetManager.dispose();
 		fonts.dispose();
 	}
-	
-	public class AssetUnit {
-		public final AtlasRegion ballRed;
-		public final AtlasRegion ballBlue;
-		public final AtlasRegion ballGreen;
 
-		public final AtlasRegion infoBall;
-		
-		public AssetUnit(TextureAtlas atlas) {
-			ballRed = atlas.findRegion("ball_red");
-			ballBlue = atlas.findRegion("ball_blue");
-			ballGreen = atlas.findRegion("ball_green");
-			infoBall = atlas.findRegion("info_ball");
+	public class AssetLevel {
+
+		public final AtlasRegion background;
+		public final AssetUnit unit;
+		public final AssetDigits digits;
+
+		public AssetLevel(TextureAtlas atlas) {
+			background = atlas.findRegion("background");
+			unit = new AssetUnit(atlas);
+			digits = new AssetDigits(atlas);
 		}
-	}
-	
-	public class AssetDigits {
-		public final AtlasRegion[] digits = new AtlasRegion[10];
-		public final AtlasRegion plus;
-		public final AtlasRegion minus;
-		
-		public AssetDigits(TextureAtlas atlas) {
-			for (int i = 0; i < 10; i++) {
-				digits[i] = atlas.findRegion("n" + i);
+
+		public class AssetUnit {
+			public final AtlasRegion positive;
+			public final AtlasRegion neutral;
+			public final AtlasRegion negative;
+
+			public AssetUnit(TextureAtlas atlas) {
+				neutral = atlas.findRegion("unit_neutral");
+				negative = atlas.findRegion("unit_neg");
+				positive = atlas.findRegion("unit_pos");
 			}
-			plus = atlas.findRegion("n+");
-			minus = atlas.findRegion("n-");
+		}
+
+		public class AssetDigits {
+			public final AtlasRegion[] digits = new AtlasRegion[10];
+			public final AtlasRegion plus;
+			public final AtlasRegion minus;
+
+			public AssetDigits(TextureAtlas atlas) {
+				for (int i = 0; i < 10; i++) {
+					digits[i] = atlas.findRegion("n" + i);
+				}
+				plus = atlas.findRegion("n+");
+				minus = atlas.findRegion("n-");
+			}
 		}
 	}
 

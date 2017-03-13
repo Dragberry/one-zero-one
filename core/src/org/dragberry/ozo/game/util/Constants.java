@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public interface Constants {
 
-    String TEXTURE_ATLAS_OBJECTS = "images/onezeroone.atlas";
+    String TEXTURE_ATLAS_OBJECTS = "images/default/onezeroone.atlas";
     String TRANSLATION = "i18n/translation";
     String FONTS = "fonts/UbuntuMono-BI.ttf";
     String TEXTURE_ATLAS_SKIN = "skins/default/skin/uiskin.atlas";
