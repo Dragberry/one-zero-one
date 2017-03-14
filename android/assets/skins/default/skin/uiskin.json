@@ -41,6 +41,10 @@
     default: {
       font: menu-font-medium,
       fontColor: white
+    },
+    header: {
+      font: menu-font-large,
+      fontColor: white
     }
   },
 }
