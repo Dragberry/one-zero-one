@@ -9,8 +9,8 @@ import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.screen.DirectedGame;
-import org.dragberry.ozo.screen.popup.ConfirmationPopup;
 import org.dragberry.ozo.screen.popup.DefeatScreen;
+import org.dragberry.ozo.screen.popup.PausePopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
 
 import com.badlogic.gdx.Gdx;
@@ -455,7 +455,7 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				game.setPopup(new ConfirmationPopup(game));
+				game.setPopup(new PausePopup(game, level));
 				break;
 		}
 		return false;
