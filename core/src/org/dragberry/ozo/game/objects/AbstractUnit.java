@@ -53,7 +53,6 @@ public abstract class AbstractUnit extends AbstractGameObject {
 				sign.regBall.getRegionWidth(), sign.regBall.getRegionHeight(),
 				false, flipY);
 
-		batch.setColor(Constants.COLOR_UNIT_TEXT);
 		float zoomFactor;
 		switch (valueDigits.size) {
 			case 1:

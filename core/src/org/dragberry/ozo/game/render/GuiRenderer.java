@@ -54,7 +54,6 @@ public class GuiRenderer implements Renderer {
 	
 	private void renderGoals(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_s;
-		font.setColor(Color.BLACK);
 		font.draw(batch, goal, 10, 15);
 		font.draw(batch, goalToLose, camera.viewportWidth - goalToLose.width - 10, 15);
 		getGameContoller().level.renderGoals(batch, 10.0f, 40.0f);
@@ -62,7 +61,6 @@ public class GuiRenderer implements Renderer {
 
 	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
-		font.setColor(Color.BLACK);
         font.draw(batch, getGameContoller().level.settings.name,
                 camera.viewportWidth / 4, 15, camera.viewportWidth / 2, Align.center, true);
 	}
@@ -74,7 +72,6 @@ public class GuiRenderer implements Renderer {
 	
 	private void renderSteps(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
-		font.setColor(Color.BLACK);
 		font.draw(batch, stepsStr, camera.viewportWidth - stepsStr.width - 10, camera.viewportHeight - stepsStr.height * 4);
 		steps = new GlyphLayout(font, String.valueOf(gameController.level.steps));
 		font.draw(batch, steps, camera.viewportWidth - 25 - steps.width, camera.viewportHeight - steps.height * 2);
@@ -82,7 +79,6 @@ public class GuiRenderer implements Renderer {
 	
 	private void renderTime(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
-		font.setColor(Color.BLACK);
 		font.draw(batch, timeStr, 25, camera.viewportHeight - timeStr.height * 4);
 		font.draw(batch, TimeUtils.timeToString((int) getGameContoller().level.time), 25, camera.viewportHeight - timeStr.height * 2);
 	}

@@ -139,12 +139,12 @@ public class Assets implements Disposable, AssetErrorListener {
 		public final BitmapFont menu_l;
 
 		private AssetFonts(int guiXS, int guiS, int guiM, int guiL, int menuM, int menuL) {
-			gui_xs = createFont(guiXS, true, Color.BLACK);
-			gui_s = createFont(guiS, true, Color.BLACK);
-			gui_m = createFont(guiM, true, Color.BLACK);
-			gui_l = createFont(guiL, true, Color.BLACK);
-			menu_m = createFont(menuM, false, Color.WHITE);
-			menu_l = createFont(menuL, false, Color.WHITE);
+			gui_xs = createFont(guiXS, true, Constants.FONT_BLOCK_1);
+			gui_s = createFont(guiS, true, Constants.FONT_BLOCK_1);
+			gui_m = createFont(guiM, true, Constants.FONT_BLOCK_1);
+			gui_l = createFont(guiL, true, Constants.FONT_BLOCK_1);
+			menu_m = createFont(menuM, false, Constants.FONT_BLOCK_1);
+			menu_l = createFont(menuL, false, Constants.FONT_BLOCK_1);
 		}
 
 		public static AssetFonts create(int screenWidth) {

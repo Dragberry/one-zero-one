@@ -13,7 +13,8 @@ public interface Constants {
 //    Color BACKGROUND = new Color(0xC3 / 255f, 0xD5 / 255f,  0xDB / 255f, 1);
     Color BACKGROUND = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
     Color BACKGROUND_GAME = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
-    Color COLOR_UNIT_TEXT = new Color(0xF0 / 255f, 0xE6 / 255f,  0x8C / 255f, 1);
+
+    Color FONT_BLOCK_1 = new Color(70/ 255f, 44/ 255f, 5/ 255f, 1);
 
     float VIEWPORT_WIDTH = 1280.0f;
     float VIEWPORT_GUI_WIDTH = 720.0f;

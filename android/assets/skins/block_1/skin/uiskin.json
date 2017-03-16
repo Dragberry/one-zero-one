@@ -13,13 +13,13 @@
       fontColor: white
     },
     level-open: {
-      down: default-level-opened,
-      up: default-level-opened-down,
+      down: default-level-opened-down,
+      up: default-level-opened,
       font: menu-font-large,
       fontColor: white
     },
     level-closed: {
-      down: default-level-closed,
+      down: default-level-closed-down,
       up: default-level-closed,
       font: menu-font-large,
       fontColor: white
