@@ -256,7 +256,6 @@ public class GameController extends InputAdapter {
 		refreshState();
     	level.steps++;
     	if (isGameFinished()) {
-
 			return;
 		}
     	selectedUnit.unselect();

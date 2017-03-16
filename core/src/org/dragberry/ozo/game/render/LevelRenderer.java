@@ -15,10 +15,10 @@ public class LevelRenderer implements Renderer {
 
 	private static final float LONG_ASPECT_RATIO = 1f / 1.6f;
 
-
 	private OrthographicCamera camera;
 	private GameController gameController;
 
+	private OrthographicCamera cameraBg;
 
 	private TextureAtlas.AtlasRegion bg = Assets.instance.level.background;
 	private float bgOffsetX;
@@ -32,15 +32,16 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		CameraHelper.INSTANCE.applyTo(camera);
-		batch.setProjectionMatrix(camera.combined);
-
-		TextureAtlas.AtlasRegion bg = Assets.instance.level.background;
+		// background
+		batch.setProjectionMatrix(cameraBg.combined);
 		batch.draw(bg, bgOffsetX, bgOffsetY,
 				0, 0,
 				bg.getRegionWidth(), bg.getRegionHeight(),
 				bgZoom, bgZoom, 0);
 
+		// units
+		CameraHelper.INSTANCE.applyTo(camera);
+		batch.setProjectionMatrix(camera.combined);
 		Unit selectedUnit = null;
 		for (Unit[] row : gameController.units) {
 			for (Unit unit : row) {
@@ -57,9 +58,8 @@ public class LevelRenderer implements Renderer {
 	}
 
 	private void initBackground() {
-		bg = Assets.instance.level.background;
-		float bgWidthRatio = ((float) Gdx.graphics.getWidth()) / bg.getRegionWidth();
-		float bgHeightRatio = (float) Gdx.graphics.getHeight() / bg.getRegionHeight();
+		float bgWidthRatio = cameraBg.viewportWidth / bg.getRegionWidth();
+		float bgHeightRatio = cameraBg.viewportHeight / bg.getRegionHeight();
 		if (bgWidthRatio > bgHeightRatio) {
 			bgOffsetY =  bg.getRegionHeight() *(bgHeightRatio - bgWidthRatio) / 2;
 			bgZoom = bgWidthRatio;
@@ -72,6 +72,10 @@ public class LevelRenderer implements Renderer {
 	@Override
 	public void init() {
 		float height = Gdx.graphics.getHeight() * (Constants.VIEWPORT_WIDTH / Gdx.graphics.getWidth());
+		cameraBg = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
+		cameraBg.position.set(Constants.VIEWPORT_WIDTH / 2, height / 2, 0);
+		cameraBg.update();
+
 		camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
 		camera.position.set(-Constants.VIEWPORT_WIDTH / 2, -height / 2, 0);
 		camera.update();
@@ -80,6 +84,7 @@ public class LevelRenderer implements Renderer {
 				gameController.level.width * Constants.UNIT_SIZE / 2,
 				gameController.level.height * Constants.UNIT_SIZE / 2);
 		setZoom();
+
 		initBackground();
 	}
 
@@ -87,7 +92,7 @@ public class LevelRenderer implements Renderer {
 		float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
 		boolean longScreen = screenAspectRatio <= LONG_ASPECT_RATIO;
         float gameAspectRatio = gameController.level.width / gameController.level.height;
-        float zoom = 0;
+        float zoom;
         if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
         	zoom = gameController.level.height * Constants.UNIT_SIZE / camera.viewportHeight;
         } else {
@@ -98,6 +103,8 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void resize(int width, int height) {
+		cameraBg.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
+		cameraBg.update();
 		camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
 		camera.update();
 	}
