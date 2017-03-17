@@ -376,7 +376,7 @@ public class GameController extends InputAdapter {
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
 				units[x][y].unselect();
-				units[x][y].unselectedNeighbor();
+				units[x][y].unselectNeighbor();
 			}
     	}
     }
@@ -409,6 +409,10 @@ public class GameController extends InputAdapter {
     		return;
     	}
     	if (selectedUnit == currentSelectedUnit) {
+			selectedUnit.triggerSelectionEffect();
+			for (Unit neighbor : neighbors) {
+				neighbor.triggerSelectionEffect();
+			}
     		// step execution is started
     		state = State.IN_MOTION;
     		return;
@@ -421,9 +425,11 @@ public class GameController extends InputAdapter {
     		// unit first selection
     		selectedUnit = currentSelectedUnit;
     		selectedUnit.select();
+			selectedUnit.triggerSelectionEffect();
     		getNeighbors(selectedUnit);
     		for (Unit neighbor : neighbors) {
-    			neighbor.selectedNeighbor();
+    			neighbor.selectNeighbor();
+				neighbor.triggerSelectionEffect();
 			}
     	}
     }
