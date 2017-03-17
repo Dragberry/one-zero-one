@@ -3,6 +3,7 @@ package org.dragberry.ozo.game.objects;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Unit extends AbstractUnit {
@@ -28,6 +29,12 @@ public class Unit extends AbstractUnit {
 	private State state;
 	private float time;
 	private static final float GROWING_TIME = 0.2f;
+
+	private boolean isFluctuated;
+	private float fluctuationsTime;
+	private static final float FLUCTUATIONS_TIME = 0.7f;
+
+	private float totalTime;
 
 	@Override
 	protected void init() {
@@ -56,6 +63,17 @@ public class Unit extends AbstractUnit {
 
 	@Override
 	public void update(float deltaTime) {
+		totalTime += deltaTime;
+		if (isFluctuated) {
+			fluctuationsTime += deltaTime;
+			if (fluctuationsTime < FLUCTUATIONS_TIME) {
+				rotation = 7 / Math.max(fluctuationsTime * 7, 1) * (MathUtils.sin(50 * fluctuationsTime));
+			} else {
+				isFluctuated = false;
+				fluctuationsTime = 0;
+				rotation = 0;
+			}
+		}
 		switch (state) {
 			case INITIAL:
 				time += deltaTime;
@@ -162,17 +180,22 @@ public class Unit extends AbstractUnit {
 		return selectedNeighbor;
 	}
 
-	public void selectedNeighbor() {
+	public void selectNeighbor() {
 		selectedNeighbor = true;
 		state = State.GROW_UP;
 		time = 0;
 
 	}
 
-	public void unselectedNeighbor() {
+	public void unselectNeighbor() {
 		selectedNeighbor = false;
 		state = State.GROW_DOWN;
 		time = 0;
+	}
+
+	public void triggerSelectionEffect() {
+		isFluctuated = true;
+		fluctuationsTime = 0;
 	}
 
 }
