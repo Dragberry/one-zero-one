@@ -408,9 +408,14 @@ public abstract class DirectedGame implements ApplicationListener {
         try {
 			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.levelId);
 			if (level == null) {
-				Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
-				Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
-				level = constructor.newInstance(currentLevelSettings);
+				level = currentLevelSettings.loadLevelState();
+				if (level != null) {
+					Gdx.app.debug(TAG, "Incomplete level was loaded: " + currentLevelSettings.levelId);
+				} else {
+					Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
+					Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
+					level = constructor.newInstance(currentLevelSettings);
+				}
 				levelsCache.put(currentLevelSettings.levelId, level);
 			} else {
 				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);

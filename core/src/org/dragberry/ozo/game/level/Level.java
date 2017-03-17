@@ -1,10 +1,10 @@
 package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
@@ -16,6 +16,7 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -23,21 +24,23 @@ import java.util.Map;
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level<LI extends LevelSettings> {
+public abstract class Level<LI extends LevelSettings> implements Serializable {
 
     private final static String TAG = Level.class.getName();
 
 	protected final static int DEFAULT_WIDTH = 6;
     protected final static int DEFAULT_HEIGHT = 8;
 
-    public final Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
-    public final Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
+    public final transient Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
+    public final transient Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
     
     protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
-    public final LI settings;
+    public transient LI settings;
     public final int width;
     public final int height;
+
+    public Unit[][] units;
 
     public float time = 0;
     public int steps = 0;
@@ -52,6 +55,7 @@ public abstract class Level<LI extends LevelSettings> {
         this.width = width;
         this.height = height;
         this.settings = settings;
+        units = new Unit[width][height];
         createGenerators();
     }
     
@@ -87,7 +91,7 @@ public abstract class Level<LI extends LevelSettings> {
         this.goalsToLose.add(goalToLose);
     }
 
-    public boolean isLost(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
+    public boolean isLost(Unit selectedUnit, Array<Unit> neighbors) {
         for (AbstractGoal goal : goalsToLose) {
             if (goal.isReached(units, selectedUnit, neighbors)) {
                 return true;
@@ -96,7 +100,7 @@ public abstract class Level<LI extends LevelSettings> {
         return false;
     }
 
-    public boolean isWon(Unit[][] units, Unit selectedUnit, Array<Unit> neighbors) {
+    public boolean isWon(Unit selectedUnit, Array<Unit> neighbors) {
         boolean reached = true;
         for (AbstractGoal goal : goalsToWin) {
             if (!goal.isReached(units, selectedUnit, neighbors)) {

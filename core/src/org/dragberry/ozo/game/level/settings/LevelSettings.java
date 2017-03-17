@@ -13,6 +13,11 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -24,6 +29,7 @@ public class LevelSettings {
 	private static final String TAG = LevelSettings.class.getName();
 
 	private static final String COMPLETED = "completed";
+	private static final String SAVED = "saved";
 	public static final String EMPTY = "";
 
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
@@ -31,6 +37,7 @@ public class LevelSettings {
     public final String name;
     
     public boolean completed;
+	public boolean saved;
 
 	public final LevelResults results = new LevelResults();
 
@@ -47,6 +54,7 @@ public class LevelSettings {
 
 	protected void load(Preferences prefs) {
 		completed = prefs.getBoolean(COMPLETED, false);
+		completed = prefs.getBoolean(SAVED, false);
 
 		Gdx.app.debug(TAG, "load results for " + levelId);
 		loadSingleResult(LevelResultName.TIME, prefs);
@@ -89,7 +97,7 @@ public class LevelSettings {
 	}
 
 	protected Preferences loadPreferences() {
-		return Gdx.app.getPreferences(clazz.getName() + "." + levelId);
+		return Gdx.app.getPreferences(levelId);
 	}
 	
 	/**
@@ -184,5 +192,60 @@ public class LevelSettings {
 			}
 		}
 		return newResultsRequest;
+	}
+
+	public Level<? extends LevelSettings> loadLevelState() {
+		Gdx.app.debug(TAG, "Trying load incomplete level: " + levelId);
+		Preferences prefs = loadLevelStatePrefs();
+		String stateStr = prefs.getString("state");
+		if (stateStr.isEmpty()) {
+			return null;
+		}
+		byte[] state = stateStr.getBytes();
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(new ByteArrayInputStream(state));
+			return (Level<? extends LevelSettings>) ois.readObject();
+		} catch (Exception exc) {
+			Gdx.app.error(TAG, "An error has occurred during level loading: " + levelId, exc);
+		} finally {
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (Exception exc) {
+					Gdx.app.error(TAG, "An error has occurred during level loading: " + levelId, exc);
+				}
+			}
+		}
+		return null;
+	}
+
+	private Preferences loadLevelStatePrefs() {
+		return Gdx.app.getPreferences(levelId + ".state");
+	}
+
+	public void saveState(Level<? extends LevelSettings> level, boolean shouldSave) {
+		saved = shouldSave;
+		if (shouldSave) {
+			Preferences prefs = loadLevelStatePrefs();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = null;
+			try {
+				oos = new ObjectOutputStream(bos);
+				oos.writeObject(level);
+				prefs.putString("state", bos.toString());
+				prefs.flush();
+			} catch (Exception exc) {
+				Gdx.app.error(TAG, "An error has occurred during level state saving: " + levelId, exc);
+			} finally {
+				if (oos != null) {
+					try {
+						oos.close();
+					} catch (Exception exc) {
+						Gdx.app.error(TAG, "An error has occurred during level state saving: " + levelId, exc);
+					}
+				}
+			}
+		}
 	}
 }

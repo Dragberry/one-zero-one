@@ -43,7 +43,7 @@ public class LevelRenderer implements Renderer {
 		CameraHelper.INSTANCE.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		Unit selectedUnit = null;
-		for (Unit[] row : gameController.units) {
+		for (Unit[] row : gameController.level.units) {
 			for (Unit unit : row) {
 				if (unit.isSelected()) {
 					selectedUnit = unit;

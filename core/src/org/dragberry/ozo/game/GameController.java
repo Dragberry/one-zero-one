@@ -44,7 +44,7 @@ public class GameController extends InputAdapter {
 	private DirectedGame game;
 	public Level<?> level;
 	
-	public Unit[][] units;
+
 	private Array<Unit> neighbors;
 
 	private int negCount;
@@ -68,7 +68,7 @@ public class GameController extends InputAdapter {
 		if (instance == null) {
 			instance = new GameController();
 			instance.game = game;
-			instance.units = new Unit[level.width][level.height];
+			instance.level = level;
 			instance.neighbors = new Array<Unit>(4);
 
 			instance.posCountDigits = new Array<TextureRegion>(4);
@@ -89,16 +89,14 @@ public class GameController extends InputAdapter {
 			instance.zeroCount = 0;
 		}
 
-		instance.level = level;
-
 		instance.state = State.FIXED;
 		instance.motionTime = 0;
 		instance.selectedUnit = null;
 
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				Unit unit = level.generateUnit(x, y, instance.selectedUnit, instance.units[x][y]);
-				instance.units[x][y] = unit;
+				Unit unit = level.generateUnit(x, y, instance.selectedUnit, instance.level.units[x][y]);
+				instance.level.units[x][y] = unit;
 				instance.updateStateForUnit(unit);
 			}
 		}
@@ -133,7 +131,7 @@ public class GameController extends InputAdapter {
     		level.time += deltaTime;
     		for (int x = 0; x < level.width; x++) {
     			for (int y = 0; y < level.height; y++) {
-    				units[x][y].update(deltaTime);
+					level.units[x][y].update(deltaTime);
     			}
     		}
     	}
@@ -162,7 +160,7 @@ public class GameController extends InputAdapter {
 	}
 
 	private boolean isGameFinished() {
-		if (level.isLost(units, selectedUnit, neighbors)) {
+		if (level.isLost(selectedUnit, neighbors)) {
 			level.started = false;
 			game.setPopup(new DefeatPopup(game));
 
@@ -170,7 +168,7 @@ public class GameController extends InputAdapter {
 			game.logAuditEvent(attempt);
 			return true;
 		}
-		if (level.isWon(units, selectedUnit, neighbors)) {
+		if (level.isWon(selectedUnit, neighbors)) {
 			level.started = false;
 
 			NewLevelResultsRequest newResults = level.formNewResults();
@@ -213,28 +211,28 @@ public class GameController extends InputAdapter {
     
     private void shiftTopUnits(float step) {
     	for (int y = selectedUnit.y + 1; y < level.height; y++) {
-			Unit unitToMove = units[selectedUnit.x][y];
+			Unit unitToMove = level.units[selectedUnit.x][y];
 			unitToMove.moveTo(Direction.SOUTH, step);
 		}
     }
     
     private void shiftRightUnits(float step) {
     	for (int x = selectedUnit.x + 1; x < level.width; x++) {
-			Unit unitToMove = units[x][selectedUnit.y];
+			Unit unitToMove = level.units[x][selectedUnit.y];
 			unitToMove.moveTo(Direction.WEST, step);
 		}
     }
     
     private void shiftBottomUnits(float step) {
     	for (int y = selectedUnit.y - 1; y >= 0; y--) {
-			Unit unitToMove = units[selectedUnit.x][y];
+			Unit unitToMove = level.units[selectedUnit.x][y];
 			unitToMove.moveTo(Direction.NORTH, step);
 		}
     }
     
     private void shiftLeftUnits(float step) {
     	for (int x = selectedUnit.x - 1; x >= 0; x--) {
-			Unit unitToMove = units[x][selectedUnit.y];
+			Unit unitToMove = level.units[x][selectedUnit.y];
 			unitToMove.moveTo(Direction.EAST, step);
 		}
     }
@@ -256,6 +254,7 @@ public class GameController extends InputAdapter {
 		refreshState();
     	level.steps++;
     	if (isGameFinished()) {
+			level.settings.saveState(level, false);
 			return;
 		}
     	selectedUnit.unselect();
@@ -293,7 +292,7 @@ public class GameController extends InputAdapter {
 		zeroCount = 0;
 		for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				updateStateForUnit(units[x][y]);
+				updateStateForUnit(level.units[x][y]);
 			}
 		}
 		resolveStateDigits();
@@ -302,69 +301,69 @@ public class GameController extends InputAdapter {
 	private void shiftBottomUnits(Unit selectedUnit) {
 		Unit neighbor = null;
 		if (selectedUnit.y != 0) {
-			neighbor = units[selectedUnit.x][selectedUnit.y - 1];
+			neighbor = level.units[selectedUnit.x][selectedUnit.y - 1];
 		}
 		for (int y = selectedUnit.y - 1; y > 0; y--) {
-			Unit unitToMove = units[selectedUnit.x][y - 1];
-			units[selectedUnit.x][y] = unitToMove;
+			Unit unitToMove = level.units[selectedUnit.x][y - 1];
+			level.units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
 		if (neighbor != null) {
-			units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
+			level.units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
 		}
 	}
     
     private void shiftTopUnits(Unit selectedUnit) {
 		Unit neighbor = null;
 		if (selectedUnit.y != level.height - 1) {
-			neighbor = units[selectedUnit.x][selectedUnit.y + 1];
+			neighbor = level.units[selectedUnit.x][selectedUnit.y + 1];
 		}
 		for (int y = selectedUnit.y + 1; y < level.height - 1; y++) {
-			Unit unitToMove = units[selectedUnit.x][y + 1];
-			units[selectedUnit.x][y] = unitToMove;
+			Unit unitToMove = level.units[selectedUnit.x][y + 1];
+			level.units[selectedUnit.x][y] = unitToMove;
 			unitToMove.moveTo(selectedUnit.x, y);
 		}
 		if (neighbor != null) {
-			units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, selectedUnit, neighbor);
+			level.units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, selectedUnit, neighbor);
 		}
 	}
 
 	private void shiftRightUnits(Unit selectedUnit) {
 		Unit neighbor = null;
 		if (selectedUnit.x != level.width - 1) {
-			neighbor = units[selectedUnit.x + 1][selectedUnit.y];
+			neighbor = level.units[selectedUnit.x + 1][selectedUnit.y];
 		}
 		for (int x = selectedUnit.x + 1; x < level.width - 1; x++) {
-			Unit unitToMove = units[x + 1][selectedUnit.y];
-			units[x][selectedUnit.y] = unitToMove;
+			Unit unitToMove = level.units[x + 1][selectedUnit.y];
+			level.units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
 		if (neighbor != null) {
-			units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, selectedUnit, neighbor);
+			level.units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, selectedUnit, neighbor);
 		}
 	}
 
 	private void shiftLeftUnits(Unit selectedUnit) {
 		Unit neighbor = null;
 		if (selectedUnit.x != 0) {
-			neighbor = units[selectedUnit.x - 1][selectedUnit.y];
+			neighbor = level.units[selectedUnit.x - 1][selectedUnit.y];
 		}
 		for (int x = selectedUnit.x - 1; x > 0; x--) {
-			Unit unitToMove = units[x - 1][selectedUnit.y];
-			units[x][selectedUnit.y] = unitToMove;
+			Unit unitToMove = level.units[x - 1][selectedUnit.y];
+			level.units[x][selectedUnit.y] = unitToMove;
 			unitToMove.moveTo(x, selectedUnit.y);
 		}
 		if (neighbor != null) {
-			units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
+			level.units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
 		}
 	}
 	
     private Unit getSelectedUnit(float xCoord, float yCoord) {
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				if (units[x][y].bounds.contains(xCoord, yCoord)) {
+				if (level.units[x][y].bounds.contains(xCoord, yCoord)) {
 					Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
-					return units[x][y];
+					return level.units[x][y];
 				}
 			}
     	}
@@ -375,8 +374,8 @@ public class GameController extends InputAdapter {
     	selectedUnit = null;
     	for (int x = 0; x < level.width; x++) {
 			for (int y = 0; y < level.height; y++) {
-				units[x][y].unselect();
-				units[x][y].unselectNeighbor();
+				level.units[x][y].unselect();
+				level.units[x][y].unselectNeighbor();
 			}
     	}
     }
@@ -384,16 +383,16 @@ public class GameController extends InputAdapter {
     private void getNeighbors(Unit unit) {
     	neighbors.clear();
     	if (unit.y != 0) {
-    		neighbors.add(units[unit.x][unit.y - 1]);
+    		neighbors.add(level.units[unit.x][unit.y - 1]);
     	}
     	if (unit.x != level.width - 1) {
-    		neighbors.add(units[unit.x + 1][unit.y]);
+    		neighbors.add(level.units[unit.x + 1][unit.y]);
     	}
     	if (unit.y != level.height - 1) {
-    		neighbors.add(units[unit.x][unit.y + 1]);
+    		neighbors.add(level.units[unit.x][unit.y + 1]);
     	}
     	if (unit.x != 0) {
-    		neighbors.add(units[unit.x - 1][unit.y]);
+    		neighbors.add(level.units[unit.x - 1][unit.y]);
     	}
     }
     
