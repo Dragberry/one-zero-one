@@ -5,14 +5,14 @@ filter: Nearest,Nearest
 repeat: none
 logo
   rotate: false
-  xy: 1, 150
+  xy: 1, 133
   size: 640, 352
   orig: 640, 352
   offset: 0, 0
   index: -1
 default-window
   rotate: false
-  xy: 1, 71
+  xy: 1, 54
   size: 51, 77
   split: 26, 24, 37, 39
   orig: 51, 77
@@ -20,7 +20,7 @@ default-window
   index: -1
 default-level-closed-down
   rotate: false
-  xy: 643, 451
+  xy: 643, 434
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
@@ -28,7 +28,7 @@ default-level-closed-down
   index: -1
 default-level-closed
   rotate: false
-  xy: 1, 18
+  xy: 1, 1
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
@@ -36,33 +36,33 @@ default-level-closed
   index: -1
 default-level-opened-down
   rotate: false
-  xy: 54, 97
+  xy: 54, 80
   size: 51, 51
-  split: 24, 26, 26, 24
+  split: 25, 25, 25, 25
   orig: 51, 51
   offset: 0, 0
   index: -1
 default-level-opened
   rotate: false
-  xy: 643, 398
+  xy: 643, 381
   size: 51, 51
-  split: 25, 25, 26, 24
+  split: 25, 25, 25, 25
   orig: 51, 51
   offset: 0, 0
   index: -1
 default-round-down
   rotate: false
-  xy: 696, 451
+  xy: 696, 434
   size: 51, 51
-  split: 25, 25, 26, 24
+  split: 25, 25, 25, 25
   orig: 51, 51
   offset: 0, 0
   index: -1
 default-round
   rotate: false
-  xy: 1, 1
-  size: 15, 15
-  split: 7, 7, 7, 7
-  orig: 15, 15
+  xy: 54, 27
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
   offset: 0, 0
   index: -1
