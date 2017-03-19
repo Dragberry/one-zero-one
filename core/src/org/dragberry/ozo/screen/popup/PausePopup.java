@@ -101,6 +101,7 @@ public class PausePopup extends AbstractPopup {
                     @Override
                     public void execute() {
                         level.settings.saveState(level, true);
+                        level.savedState = true;
                         game.logAuditEvent(levelAttempt);
                         game.back();
                     }

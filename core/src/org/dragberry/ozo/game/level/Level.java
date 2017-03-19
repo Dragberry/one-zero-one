@@ -189,6 +189,6 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     @Override
     public String toString() {
-        return "Level: " + settings.levelId;
+        return settings == null ? "Unknown level" : "Level: " + settings.levelId;
     }
 }
