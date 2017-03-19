@@ -20,6 +20,7 @@ import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.platform.Platform;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
+import org.dragberry.ozo.screen.popup.ObjectivePopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
@@ -362,6 +363,7 @@ public abstract class DirectedGame implements ApplicationListener {
             blackoutShader.dispose();
             init = false;
         }
+
     }
     
     public void back() {
@@ -402,26 +404,29 @@ public abstract class DirectedGame implements ApplicationListener {
     	}
     }
     
-    public void playLevel(LevelSettings currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
+    public <LS extends LevelSettings> void playLevel(LS currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
         logAuditEvent(createSimpleAuditRequest(AuditEventType.START_LEVEL));
 		this.currentLevelSettings = currentLevelSettings;
         try {
-			Level<? extends LevelSettings> level = levelsCache.get(currentLevelSettings.levelId);
+			boolean restore = false;
+			Level<LS> level = (Level<LS>) levelsCache.get(currentLevelSettings.levelId);
 			if (level == null) {
-				level = currentLevelSettings.loadLevelState();
+				level = (Level<LS>) currentLevelSettings.loadLevelState();
 				if (level != null) {
+					restore = true;
+					level.setSettings(currentLevelSettings);
 					Gdx.app.debug(TAG, "Incomplete level was loaded: " + currentLevelSettings.levelId);
 				} else {
 					Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
-					Constructor<? extends Level<? extends LevelSettings>> constructor = currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
+					Constructor<? extends Level<LS>> constructor = (Constructor<? extends Level<LS>>) currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
 					level = constructor.newInstance(currentLevelSettings);
 				}
 				levelsCache.put(currentLevelSettings.levelId, level);
 			} else {
+				restore = level.savedState;
 				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);
-				level.reset();
 			}
-            setScreen(new GameScreen(this, level), ScreenTransitionFade.init(), callerClass);
+            setScreen(GameScreen.init(this, level, restore), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
             Gdx.app.error(TAG, "An exception has occured during level creation", exc);
         }

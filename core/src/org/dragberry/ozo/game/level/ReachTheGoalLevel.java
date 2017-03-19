@@ -9,10 +9,15 @@ import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 public class ReachTheGoalLevel extends Level<ReachTheGoalLevelSettings> {
 
-    public ReachTheGoalLevel(ReachTheGoalLevelSettings levelInfo) {
-    	super(levelInfo);
-    	addGoalToWin(new JustReachGoal(levelInfo.goal, levelInfo.operator));
-        addGoalToLose(new JustReachGoal(levelInfo.goalToLose, JustReachGoal.Operator.LESS));
+    public ReachTheGoalLevel() {}
+
+    public ReachTheGoalLevel(ReachTheGoalLevelSettings settings) {
+    	super(settings);
     }
 
+    @Override
+    protected void addGoals(ReachTheGoalLevelSettings settings) {
+        addGoalToWin(new JustReachGoal(settings.goal, settings.operator));
+        addGoalToLose(new JustReachGoal(settings.goalToLose, JustReachGoal.Operator.LESS));
+    }
 }

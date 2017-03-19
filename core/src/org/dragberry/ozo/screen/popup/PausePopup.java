@@ -23,14 +23,28 @@ public class PausePopup extends AbstractPopup {
 
     private Level<?> level;
 
-    public PausePopup(DirectedGame game, Level<?> level, LevelAttemptAuditEventRequest attempt) {
+    private static PausePopup instance;
+
+    public static PausePopup init(DirectedGame game, Level<?> level, LevelAttemptAuditEventRequest attempt) {
+        if (instance == null) {
+            instance = new PausePopup(game);
+        }
+        instance.level = level;
+        instance.levelAttempt = attempt;
+        return instance;
+    }
+
+    private PausePopup(DirectedGame game) {
         super(game);
-        this.level = level;
-        this.levelAttempt = levelAttempt;
     }
 
     @Override
-    protected void rebuildStage(float viewportWidth, float viewportHeight) {
+    protected void rebuildStage() {
+
+    }
+
+    @Override
+    protected void buildStage(float viewportWidth, float viewportHeight) {
         popupWindow.setWidth(viewportWidth * 0.75f);
         popupWindow.setHeight(viewportHeight * 0.375f);
         Label msgLbl = new Label(
@@ -68,8 +82,7 @@ public class PausePopup extends AbstractPopup {
 
                     @Override
                     public void execute() {
-                        GameController.instance.init(game, level);
-                        level.reset();
+                        GameController.instance.init(game, level, true);
                         level.started = true;
                     }
                 });

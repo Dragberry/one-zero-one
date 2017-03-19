@@ -21,38 +21,46 @@ import java.util.Map;
 
 public class VictoryPopup extends AbstractPopup {
 
+	private static VictoryPopup instance;
+
+	public static VictoryPopup init(DirectedGame game, NewLevelResultsResponse results) {
+		if (instance == null) {
+			instance = new VictoryPopup(game);
+		}
+		instance.results = results;
+		return instance;
+	}
+
 	private NewLevelResultsResponse results;
 
-	public VictoryPopup(DirectedGame game, NewLevelResultsResponse results) {
+	private Label congrLbl;
+	private Label wonLbl;
+	private Label bestResultLbl;
+
+	private TextButton nextLevelBtn;
+	private TextButton playAgainBtn;
+	private TextButton mainMenuBtn;
+
+	private Table resultTable;
+
+	private VictoryPopup(DirectedGame game) {
 		super(game);
-		this.results = results;
 	}
 
 	@Override
-	protected void rebuildStage(float viewportWidth, float viewportHeight) {
+	protected void rebuildStage() {
+		popupWindow.clear();
+		resultTable.clear();
 
-		popupWindow.setWidth(viewportWidth * 0.75f);
-		popupWindow.setHeight(viewportHeight * 0.75f);
-
-		Skin skin = Assets.instance.skin.skin;
-		Label congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), skin);
-		congrLbl.setAlignment(Align.center);
 		popupWindow.add(congrLbl).fill().expand();
 		popupWindow.row().pad(10f);
 
 		if (results.getResults().isEmpty()) {
-			Label wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), skin);
-			wonLbl.setAlignment(Align.center);
 			popupWindow.add(wonLbl).fill().expand();
 			popupWindow.row();
 		} else {
-			Label bestResultLbl = new Label(Assets.instance.translation.get("ozo.newRecord"), skin);
-			bestResultLbl.setAlignment(Align.center);
-			bestResultLbl.setWrap(true);
 			popupWindow.add(bestResultLbl).fill().expand();
 			popupWindow.row().expand().fill();
-
-			Table resultTable = new Table();
 
 			ArrayMap<LevelResultName, Integer> worlds = new ArrayMap<LevelResultName, Integer>(results.getResults().size());
 			ArrayMap<LevelResultName, Integer> personal = new ArrayMap<LevelResultName, Integer>(results.getResults().size());
@@ -71,11 +79,39 @@ public class VictoryPopup extends AbstractPopup {
 			popupWindow.add(resultTable).row();
 		}
 
-		popupWindow.add(createNextBtn()).fill().expand().pad(10f);
+		popupWindow.add(nextLevelBtn).fill().expand().pad(10f);
 		popupWindow.row();
-		popupWindow.add(createPlayAgainBtn()).fill().expand().pad(10f);
+		popupWindow.add(playAgainBtn).fill().expand().pad(10f);
 		popupWindow.row();
-		popupWindow.add(createMainMenuBtn()).fill().expand().pad(10f);
+		popupWindow.add(mainMenuBtn).fill().expand().pad(10f);
+	}
+
+	@Override
+	protected void buildStage(float viewportWidth, float viewportHeight) {
+		popupWindow.setWidth(viewportWidth * 0.75f);
+		popupWindow.setHeight(viewportHeight * 0.75f);
+
+		Skin skin = Assets.instance.skin.skin;
+		congrLbl = new Label(Assets.instance.translation.get("ozo.congratulations"), skin);
+		congrLbl.setAlignment(Align.center);
+
+		wonLbl = new Label(Assets.instance.translation.get("ozo.levelCompleted"), skin);
+		wonLbl.setAlignment(Align.center);
+
+		bestResultLbl = new Label(Assets.instance.translation.get("ozo.newRecord"), skin);
+		bestResultLbl.setAlignment(Align.center);
+		bestResultLbl.setWrap(true);
+
+		resultTable = new Table();
+
+		popupWindow.add(congrLbl).fill().expand();
+		popupWindow.row().pad(10f);
+
+		nextLevelBtn = createNextBtn();
+		playAgainBtn = createPlayAgainBtn();
+		mainMenuBtn = createMainMenuBtn();
+
+		rebuildStage();
 	}
 
 	private static void populateRecords(String titleKey, ArrayMap<LevelResultName, Integer> records, Table table) {
@@ -118,6 +154,23 @@ public class VictoryPopup extends AbstractPopup {
 		return btn;
 	}
 
+	private TextButton createPlayAgainBtn() {
+		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.playAgain"), Assets.instance.skin.skin);
+		btn.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.hidePopup(new ActionExecutor() {
+
+					@Override
+					public void execute() {
+						game.playLevel();
+					}
+				});
+			}
+		});
+		return btn;
+	}
+
 	private TextButton createMainMenuBtn() {
 		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.goToMenu"), Assets.instance.skin.skin);
 		btn.addListener(new ClickListener() {
@@ -128,23 +181,6 @@ public class VictoryPopup extends AbstractPopup {
 					@Override
 					public void execute() {
 						game.back();
-					}
-				});
-			}
-		});
-		return btn;
-	}
-
-	private TextButton createPlayAgainBtn() {
-		TextButton btn = new TextButton(Assets.instance.translation.get("ozo.playAgain"), Assets.instance.skin.skin);
-		btn.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				game.hidePopup(new ActionExecutor() {
-					
-					@Override
-					public void execute() {
-						game.playLevel();
 					}
 				});
 			}

@@ -21,7 +21,7 @@ public class BestResultScreen extends AbstractSelectLevelMenuScreen {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setPopup(new BestResultsPopup(game, levelSettings));
+                game.setPopup(BestResultsPopup.init(game, levelSettings));
             }
         });
     }

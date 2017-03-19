@@ -4,7 +4,6 @@ import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 public class Unit extends AbstractUnit {
 
@@ -18,46 +17,45 @@ public class Unit extends AbstractUnit {
 
 	public int x;
 	public int y;
-	public int previousValue;
 
-	private boolean selected;
-	private boolean selectedNeighbor;
+	public transient int previousValue;
+
+	private transient boolean selected;
+	private transient boolean selectedNeighbor;
 
 	public enum State {
 		FIXED, GROW_UP, GROW_DOWN, INITIAL
 	}
-	private State state;
-	private float time;
-	private static final float GROWING_TIME = 0.2f;
+	private transient State state;
+	private transient float time;
+	private transient static final float GROWING_TIME = 0.2f;
 
-	private boolean isFluctuated;
-	private float fluctuationsTime;
-	private static final float FLUCTUATIONS_TIME = 0.7f;
+	private transient boolean isFluctuated;
+	private transient float fluctuationsTime;
+	private transient static final float FLUCTUATIONS_TIME = 0.7f;
 
-	private float totalTime;
-
-	@Override
-	protected void init() {
-		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
-		bounds.set(position.x, position.y, dimension.x, dimension.y);
-	}
+	private transient float totalTime;
 
 	public Unit init(int value, int x, int y) {
-		this.previousValue = this.value;
-		this.value = value;
-		DigitUtil.resolveDigits(value, valueDigits);
-		this.dimension = new Vector2(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		this.x = x;
 		this.y = y;
+		this.value = value;
+		return init();
+	}
+
+	public Unit init() {
+		this.previousValue = this.value;
+		DigitUtil.resolveDigits(value, valueDigits);
+		dimension.set(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
+		position.set(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
+		bounds.set(position.x, position.y, dimension.x, dimension.y);
 		origin.set(dimension.x / 2, dimension.y / 2);
 		scale.set(UNIT_INITIAL_SCALE, UNIT_INITIAL_SCALE);
+		state = State.INITIAL;
 		flipY = false;
 		time = 0;
-		state = State.INITIAL;
 		selected = false;
 		selectedNeighbor = false;
-		position = new Vector2(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
-		bounds.set(position.x, position.y, dimension.x, dimension.y);
 		return this;
 	}
 
@@ -152,7 +150,8 @@ public class Unit extends AbstractUnit {
 	public void moveTo(int gameX, int gameY) {
 		this.x = gameX;
 		this.y = gameY;
-		init();
+		position.set(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
+		bounds.set(position.x, position.y, dimension.x, dimension.y);
 	}
 
 	@Override

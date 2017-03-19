@@ -7,10 +7,16 @@ import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 
 public class NoAnnihilationLevel extends Level<NoAnnihilationLevelSettings> {
 
-	public NoAnnihilationLevel(NoAnnihilationLevelSettings levelInfo) {
-		super(levelInfo);
-		addGoalToWin(new JustReachGoal(levelInfo.goal, Operator.EQUALS));
-		addGoalToLose(new AnnihilationCounterGoal(levelInfo.goalToLose));
+	public NoAnnihilationLevel() {}
+
+	public NoAnnihilationLevel(NoAnnihilationLevelSettings settings) {
+		super(settings);
+	}
+
+	@Override
+	protected void addGoals(NoAnnihilationLevelSettings settings) {
+		addGoalToWin(new JustReachGoal(settings.goal, Operator.EQUALS));
+		addGoalToLose(new AnnihilationCounterGoal(settings.goalToLose));
 	}
 
 }

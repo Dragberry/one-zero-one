@@ -12,8 +12,10 @@ import java.util.HashMap;
 
 public class MushroomRainLevel extends ReachTheGoalLevel {
 
-    public MushroomRainLevel(ReachTheGoalLevelSettings levelInfo) {
-        super(levelInfo);
+    public MushroomRainLevel() {}
+
+    public MushroomRainLevel(ReachTheGoalLevelSettings settings) {
+        super(settings);
     }
 
     @Override

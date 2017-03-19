@@ -1,7 +1,6 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
+import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -111,8 +110,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	}
 
 	private TextButton createRandomGameBtn() {
-		final String freeplay = "ozo.freeplay";
-		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), Assets.instance.skin.skin);
+		TextButton btn = new TextButton(Assets.instance.translation.format(Levels.L999_FREEPLAY), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(
@@ -121,16 +119,15 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.playLevel(new ReachTheGoalLevelSettings(
-						freeplay, -999, 9999), MainMenuScreen.this.getClass());
+				game.playLevel(game.levelProvider.freeplayLevel, MainMenuScreen.this.getClass());
 			}
 		});
 		return btn;
 	}
 	
 	private TextButton createResultsBtn() {
-		final String freeplay = "ozo.bestResults";
-		TextButton btn = new TextButton(Assets.instance.translation.format(freeplay), Assets.instance.skin.skin);
+		final String bestResults = "ozo.bestResults";
+		TextButton btn = new TextButton(Assets.instance.translation.format(bestResults), Assets.instance.skin.skin);
 		btn.setWidth(buttonWidth);
 		btn.setHeight(BTN_HEIGHT);
 		btn.setPosition(

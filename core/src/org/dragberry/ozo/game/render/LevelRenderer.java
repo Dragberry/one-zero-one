@@ -25,8 +25,7 @@ public class LevelRenderer implements Renderer {
 	private float bgOffsetY;
 	private float bgZoom;
 
-	public LevelRenderer(GameController gameController) {
-		this.gameController = gameController;
+	public LevelRenderer() {
 		init();
 	}
 
@@ -71,6 +70,8 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void init() {
+		this.gameController = GameController.getInstance();
+
 		float height = Gdx.graphics.getHeight() * (Constants.VIEWPORT_WIDTH / Gdx.graphics.getWidth());
 		cameraBg = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
 		cameraBg.position.set(Constants.VIEWPORT_WIDTH / 2, height / 2, 0);

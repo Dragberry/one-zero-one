@@ -64,11 +64,14 @@ public class GameController extends InputAdapter {
 
 	public static GameController instance;
 
-	public static GameController init(DirectedGame game, Level<?> level) {
+	public static GameController getInstance() {
+		return instance;
+	}
+
+	public static GameController init(DirectedGame game, Level<?> level, boolean restore) {
 		if (instance == null) {
 			instance = new GameController();
 			instance.game = game;
-			instance.level = level;
 			instance.neighbors = new Array<Unit>(4);
 
 			instance.posCountDigits = new Array<TextureRegion>(4);
@@ -93,27 +96,27 @@ public class GameController extends InputAdapter {
 		instance.motionTime = 0;
 		instance.selectedUnit = null;
 
-		for (int x = 0; x < level.width; x++) {
-			for (int y = 0; y < level.height; y++) {
-				Unit unit = level.generateUnit(x, y, instance.selectedUnit, instance.level.units[x][y]);
-				instance.level.units[x][y] = unit;
-				instance.updateStateForUnit(unit);
-			}
-		}
+		instance.level = level;
+		instance.level.reset(restore);
+		instance.updateStateForUnit();
 		instance.resolveStateDigits();
 		return instance;
 	}
 
-	private void updateStateForUnit(Unit unit) {
-		int value = unit.getValue();
-		if (value < 0) {
-			negCount++;
-			negSum += value;
-		} else if (value > 0) {
-			posCount++;
-			posSum += value;
-		} else {
-			zeroCount++;
+	private void updateStateForUnit() {
+		for (int x = 0; x < level.width; x++) {
+			for (int y = 0; y < level.height; y++) {
+				int value = level.units[x][y].getValue();
+				if (value < 0) {
+					negCount++;
+					negSum += value;
+				} else if (value > 0) {
+					posCount++;
+					posSum += value;
+				} else {
+					zeroCount++;
+				}
+			}
 		}
 	}
 
@@ -162,7 +165,7 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(selectedUnit, neighbors)) {
 			level.started = false;
-			game.setPopup(new DefeatPopup(game));
+			game.setPopup(DefeatPopup.init(game));
 
 			populateLevelAttempt(LevelAttemptStatus.FAILED);
 			game.logAuditEvent(attempt);
@@ -180,8 +183,6 @@ public class GameController extends InputAdapter {
 			level.settings.completed = true;
 			level.settings.updateResults(response);
 
-			final VictoryPopup victoryPopup = new VictoryPopup(game, response);
-
 			game.platform.getHttpClient().executeTask(
 					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
 							newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
@@ -192,7 +193,7 @@ public class GameController extends InputAdapter {
 						}
 					});
 
-			game.setPopup(victoryPopup);
+			game.setPopup(VictoryPopup.init(game, response));
 
 			populateLevelAttempt(LevelAttemptStatus.SUCCESS);
 			game.logAuditEvent(attempt);
@@ -255,6 +256,7 @@ public class GameController extends InputAdapter {
     	level.steps++;
     	if (isGameFinished()) {
 			level.settings.saveState(level, false);
+			level.savedState = false;
 			return;
 		}
     	selectedUnit.unselect();
@@ -290,11 +292,7 @@ public class GameController extends InputAdapter {
 		posCount = 0;
 		posSum = 0;
 		zeroCount = 0;
-		for (int x = 0; x < level.width; x++) {
-			for (int y = 0; y < level.height; y++) {
-				updateStateForUnit(level.units[x][y]);
-			}
-		}
+		updateStateForUnit();
 		resolveStateDigits();
 	}
 
@@ -504,7 +502,7 @@ public class GameController extends InputAdapter {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
 				populateLevelAttempt(LevelAttemptStatus.INTERRUPTED);
-				game.setPopup(new PausePopup(game, level, attempt));
+				game.setPopup(PausePopup.init(game, level, attempt));
 				break;
 		}
 		return false;

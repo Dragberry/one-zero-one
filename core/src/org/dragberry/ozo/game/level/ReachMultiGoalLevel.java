@@ -10,10 +10,17 @@ import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 
 public class ReachMultiGoalLevel extends Level<ReachMultiGoalLevelSettings> {
 
-    public ReachMultiGoalLevel(ReachMultiGoalLevelSettings levelInfo) {
-        super(levelInfo);
-    	addGoalToLose(new JustReachGoal(levelInfo.goalToLose, JustReachGoal.Operator.LESS));
-        addGoalToWin(new MultiGoal(levelInfo.goals));
+    public ReachMultiGoalLevel() {}
+
+    public ReachMultiGoalLevel(ReachMultiGoalLevelSettings settings) {
+        super(settings);
     }
+
+    @Override
+    protected void addGoals(ReachMultiGoalLevelSettings settings) {
+        addGoalToLose(new JustReachGoal(settings.goalToLose, JustReachGoal.Operator.LESS));
+        addGoalToWin(new MultiGoal(settings.goals));
+    }
+
 
 }

@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
-public abstract class AbstractUnit extends AbstractGameObject {
+import java.io.Serializable;
+
+public abstract class AbstractUnit extends AbstractGameObject implements Serializable {
 
 	protected int value;
-	protected boolean flipY;
-	protected Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
+	protected transient boolean flipY;
+	protected transient Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
 	
 	public AbstractUnit(int value) {
 		this.value = value;

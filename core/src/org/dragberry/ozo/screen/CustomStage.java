@@ -4,8 +4,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import org.dragberry.ozo.screen.popup.ConfirmationPopup;
-
 /**
  * Created by maksim on 18.02.17.
  */

@@ -28,8 +28,8 @@ public class GuiRenderer implements Renderer {
 	
 	private GameController gameController;
 	
-	public GuiRenderer(GameController gameController) {
-		this.gameController = gameController;
+	public GuiRenderer() {
+		this.gameController = GameController.getInstance();
 		init();
 	}
 	

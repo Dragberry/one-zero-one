@@ -16,12 +16,26 @@ import org.dragberry.ozo.screen.DirectedGame;
 
 public class DefeatPopup extends AbstractPopup {
 
-    public DefeatPopup(DirectedGame game) {
+    private static DefeatPopup instance;
+
+    public static DefeatPopup init(DirectedGame game) {
+        if (instance == null) {
+            instance = new DefeatPopup(game);
+        }
+        return instance;
+    }
+
+    private DefeatPopup(DirectedGame game) {
         super(game);
     }
 
     @Override
-    protected void rebuildStage(float viewportWidth, float viewportHeight) {
+    protected void rebuildStage() {
+
+    }
+
+    @Override
+    protected void buildStage(float viewportWidth, float viewportHeight) {
         popupWindow.setWidth(viewportWidth * 0.75f);
         popupWindow.setHeight(viewportHeight / 2);
         Label lostLbl = new Label(Assets.instance.translation.get("ozo.youLost"), Assets.instance.skin.skin);

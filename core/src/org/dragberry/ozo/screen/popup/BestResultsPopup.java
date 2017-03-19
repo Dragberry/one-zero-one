@@ -18,61 +18,97 @@ import java.util.Map;
 
 public class BestResultsPopup extends AbstractPopup {
 
-	private final LevelSettings levelSettings;
-	
-	public BestResultsPopup(DirectedGame game, LevelSettings levelSettings) {
+	private LevelSettings levelSettings;
+
+	private Skin skin = Assets.instance.skin.skin;
+
+	private Label msgLbl;
+	private Label uncompleteLbl;
+	private Label personalLbl;
+	private Label worldLbl;
+	private Label emtpyLbl;
+
+	private Table resultTable;
+
+	private TextButton backBtn;
+
+	private static BestResultsPopup instance;
+
+	public static BestResultsPopup init(DirectedGame game, LevelSettings levelSettings) {
+		if (instance == null) {
+			instance = new BestResultsPopup(game);
+		}
+		instance.levelSettings = levelSettings;
+		return instance;
+	}
+
+	private BestResultsPopup(DirectedGame game) {
 		super(game);
-		this.levelSettings = levelSettings;
 	}
 
 	@Override
-	protected void rebuildStage(float viewportWidth, float viewportHeight) {
-		 popupWindow.setWidth(viewportWidth * 0.75f);
-		 popupWindow.setHeight(viewportHeight / 2);
-		 Skin skin = Assets.instance.skin.skin;
-		 Label msgLbl = new Label(levelSettings.name, skin);
-		 msgLbl.setWrap(true);
-		 msgLbl.setAlignment(Align.center);
-		 popupWindow.add(msgLbl).fillX().expandX();
-		 popupWindow.row().expand().fill();
+	protected void rebuildStage() {
+		popupWindow.clear();
+		resultTable.clear();
+
+		popupWindow.add(msgLbl).fillX().expandX();
+		popupWindow.row().expand().fill();
 
 		if (!levelSettings.completed) {
-			Label uncompleteLbl = new Label(
-					Assets.instance.translation.get("ozo.levelUncomplete"), skin);
-			uncompleteLbl.setWrap(true);
-			uncompleteLbl.setAlignment(Align.center);
 			popupWindow.add(uncompleteLbl).fillX().expandX();
 			popupWindow.row().expand().fill();
 		}
 
+		resultTable.add(emtpyLbl).colspan(4).fill().expand().pad(5f);
+		resultTable.add(personalLbl).colspan(1).fill().expand().pad(5f);
+		resultTable.add(worldLbl).colspan(1).fill().expand().pad(5f);
+		resultTable.row();
 
-		 Table resultTable = new Table();
-		 Label lbl = new Label("", skin);
-		 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
-		 lbl = new Label(Assets.instance.translation.get("ozo.personal"), skin);
-		 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
-		 lbl = new Label(Assets.instance.translation.get("ozo.world"), skin);
-		 resultTable.add(lbl).colspan(1).fill().expand().pad(5f);
-		 resultTable.row();
 
-		 for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> result : levelSettings.results.getResults().entrySet()) {
-			 LevelResultName name = result.getKey();
-			 lbl = new Label(Assets.instance.translation.get(name.key()), skin);
-			 lbl.setWrap(true);
-			 resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
-			 LevelSingleResult<Integer> value = result.getValue();
-			 lbl = new Label(name.toString(value.getPersonal()), skin);
-			 lbl.setWrap(true);
-			 lbl.setAlignment(Align.center);
-			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
-			 lbl = new Label(name.toString(value.getWorlds()), skin);
-			 lbl.setWrap(true);
-			 lbl.setAlignment(Align.center);
-			 resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
-			 resultTable.row();
-		 }
-		 popupWindow.add(resultTable).row();
-		 popupWindow.add(createBackBtn());
+		Label lbl;
+		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> result : levelSettings.results.getResults().entrySet()) {
+			LevelResultName name = result.getKey();
+			lbl = new Label(Assets.instance.translation.get(name.key()), skin);
+			lbl.setWrap(true);
+			resultTable.add(lbl).colspan(4).fill().expand().pad(5f);
+			LevelSingleResult<Integer> value = result.getValue();
+			lbl = new Label(name.toString(value.getPersonal()), skin);
+			lbl.setWrap(true);
+			lbl.setAlignment(Align.center);
+			resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
+			lbl = new Label(name.toString(value.getWorlds()), skin);
+			lbl.setWrap(true);
+			lbl.setAlignment(Align.center);
+			resultTable.add(lbl).colspan(1).fill().expand().pad(5f, 0f, 5f, 10f);
+			resultTable.row();
+		}
+		popupWindow.add(resultTable).row();
+		popupWindow.add(backBtn);
+	}
+
+	@Override
+	protected void buildStage(float viewportWidth, float viewportHeight) {
+		popupWindow.setWidth(viewportWidth * 0.75f);
+		popupWindow.setHeight(viewportHeight / 2);
+
+		msgLbl = new Label(levelSettings.name, skin);
+		msgLbl.setWrap(true);
+		msgLbl.setAlignment(Align.center);
+
+		uncompleteLbl = new Label(
+				Assets.instance.translation.get("ozo.levelUncomplete"), skin);
+		uncompleteLbl.setWrap(true);
+		uncompleteLbl.setAlignment(Align.center);
+
+		resultTable = new Table();
+
+		emtpyLbl = new Label("", skin);
+		personalLbl = new Label(Assets.instance.translation.get("ozo.personal"), skin);
+		worldLbl = new Label(Assets.instance.translation.get("ozo.world"), skin);
+
+		backBtn = createBackBtn();
+
+		rebuildStage();
 	}
 	
 	private TextButton createBackBtn() {
@@ -86,8 +122,4 @@ public class BestResultsPopup extends AbstractPopup {
         return btn;
     }
 
-	@Override
-	public void hide() {
-		stage.dispose();
-	}
 }

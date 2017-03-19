@@ -9,9 +9,10 @@ import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 public class ChessboardLevel extends ReachTheGoalLevel {
 	
+	public ChessboardLevel() {}
 
-	public ChessboardLevel(ReachTheGoalLevelSettings levelInfo) {
-		super(levelInfo);
+	public ChessboardLevel(ReachTheGoalLevelSettings settings) {
+		super(settings);
 	}
 	
 	@Override

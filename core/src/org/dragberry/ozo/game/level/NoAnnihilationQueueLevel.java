@@ -6,8 +6,10 @@ import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 
 public class NoAnnihilationQueueLevel extends NoAnnihilationLevel {
 
-	public NoAnnihilationQueueLevel(NoAnnihilationLevelSettings levelInfo) {
-		super(levelInfo);
+	public NoAnnihilationQueueLevel() {}
+
+	public NoAnnihilationQueueLevel(NoAnnihilationLevelSettings settings) {
+		super(settings);
 	}
 	
 	@Override

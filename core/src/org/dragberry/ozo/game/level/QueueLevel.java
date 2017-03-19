@@ -6,8 +6,10 @@ import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 public class QueueLevel extends ReachTheGoalLevel {
 
-	public QueueLevel(ReachTheGoalLevelSettings levelInfo) {
-		super(levelInfo);
+	public QueueLevel() {}
+
+	public QueueLevel(ReachTheGoalLevelSettings settings) {
+		super(settings);
 	}
 
 	@Override

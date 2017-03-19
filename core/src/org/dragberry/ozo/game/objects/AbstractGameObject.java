@@ -6,24 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class AbstractGameObject {
 	
-	public Rectangle bounds;
-	public Vector2 position;
-	public Vector2 dimension;
-	public Vector2 origin;
-	public Vector2 scale;
-	public float rotation;
-	
-	
-	public AbstractGameObject() {
-		position = new Vector2();
-		dimension = new Vector2(1, 1);
-		origin = new Vector2();
-		scale = new Vector2(1, 1);
-		rotation = 0;
-		bounds = new Rectangle();
-	}
-	
-	protected void init() {}
+	public transient Vector2 position = new Vector2();
+	public transient Vector2 dimension = new Vector2(1, 1);
+	public transient Vector2 origin = new Vector2();
+	public transient Vector2 scale = new Vector2(1, 1);
+	public transient Rectangle bounds = new Rectangle();
+	public transient float rotation;
 	
 	public void update (float deltaTime) {
 		// do nothing by default

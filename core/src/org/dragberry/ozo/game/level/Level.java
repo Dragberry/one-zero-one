@@ -1,7 +1,6 @@
 package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
@@ -24,7 +23,7 @@ import java.util.Map;
  * Created by maksim on 30.01.17.
  */
 
-public abstract class Level<LI extends LevelSettings> implements Serializable {
+public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     private final static String TAG = Level.class.getName();
 
@@ -36,25 +35,40 @@ public abstract class Level<LI extends LevelSettings> implements Serializable {
     
     protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
-    public transient LI settings;
-    public final int width;
-    public final int height;
+    public transient LS settings;
+    public int width;
+    public int height;
 
     public Unit[][] units;
 
     public float time = 0;
     public int steps = 0;
     public int lostNumbers = 0;
-	public boolean started = false;
+    public boolean savedState = false;
+
+	public transient boolean started = false;
+
+
+    public Level() {}
+
+    /**
+     * Call this method when level has been restored
+     * @param settings
+     */
+    public void setSettings(LS settings) {
+        this.settings = settings;
+        addGoals(settings);
+    }
     
-    public Level(LI settings) {
+    public Level(LS settings) {
         this(settings, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
-    public Level(LI settings, int width, int height) {
+    public Level(LS settings, int width, int height) {
         this.width = width;
         this.height = height;
         this.settings = settings;
+        addGoals(settings);
         units = new Unit[width][height];
         createGenerators();
     }
@@ -90,6 +104,8 @@ public abstract class Level<LI extends LevelSettings> implements Serializable {
     protected void addGoalToLose(AbstractGoal goalToLose) {
         this.goalsToLose.add(goalToLose);
     }
+
+    protected abstract void addGoals(LS settings);
 
     public boolean isLost(Unit selectedUnit, Array<Unit> neighbors) {
         for (AbstractGoal goal : goalsToLose) {
@@ -144,15 +160,18 @@ public abstract class Level<LI extends LevelSettings> implements Serializable {
         return results;
     }
 
-    public void reset() {
-        time = 0;
-        steps = 0;
-        lostNumbers = 0;
+    public void reset(boolean restore) {
+        resetUnits(restore);
+        if (!restore) {
+            time = 0;
+            steps = 0;
+            lostNumbers = 0;
+        }
         started = false;
-        for (Goal goal: goalsToWin) {
+        for (Goal goal : goalsToWin) {
             goal.reset();
         }
-        for (Goal goal: goalsToLose) {
+        for (Goal goal : goalsToLose) {
             goal.reset();
         }
         for (Generator generator : generators.values()) {
@@ -160,4 +179,16 @@ public abstract class Level<LI extends LevelSettings> implements Serializable {
         }
     }
 
+    private void resetUnits(boolean restore) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                units[x][y] = restore ? units[x][y].init() : generateUnit(x, y, null, units[x][y]);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Level: " + settings.levelId;
+    }
 }

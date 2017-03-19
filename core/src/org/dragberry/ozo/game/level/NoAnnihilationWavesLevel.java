@@ -8,13 +8,19 @@ import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 
 public class NoAnnihilationWavesLevel extends NoAnnihilationLevel {
 
+	public NoAnnihilationWavesLevel() {}
+
 	private WavesGenerator generator = new WavesGenerator(-1, -1, width, height);
 
-	public NoAnnihilationWavesLevel(NoAnnihilationLevelSettings levelInfo) {
-		super(levelInfo);
+	public NoAnnihilationWavesLevel(NoAnnihilationLevelSettings settings) {
+		super(settings);
+	}
+
+	@Override
+	protected void addGoals(NoAnnihilationLevelSettings settings) {
+		super.addGoals(settings);
 		addGoalToLose(new JustReachGoal(-99, JustReachGoal.Operator.LESS));
 	}
-	
 
 	@Override
 	protected Generator getDefaultGenerator(int x, int y) {
@@ -22,8 +28,8 @@ public class NoAnnihilationWavesLevel extends NoAnnihilationLevel {
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
+	public void reset(boolean cleanState) {
+		super.reset(cleanState);
 		generator.reset(width, height);
 	}
 }

@@ -12,17 +12,27 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen extends AbstractGameScreen {
 
-	private Level<?> level;
+	private static GameScreen instance;
+
+	public static GameScreen init(DirectedGame game, Level<?> level, boolean restore) {
+		if (instance == null) {
+			instance = new GameScreen(game);
+		}
+		instance.gameController = GameController.init(game, level, restore);
+		instance.gameRenderer = GameRenderer.init();
+		instance.objectivePopup = ObjectivePopup.init(game, level, restore);
+		return instance;
+	}
+
 	private boolean paused;
-	
-	private ObjectivePopup objectivePopup;
 	
 	private GameController gameController;
 	private GameRenderer gameRenderer;
 
-	public GameScreen(DirectedGame game, Level<?> level) {
+	private ObjectivePopup objectivePopup;
+
+	public GameScreen(DirectedGame game) {
 		super(game);
-		this.level = level;
 	}
 
 	@Override
@@ -50,16 +60,11 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		gameController = GameController.init(game, level);
-		gameRenderer = new GameRenderer(gameController);
-		objectivePopup = new ObjectivePopup(game, level);
 		game.setPopup(objectivePopup);
 	}
 
 	@Override
-	public void hide() {
-		gameRenderer.dispose();
-	}
+	public void hide() {}
 
 	@Override
 	public void pause() {

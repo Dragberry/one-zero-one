@@ -15,6 +15,15 @@ import org.dragberry.ozo.game.util.Constants;
 public class GameRenderer implements Disposable {
 	
 	private static final String TAG = GameRenderer.class.getName();
+
+	private static GameRenderer instance;
+
+	public static GameRenderer init() {
+		if (instance == null) {
+			instance = new GameRenderer();
+		}
+		return instance;
+	}
 	
     private SpriteBatch batch;
 	private GameController gameController;
@@ -25,20 +34,16 @@ public class GameRenderer implements Disposable {
 	private ShapeRenderer shapeRenderer;
 	private boolean debug = false;
 
-	public GameRenderer(GameController controller) {
-		gameController = controller;
-		init();
+	public GameRenderer() {
+		gameController = GameController.getInstance();
+		batch = new SpriteBatch();
+		levelRenderer = new LevelRenderer();
+		CameraHelper.INSTANCE.camera = levelRenderer.getCamera();
+		guiRenderer = new GuiRenderer();
+		CameraHelper.INSTANCE.cameraGui = guiRenderer.getCamera();
+		initDebug();
 	}
 
-	public void init() {
-		batch = new SpriteBatch();
-		levelRenderer = new LevelRenderer(gameController);
-		CameraHelper.INSTANCE.camera = levelRenderer.getCamera();
-        guiRenderer = new GuiRenderer(gameController);
-		CameraHelper.INSTANCE.cameraGui = guiRenderer.getCamera();
-        initDebug();
-	}
-	
 	private void initDebug() {
 		if (!debug) {
 			return;

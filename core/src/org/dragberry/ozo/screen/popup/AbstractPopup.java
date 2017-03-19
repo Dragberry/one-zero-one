@@ -47,20 +47,25 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 	@Override
 	public void show() {
 		game.platform.getAdsController().showBannerAd();
-		stage = new Stage(new ScalingViewport(Scaling.stretch,
-				Constants.VIEWPORT_GUI_WIDTH,
-				Gdx.graphics.getHeight() *  Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
-
-		rebuildStage();
+		if (stage == null) {
+			stage = new Stage(new ScalingViewport(Scaling.stretch,
+					Constants.VIEWPORT_GUI_WIDTH,
+					Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()));
+			buildStage();
+		} else {
+			rebuildStage();
+		}
 	}
 
-	public void rebuildStage() {
+	protected abstract void rebuildStage();
+
+	protected void buildStage() {
 		popupWindow = new Window(popupTitle, Assets.instance.skin.skin);
 		final float viewportWidth = stage.getViewport().getCamera().viewportWidth;
 		final float viewportHeight = stage.getViewport().getCamera().viewportHeight;
 		stage.addActor(popupWindow);
 		popupWindow.row().fill().expand();
-		rebuildStage(viewportWidth, viewportHeight);
+		buildStage(viewportWidth, viewportHeight);
 		float popupWidth = popupWindow.getWidth();
 		float popupHeight = popupWindow.getHeight();
 		popupWindow.setPosition(
@@ -69,13 +74,12 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 		);
 	}
 
-	protected abstract void rebuildStage(float viewportWidth, float viewportHeight);
+	protected abstract void buildStage(float viewportWidth, float viewportHeight);
 
 
 	@Override
 	public void hide() {
 		game.platform.getAdsController().hideBannerAd();
-		stage.dispose();
 	}
 
 	@Override

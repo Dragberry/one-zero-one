@@ -13,6 +13,8 @@ public class WavesLevel extends ReachTheGoalLevel {
 
     private WavesGenerator generator = new WavesGenerator(-1, -1, width, height);
 
+    public WavesLevel() {}
+
     public WavesLevel(ReachTheGoalLevelSettings settings) {
         super(settings);
     }
@@ -23,8 +25,8 @@ public class WavesLevel extends ReachTheGoalLevel {
     }
 
     @Override
-    public void reset() {
-        super.reset();
+    public void reset(boolean cleanState) {
+        super.reset(cleanState);
         generator.reset(width, height);
     }
 }

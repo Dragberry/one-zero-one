@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Json;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelResults;
@@ -13,11 +14,6 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -28,8 +24,10 @@ public class LevelSettings {
 
 	private static final String TAG = LevelSettings.class.getName();
 
+	private static final Json JSON = new Json();
+
 	private static final String COMPLETED = "completed";
-	private static final String SAVED = "saved";
+	private static final String STATE = "state";
 	public static final String EMPTY = "";
 
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
@@ -37,7 +35,6 @@ public class LevelSettings {
     public final String name;
     
     public boolean completed;
-	public boolean saved;
 
 	public final LevelResults results = new LevelResults();
 
@@ -54,7 +51,6 @@ public class LevelSettings {
 
 	protected void load(Preferences prefs) {
 		completed = prefs.getBoolean(COMPLETED, false);
-		completed = prefs.getBoolean(SAVED, false);
 
 		Gdx.app.debug(TAG, "load results for " + levelId);
 		loadSingleResult(LevelResultName.TIME, prefs);
@@ -157,11 +153,6 @@ public class LevelSettings {
 		NewLevelResultsRequest newResultsRequest = new NewLevelResultsRequest();
 		newResultsRequest.setLevelId(levelId);
 
-		// Make level completed, if the level is not completed, but the new results are not empty
-//		if (!completed && !newResults.getResults().isEmpty()) {
-//			completed = true;
-//		}
-
 		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> entry : newResults.getResults().entrySet()) {
 			LevelResultName resultName = entry.getKey();
 			LevelSingleResult<Integer> newResult = entry.getValue();
@@ -197,27 +188,16 @@ public class LevelSettings {
 	public Level<? extends LevelSettings> loadLevelState() {
 		Gdx.app.debug(TAG, "Trying load incomplete level: " + levelId);
 		Preferences prefs = loadLevelStatePrefs();
-		String stateStr = prefs.getString("state");
+		String stateStr = prefs.getString(STATE);
 		if (stateStr.isEmpty()) {
 			return null;
 		}
-		byte[] state = stateStr.getBytes();
-		ObjectInputStream ois = null;
 		try {
-			ois = new ObjectInputStream(new ByteArrayInputStream(state));
-			return (Level<? extends LevelSettings>) ois.readObject();
+			return JSON.fromJson(clazz, stateStr);
 		} catch (Exception exc) {
-			Gdx.app.error(TAG, "An error has occurred during level loading: " + levelId, exc);
-		} finally {
-			if (ois != null) {
-				try {
-					ois.close();
-				} catch (Exception exc) {
-					Gdx.app.error(TAG, "An error has occurred during level loading: " + levelId, exc);
-				}
-			}
+			Gdx.app.error(TAG, "Unable to load level state!", exc);
+			return null;
 		}
-		return null;
 	}
 
 	private Preferences loadLevelStatePrefs() {
@@ -225,27 +205,13 @@ public class LevelSettings {
 	}
 
 	public void saveState(Level<? extends LevelSettings> level, boolean shouldSave) {
-		saved = shouldSave;
-		if (shouldSave) {
-			Preferences prefs = loadLevelStatePrefs();
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = null;
-			try {
-				oos = new ObjectOutputStream(bos);
-				oos.writeObject(level);
-				prefs.putString("state", bos.toString());
-				prefs.flush();
-			} catch (Exception exc) {
-				Gdx.app.error(TAG, "An error has occurred during level state saving: " + levelId, exc);
-			} finally {
-				if (oos != null) {
-					try {
-						oos.close();
-					} catch (Exception exc) {
-						Gdx.app.error(TAG, "An error has occurred during level state saving: " + levelId, exc);
-					}
-				}
-			}
-		}
+		Preferences prefs = loadLevelStatePrefs();
+		prefs.putString(STATE, shouldSave ? JSON.toJson(level) : EMPTY);
+		prefs.flush();
+	}
+
+	@Override
+	public String toString() {
+		return "Level Settings: " + levelId;
 	}
 }

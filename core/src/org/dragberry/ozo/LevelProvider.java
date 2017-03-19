@@ -5,6 +5,7 @@ import static org.dragberry.ozo.common.level.Levels.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
+import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.common.levelresult.LevelResults;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
@@ -37,14 +38,18 @@ public class LevelProvider {
 
     public final Array<LevelSettings> levels = new Array<LevelSettings>();
 
+    public final LevelSettings freeplayLevel;
+
     private final Platform platform;
 
     public LevelProvider(Platform platform) {
         this.platform = platform;
+        freeplayLevel = new ReachTheGoalLevelSettings(Levels.L999_FREEPLAY, -999, 9999);
+
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 25));
-        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -11, 33));
+        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 25, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -11, 33, JustReachGoal.Operator.MORE));
         levels.add(new ReachMultiGoalLevelSettings(L004_DOUBLE_5, -10, 5, 5));
         levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, L005_MUSHROOM_RAIN ,-10, 25));
         levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 10, 20));
@@ -65,6 +70,7 @@ public class LevelProvider {
 
     public void loadResults() {
         Gdx.app.debug(TAG, "loadResults...");
+        freeplayLevel.load();
         for (LevelSettings levelSettings : levels) {
             levelSettings.load();
         }
@@ -79,25 +85,30 @@ public class LevelProvider {
                     Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = result.getLevelResults();
 
-                    for (final LevelSettings levelSettings : levels) {
-                        LevelResults results = allResults.get(levelSettings.levelId);
-                        NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
-                        newResultsRequest.setUserId(platform.getUser().getId());
-                        levelSettings.save();
-                        if (!newResultsRequest.getResults().isEmpty()) {
-                            Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
-                            platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-                                    newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
-
-                                @Override
-                                public void onComplete(NewLevelResultsResponse result) {
-                                    Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
-                                    levelSettings.updateResults(result);
-                                    levelSettings.save();
-                                }
-                            });
-                        }
+                    processLevel(allResults, freeplayLevel);
+                    for (LevelSettings levelSettings : levels) {
+                        processLevel(allResults, levelSettings);
                     }
+                }
+            });
+        }
+    }
+
+    private void processLevel(Map<String, LevelResults> allResults, final LevelSettings levelSettings) {
+        LevelResults results = allResults.get(levelSettings.levelId);
+        NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
+        newResultsRequest.setUserId(platform.getUser().getId());
+        levelSettings.save();
+        if (!newResultsRequest.getResults().isEmpty()) {
+            Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
+            platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+                    newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
+
+                @Override
+                public void onComplete(NewLevelResultsResponse result) {
+                    Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
+                    levelSettings.updateResults(result);
+                    levelSettings.save();
                 }
             });
         }
