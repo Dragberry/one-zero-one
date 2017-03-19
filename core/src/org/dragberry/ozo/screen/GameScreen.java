@@ -1,7 +1,6 @@
 package org.dragberry.ozo.screen;
 
-import org.dragberry.ozo.game.GameController;
-import org.dragberry.ozo.game.GameRenderer;
+import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.popup.ObjectivePopup;
@@ -14,7 +13,7 @@ public class GameScreen extends AbstractGameScreen {
 
 	private static GameScreen instance;
 
-	public static GameScreen init(DirectedGame game, Level<?> level, boolean restore) {
+	public static GameScreen init(org.dragberry.ozo.game.DirectedGame game, Level<?> level, boolean restore) {
 		if (instance == null) {
 			instance = new GameScreen(game);
 		}
@@ -31,7 +30,7 @@ public class GameScreen extends AbstractGameScreen {
 
 	private ObjectivePopup objectivePopup;
 
-	public GameScreen(DirectedGame game) {
+	public GameScreen(org.dragberry.ozo.game.DirectedGame game) {
 		super(game);
 	}
 

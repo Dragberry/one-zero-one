@@ -11,7 +11,7 @@ import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.screen.ActionExecutor;
-import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.game.DirectedGame;
 
 /**
  * Created by maksim on 02.02.17.

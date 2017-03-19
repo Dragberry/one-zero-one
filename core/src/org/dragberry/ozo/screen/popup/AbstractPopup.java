@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.AbstractGameScreen;
-import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.game.DirectedGame;
 
 public abstract class AbstractPopup extends AbstractGameScreen {
 

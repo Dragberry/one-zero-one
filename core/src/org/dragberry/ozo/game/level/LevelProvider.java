@@ -1,4 +1,4 @@
-package org.dragberry.ozo;
+package org.dragberry.ozo.game.level;
 
 import static org.dragberry.ozo.common.level.Levels.*;
 
@@ -10,12 +10,6 @@ import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.common.levelresult.LevelResults;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
-import org.dragberry.ozo.game.level.ChessboardLevel;
-import org.dragberry.ozo.game.level.MushroomRainLevel;
-import org.dragberry.ozo.game.level.NoAnnihilationQueueLevel;
-import org.dragberry.ozo.game.level.NoAnnihilationWavesLevel;
-import org.dragberry.ozo.game.level.QueueLevel;
-import org.dragberry.ozo.game.level.WavesLevel;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;

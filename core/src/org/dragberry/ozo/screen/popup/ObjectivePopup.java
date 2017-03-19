@@ -14,7 +14,7 @@ import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
-import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.game.DirectedGame;
 
 public class ObjectivePopup extends AbstractPopup {
 

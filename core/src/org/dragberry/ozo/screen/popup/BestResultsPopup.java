@@ -4,7 +4,7 @@ import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelSingleResult;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
-import org.dragberry.ozo.screen.DirectedGame;
+import org.dragberry.ozo.game.DirectedGame;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;

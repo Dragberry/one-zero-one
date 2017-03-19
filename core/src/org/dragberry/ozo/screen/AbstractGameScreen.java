@@ -5,9 +5,9 @@ import com.badlogic.gdx.Screen;
 
 public abstract class AbstractGameScreen implements Screen {
 	
-	protected DirectedGame game;
+	protected org.dragberry.ozo.game.DirectedGame game;
 	
-	public AbstractGameScreen(DirectedGame game) {
+	public AbstractGameScreen(org.dragberry.ozo.game.DirectedGame game) {
 		this.game = game;
 	}
 

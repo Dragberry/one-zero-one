@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
-import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.util.Constants;
 
@@ -26,7 +26,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     private Stage stage;
     private String screenTitle;
 
-    public AbstractSelectLevelMenuScreen(DirectedGame game, String titleKey) {
+    public AbstractSelectLevelMenuScreen(org.dragberry.ozo.game.DirectedGame game, String titleKey) {
         super(game);
         this.screenTitle = Assets.instance.translation.get(titleKey);
     }

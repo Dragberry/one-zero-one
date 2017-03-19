@@ -15,7 +15,6 @@ import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
-import org.dragberry.ozo.screen.DirectedGame;
 import org.dragberry.ozo.screen.popup.DefeatPopup;
 import org.dragberry.ozo.screen.popup.PausePopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;

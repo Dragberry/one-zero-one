@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import org.dragberry.ozo.common.level.Levels;
-import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -26,7 +26,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 	private float buttonWidth;
 	private float firstBtnY;
 
-	public MainMenuScreen(DirectedGame game) {
+	public MainMenuScreen(org.dragberry.ozo.game.DirectedGame game) {
 		super(game);
 	}
 

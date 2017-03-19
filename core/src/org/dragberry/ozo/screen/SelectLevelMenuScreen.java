@@ -3,6 +3,7 @@ package org.dragberry.ozo.screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 
 /**
@@ -10,7 +11,7 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
  */
 public class SelectLevelMenuScreen extends AbstractSelectLevelMenuScreen {
 
-    public SelectLevelMenuScreen(DirectedGame game) {
+    public SelectLevelMenuScreen(org.dragberry.ozo.game.DirectedGame game) {
         super(game, "ozo.selectLevel");
     }
 
