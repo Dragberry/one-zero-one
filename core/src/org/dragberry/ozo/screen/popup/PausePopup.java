@@ -23,18 +23,13 @@ public class PausePopup extends AbstractPopup {
 
     private Level<?> level;
 
-    private static PausePopup instance;
-
-    public static PausePopup init(DirectedGame game, Level<?> level, LevelAttemptAuditEventRequest attempt) {
-        if (instance == null) {
-            instance = new PausePopup(game);
-        }
-        instance.level = level;
-        instance.levelAttempt = attempt;
-        return instance;
+    public PausePopup init(Level<?> level, LevelAttemptAuditEventRequest attempt) {
+        this.level = level;
+        this.levelAttempt = attempt;
+        return this;
     }
 
-    private PausePopup(DirectedGame game) {
+    public PausePopup(DirectedGame game) {
         super(game);
     }
 
@@ -82,7 +77,7 @@ public class PausePopup extends AbstractPopup {
 
                     @Override
                     public void execute() {
-                        GameController.instance.init(game, level, false);
+                        GameController.instance.init(level, false);
                         level.started = true;
                     }
                 });

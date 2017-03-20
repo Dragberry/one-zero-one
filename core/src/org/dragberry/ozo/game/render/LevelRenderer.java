@@ -16,7 +16,6 @@ public class LevelRenderer implements Renderer {
 	private static final float LONG_ASPECT_RATIO = 1f / 1.6f;
 
 	private OrthographicCamera camera;
-	private GameController gameController;
 
 	private OrthographicCamera cameraBg;
 
@@ -42,7 +41,7 @@ public class LevelRenderer implements Renderer {
 		CameraHelper.INSTANCE.applyTo(camera);
 		batch.setProjectionMatrix(camera.combined);
 		Unit selectedUnit = null;
-		for (Unit[] row : gameController.level.units) {
+		for (Unit[] row : GameController.instance.level.units) {
 			for (Unit unit : row) {
 				if (unit.isSelected()) {
 					selectedUnit = unit;
@@ -70,8 +69,6 @@ public class LevelRenderer implements Renderer {
 
 	@Override
 	public void init() {
-		this.gameController = GameController.getInstance();
-
 		float height = Gdx.graphics.getHeight() * (Constants.VIEWPORT_WIDTH / Gdx.graphics.getWidth());
 		cameraBg = new OrthographicCamera(Constants.VIEWPORT_WIDTH, height);
 		cameraBg.position.set(Constants.VIEWPORT_WIDTH / 2, height / 2, 0);
@@ -82,8 +79,8 @@ public class LevelRenderer implements Renderer {
 		camera.update();
 
 		CameraHelper.INSTANCE.setPosition(
-				gameController.level.width * Constants.UNIT_SIZE / 2,
-				gameController.level.height * Constants.UNIT_SIZE / 2);
+				GameController.instance.level.width * Constants.UNIT_SIZE / 2,
+				GameController.instance.level.height * Constants.UNIT_SIZE / 2);
 		setZoom();
 
 		initBackground();
@@ -92,12 +89,12 @@ public class LevelRenderer implements Renderer {
 	private void setZoom() {
 		float screenAspectRatio = camera.viewportWidth / camera.viewportHeight;
 		boolean longScreen = screenAspectRatio <= LONG_ASPECT_RATIO;
-        float gameAspectRatio = gameController.level.width / gameController.level.height;
+        float gameAspectRatio = GameController.instance.level.width / GameController.instance.level.height;
         float zoom;
         if (screenAspectRatio > 1 && screenAspectRatio > gameAspectRatio) {
-        	zoom = gameController.level.height * Constants.UNIT_SIZE / camera.viewportHeight;
+        	zoom = GameController.instance.level.height * Constants.UNIT_SIZE / camera.viewportHeight;
         } else {
-        	zoom = gameController.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
+        	zoom = GameController.instance.level.width * Constants.UNIT_SIZE / camera.viewportWidth;
         }
 		CameraHelper.INSTANCE.setZoom(longScreen ? zoom : zoom * 1.15f);
 	}
@@ -108,11 +105,6 @@ public class LevelRenderer implements Renderer {
 		cameraBg.update();
 		camera.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
 		camera.update();
-	}
-
-	@Override
-	public GameController getGameContoller() {
-		return gameController;
 	}
 
 	@Override

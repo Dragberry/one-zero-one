@@ -85,4 +85,8 @@ public abstract class AbstractPopup extends AbstractGameScreen {
 	@Override
 	public void pause() { }
 
+	@Override
+	public void dispose() {
+		stage.dispose();
+	}
 }

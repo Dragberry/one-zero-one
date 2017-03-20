@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.ArrayMap;
 
 import org.dragberry.ozo.game.level.LevelProvider;
 import org.dragberry.ozo.common.CommonConstants;
@@ -42,14 +43,18 @@ public abstract class DirectedGame implements ApplicationListener {
 	private static final String USER_ID = "userID";
 	private static final String SETTINGS_EXTENSION = ".settings";
 
+	public static DirectedGame game;
+
 	public final Platform platform;
 
 	private boolean auditEnabled;
 
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
-	
-    private LevelSettings currentLevelSettings;
+
+	public final ArrayMap<Class<? extends AbstractGameScreen>, AbstractGameScreen> screensCache = new ArrayMap<Class<? extends AbstractGameScreen>, AbstractGameScreen>();
+
+	private LevelSettings currentLevelSettings;
 
     private boolean init;
     private AbstractGameScreen currScreen;
@@ -78,6 +83,22 @@ public abstract class DirectedGame implements ApplicationListener {
 	public DirectedGame(Platform platform, boolean auditEnabled) {
 		this.platform = platform;
 		this.auditEnabled = auditEnabled;
+		game = this;
+	}
+
+	public <S extends AbstractGameScreen> S getScreen(Class<S> screenClass) {
+		S screen = (S) screensCache.get(screenClass);
+		if (screen == null) {
+			try {
+				Constructor<S> constructor = screenClass.getConstructor(DirectedGame.class);
+				screen = constructor.newInstance(this);
+				screensCache.put(screenClass, screen);
+			} catch (Exception exc) {
+				Gdx.app.debug(TAG, "An error has occured screen creation", exc);
+				Gdx.app.exit();
+			}
+		}
+		return screen;
 	}
 
 	/**
@@ -133,9 +154,6 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public void exit() {
 		logAuditEvent(createSimpleAuditRequest(AuditEventType.EXIT_APPLICATION));
-//		Assets.instance.dispose();
-//		GameController.dispose();
-//		GameRenderer.dispose();
 		Gdx.app.exit();
 	}
 
@@ -369,6 +387,11 @@ public abstract class DirectedGame implements ApplicationListener {
             init = false;
         }
 
+		for (AbstractGameScreen screen : screensCache.values()) {
+			screen.dispose();
+		}
+		screensCache.clear();
+
     }
     
     public void back() {
@@ -431,7 +454,7 @@ public abstract class DirectedGame implements ApplicationListener {
 				restore = level.savedState;
 				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);
 			}
-            setScreen(GameScreen.init(this, level, restore), ScreenTransitionFade.init(), callerClass);
+            setScreen(getScreen(GameScreen.class).init(level, restore), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
             Gdx.app.error(TAG, "An exception has occured during level creation", exc);
         }

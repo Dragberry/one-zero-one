@@ -31,18 +31,13 @@ public class ObjectivePopup extends AbstractPopup {
 	private TextButton continueBtn;
 	private TextButton okBtn;
 
-	private static ObjectivePopup instance;
-
-	public static ObjectivePopup init(DirectedGame game, Level<?> level, boolean restore) {
-		if (instance == null) {
-			instance = new ObjectivePopup(game);
-		}
-		instance.restore = restore;
-		instance.level = level;
-		return instance;
+	public ObjectivePopup init(Level<?> level, boolean restore) {
+		this.restore = restore;
+		this.level = level;
+		return this;
 	}
 	
-	private ObjectivePopup(DirectedGame game) {
+	public ObjectivePopup(DirectedGame game) {
 		super(game);
 	}
 
@@ -116,7 +111,7 @@ public class ObjectivePopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				GameController.init(game, level, false);
+				GameController.instance.init(level, false);
 				level.started = true;
 				game.setPopup(null);
 			}

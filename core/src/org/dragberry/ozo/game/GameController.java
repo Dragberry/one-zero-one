@@ -40,9 +40,7 @@ public class GameController extends InputAdapter {
 	private float motionTime ;
 	private Unit selectedUnit;
 	
-	private DirectedGame game;
 	public Level<?> level;
-	
 
 	private Array<Unit> neighbors;
 
@@ -62,44 +60,38 @@ public class GameController extends InputAdapter {
 	public LevelAttemptAuditEventRequest attempt;
 
 	public static GameController instance;
+	static {
+		instance = new GameController();
+		instance.neighbors = new Array<Unit>(4);
 
-	public static GameController getInstance() {
-		return instance;
+		instance.posCountDigits = new Array<TextureRegion>(4);
+		instance.posSumDigits = new Array<TextureRegion>(4);
+		instance.zeroCountDigits = new Array<TextureRegion>(4);
+		instance.lostNumbersDigits = new Array<TextureRegion>(4);
+		instance.negCountDigits = new Array<TextureRegion>(4);
+		instance.negSumDigits = new Array<TextureRegion>(4);
+
+		instance.attempt = new LevelAttemptAuditEventRequest();
+		instance.attempt.setUserId(DirectedGame.game.platform.getUser().getId());
 	}
 
-	public static GameController init(DirectedGame game, Level<?> level, boolean restore) {
-		if (instance == null) {
-			instance = new GameController();
-			instance.game = game;
-			instance.neighbors = new Array<Unit>(4);
+	public GameController init(Level<?> level, boolean restore) {
+		instance.neighbors.clear();
+		instance.negCount = 0;
+		instance.negSum = 0;
+		instance.posCount = 0;
+		instance.posSum = 0;
+		instance.zeroCount = 0;
 
-			instance.posCountDigits = new Array<TextureRegion>(4);
-			instance.posSumDigits = new Array<TextureRegion>(4);
-			instance.zeroCountDigits = new Array<TextureRegion>(4);
-			instance.lostNumbersDigits = new Array<TextureRegion>(4);
-			instance.negCountDigits = new Array<TextureRegion>(4);
-			instance.negSumDigits = new Array<TextureRegion>(4);
+		state = State.FIXED;
+		motionTime = 0;
+		selectedUnit = null;
 
-			instance.attempt = new LevelAttemptAuditEventRequest();
-			instance.attempt.setUserId(game.platform.getUser().getId());
-		} else {
-			instance.neighbors.clear();
-			instance.negCount = 0;
-			instance.negSum = 0;
-			instance.posCount = 0;
-			instance.posSum = 0;
-			instance.zeroCount = 0;
-		}
-
-		instance.state = State.FIXED;
-		instance.motionTime = 0;
-		instance.selectedUnit = null;
-
-		instance.level = level;
-		instance.level.reset(restore);
-		instance.updateStateForUnit();
-		instance.resolveStateDigits();
-		return instance;
+		this.level = level;
+		this.level.reset(restore);
+		updateStateForUnit();
+		resolveStateDigits();
+		return this;
 	}
 
 	private void updateStateForUnit() {
@@ -164,10 +156,10 @@ public class GameController extends InputAdapter {
 	private boolean isGameFinished() {
 		if (level.isLost(selectedUnit, neighbors)) {
 			level.started = false;
-			game.setPopup(DefeatPopup.init(game));
+			DirectedGame.game.setPopup(DirectedGame.game.getScreen(DefeatPopup.class));
 
 			populateLevelAttempt(LevelAttemptStatus.FAILED);
-			game.logAuditEvent(attempt);
+			DirectedGame.game.logAuditEvent(attempt);
 			return true;
 		}
 		if (level.isWon(selectedUnit, neighbors)) {
@@ -175,14 +167,14 @@ public class GameController extends InputAdapter {
 
 			NewLevelResultsRequest newResults = level.formNewResults();
 			newResults.setLevelId(level.settings.levelId);
-			newResults.setUserId(game.platform.getUser().getId());
+			newResults.setUserId(DirectedGame.game.platform.getUser().getId());
 			Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
 
 			NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
 			level.settings.completed = true;
 			level.settings.updateResults(response);
 
-			game.platform.getHttpClient().executeTask(
+			DirectedGame.game.platform.getHttpClient().executeTask(
 					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
 							newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
 
@@ -192,10 +184,10 @@ public class GameController extends InputAdapter {
 						}
 					});
 
-			game.setPopup(VictoryPopup.init(game, response));
+			DirectedGame.game.setPopup(DirectedGame.game.getScreen(VictoryPopup.class).init(response));
 
 			populateLevelAttempt(LevelAttemptStatus.SUCCESS);
-			game.logAuditEvent(attempt);
+			DirectedGame.game.logAuditEvent(attempt);
 			return true;
 		}
 		return false;
@@ -502,7 +494,7 @@ public class GameController extends InputAdapter {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
 				populateLevelAttempt(LevelAttemptStatus.INTERRUPTED);
-				game.setPopup(PausePopup.init(game, level, attempt));
+				DirectedGame.game.setPopup(DirectedGame.game.getScreen(PausePopup.class).init(level, attempt));
 				break;
 		}
 		return false;

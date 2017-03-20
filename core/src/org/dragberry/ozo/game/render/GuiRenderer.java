@@ -26,10 +26,7 @@ public class GuiRenderer implements Renderer {
 
 	private OrthographicCamera camera;
 	
-	private GameController gameController;
-	
 	public GuiRenderer() {
-		this.gameController = GameController.getInstance();
 		init();
 	}
 	
@@ -56,31 +53,26 @@ public class GuiRenderer implements Renderer {
 		BitmapFont font = Assets.instance.fonts.gui_s;
 		font.draw(batch, goal, 10, 15);
 		font.draw(batch, goalToLose, camera.viewportWidth - goalToLose.width - 10, 15);
-		getGameContoller().level.renderGoals(batch, 10.0f, 40.0f);
+		GameController.instance.level.renderGoals(batch, 10.0f, 40.0f);
 	}
 
 	private void renderLevelName(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
-        font.draw(batch, getGameContoller().level.settings.name,
+        font.draw(batch, GameController.instance.level.settings.name,
                 camera.viewportWidth / 4, 15, camera.viewportWidth / 2, Align.center, true);
 	}
 
-	@Override
-	public GameController getGameContoller() {
-		return gameController;
-	}
-	
 	private void renderSteps(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.draw(batch, stepsStr, camera.viewportWidth - stepsStr.width - 10, camera.viewportHeight - stepsStr.height * 4);
-		steps = new GlyphLayout(font, String.valueOf(gameController.level.steps));
+		steps = new GlyphLayout(font, String.valueOf(GameController.instance.level.steps));
 		font.draw(batch, steps, camera.viewportWidth - 25 - steps.width, camera.viewportHeight - steps.height * 2);
 	}
 	
 	private void renderTime(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_l;
 		font.draw(batch, timeStr, 25, camera.viewportHeight - timeStr.height * 4);
-		font.draw(batch, TimeUtils.timeToString((int) getGameContoller().level.time), 25, camera.viewportHeight - timeStr.height * 2);
+		font.draw(batch, TimeUtils.timeToString((int) GameController.instance.level.time), 25, camera.viewportHeight - timeStr.height * 2);
 	}
 	
 	private void renderState(SpriteBatch batch) {
@@ -101,12 +93,12 @@ public class GuiRenderer implements Renderer {
 		float posX = camera.viewportWidth / 2;
 		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.level.digits.minus.getRegionHeight();
 		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.level.digits.minus.getRegionHeight();
-		DigitUtil.draw(batch, gameController.zeroCountDigits,
+		DigitUtil.draw(batch, GameController.instance.zeroCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, gameController.lostNumbersDigits,
+		DigitUtil.draw(batch, GameController.instance.lostNumbersDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
@@ -125,12 +117,12 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
 		posX = camera.viewportWidth / 2 - ball.getRegionWidth();
-		DigitUtil.draw(batch, gameController.posCountDigits,
+		DigitUtil.draw(batch, GameController.instance.posCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, gameController.posSumDigits,
+		DigitUtil.draw(batch, GameController.instance.posSumDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
@@ -150,12 +142,12 @@ public class GuiRenderer implements Renderer {
 		
 		posX = camera.viewportWidth / 2 + ball.getRegionWidth();
 		
-		DigitUtil.draw(batch, gameController.negCountDigits,
+		DigitUtil.draw(batch, GameController.instance.negCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, gameController.negSumDigits,
+		DigitUtil.draw(batch, GameController.instance.negSumDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,

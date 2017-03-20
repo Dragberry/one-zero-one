@@ -21,14 +21,9 @@ import java.util.Map;
 
 public class VictoryPopup extends AbstractPopup {
 
-	private static VictoryPopup instance;
-
-	public static VictoryPopup init(DirectedGame game, NewLevelResultsResponse results) {
-		if (instance == null) {
-			instance = new VictoryPopup(game);
-		}
-		instance.results = results;
-		return instance;
+	public VictoryPopup init(NewLevelResultsResponse results) {
+		this.results = results;
+		return this;
 	}
 
 	private NewLevelResultsResponse results;
@@ -43,7 +38,7 @@ public class VictoryPopup extends AbstractPopup {
 
 	private Table resultTable;
 
-	private VictoryPopup(DirectedGame game) {
+	public VictoryPopup(DirectedGame game) {
 		super(game);
 	}
 

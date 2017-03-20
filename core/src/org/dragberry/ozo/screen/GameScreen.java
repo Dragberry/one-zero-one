@@ -11,18 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen extends AbstractGameScreen {
 
-	private static GameScreen instance;
-
-	public static GameScreen init(org.dragberry.ozo.game.DirectedGame game, Level<?> level, boolean restore) {
-		if (instance == null) {
-			instance = new GameScreen(game);
-		}
-		instance.gameController = GameController.init(game, level, restore);
-		instance.gameRenderer = GameRenderer.init();
-		instance.objectivePopup = ObjectivePopup.init(game, level, restore);
-		return instance;
-	}
-
 	private boolean paused;
 	
 	private GameController gameController;
@@ -30,8 +18,15 @@ public class GameScreen extends AbstractGameScreen {
 
 	private ObjectivePopup objectivePopup;
 
-	public GameScreen(org.dragberry.ozo.game.DirectedGame game) {
+	public GameScreen(DirectedGame game) {
 		super(game);
+	}
+
+	public GameScreen init(Level<?> level, boolean restore) {
+		this.gameController = GameController.instance.init(level, restore);
+		this.gameRenderer = new GameRenderer();
+		this.objectivePopup = game.getScreen(ObjectivePopup.class).init(level, restore);
+		return this;
 	}
 
 	@Override
@@ -59,22 +54,30 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
+		Gdx.app.debug(getClass().getName(), "Game screen is shown");
 		game.setPopup(objectivePopup);
 	}
 
 	@Override
-	public void hide() {}
+	public void hide() {
+		Gdx.app.debug(getClass().getName(), "Game screen is hidden");
+	}
 
 	@Override
 	public void pause() {
+		Gdx.app.debug(getClass().getName(), "Game screen is paused");
 		paused = true;
 	}
 	
 	@Override
 	public void resume() {
+		Gdx.app.debug(getClass().getName(), "Game screen is resumed");
 		super.resume();
 		paused = false;
 	}
 
-
+	@Override
+	public void dispose() {
+		gameRenderer.dispose();
+	}
 }

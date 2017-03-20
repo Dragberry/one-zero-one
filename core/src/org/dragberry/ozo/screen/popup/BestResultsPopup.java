@@ -32,17 +32,12 @@ public class BestResultsPopup extends AbstractPopup {
 
 	private TextButton backBtn;
 
-	private static BestResultsPopup instance;
-
-	public static BestResultsPopup init(DirectedGame game, LevelSettings levelSettings) {
-		if (instance == null) {
-			instance = new BestResultsPopup(game);
-		}
-		instance.levelSettings = levelSettings;
-		return instance;
+	public BestResultsPopup init(LevelSettings levelSettings) {
+		this.levelSettings = levelSettings;
+		return this;
 	}
 
-	private BestResultsPopup(DirectedGame game) {
+	public BestResultsPopup(DirectedGame game) {
 		super(game);
 	}
 

@@ -16,16 +16,7 @@ import org.dragberry.ozo.game.DirectedGame;
 
 public class DefeatPopup extends AbstractPopup {
 
-    private static DefeatPopup instance;
-
-    public static DefeatPopup init(DirectedGame game) {
-        if (instance == null) {
-            instance = new DefeatPopup(game);
-        }
-        return instance;
-    }
-
-    private DefeatPopup(DirectedGame game) {
+    public DefeatPopup(DirectedGame game) {
         super(game);
     }
 

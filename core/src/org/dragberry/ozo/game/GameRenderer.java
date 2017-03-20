@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,18 +17,8 @@ public class GameRenderer implements Disposable {
 	
 	private static final String TAG = GameRenderer.class.getName();
 
-	private static GameRenderer instance;
-
-	public static GameRenderer init() {
-		if (instance == null) {
-			instance = new GameRenderer();
-		}
-		return instance;
-	}
-	
     private SpriteBatch batch;
-	private GameController gameController;
-	
+
 	private Renderer levelRenderer;
 	private Renderer guiRenderer;
 	
@@ -35,7 +26,6 @@ public class GameRenderer implements Disposable {
 	private boolean debug = false;
 
 	public GameRenderer() {
-		gameController = GameController.getInstance();
 		batch = new SpriteBatch();
 		levelRenderer = new LevelRenderer();
 		CameraHelper.INSTANCE.camera = levelRenderer.getCamera();
@@ -70,13 +60,13 @@ public class GameRenderer implements Disposable {
 		shapeRenderer.set(ShapeType.Line);
 		shapeRenderer.setColor(Color.BLACK);
 		
-		float width = gameController.level.width * Constants.UNIT_SIZE;
-		float height = gameController.level.height * Constants.UNIT_SIZE;
-		for (int x = 0; x <= gameController.level.width; x++) {
+		float width = GameController.instance.level.width * Constants.UNIT_SIZE;
+		float height = GameController.instance.level.height * Constants.UNIT_SIZE;
+		for (int x = 0; x <= GameController.instance.level.width; x++) {
 			float xCoord = x * Constants.UNIT_SIZE;
 			shapeRenderer.line(xCoord, 0, xCoord, height);
 		}
-		for (int y = 0; y <= gameController.level.height; y++) {
+		for (int y = 0; y <= GameController.instance.level.height; y++) {
 			float yCoord = y * Constants.UNIT_SIZE;
 			shapeRenderer.line(0, yCoord, width, yCoord);
 		}
@@ -90,6 +80,7 @@ public class GameRenderer implements Disposable {
 
     @Override
     public void dispose() {
+		Gdx.app.debug(TAG, "GameRenderer disposed...");
         batch.dispose();
         if (debug) {
         	shapeRenderer.dispose();
