@@ -133,6 +133,9 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public void exit() {
 		logAuditEvent(createSimpleAuditRequest(AuditEventType.EXIT_APPLICATION));
+//		Assets.instance.dispose();
+//		GameController.dispose();
+//		GameRenderer.dispose();
 		Gdx.app.exit();
 	}
 

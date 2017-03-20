@@ -82,7 +82,7 @@ public class PausePopup extends AbstractPopup {
 
                     @Override
                     public void execute() {
-                        GameController.instance.init(game, level, true);
+                        GameController.instance.init(game, level, false);
                         level.started = true;
                     }
                 });

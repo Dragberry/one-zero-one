@@ -34,8 +34,6 @@ public class Unit extends AbstractUnit {
 	private transient float fluctuationsTime;
 	private transient static final float FLUCTUATIONS_TIME = 0.7f;
 
-	private transient float totalTime;
-
 	public Unit init(int value, int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -44,7 +42,6 @@ public class Unit extends AbstractUnit {
 	}
 
 	public Unit init() {
-		this.previousValue = this.value;
 		DigitUtil.resolveDigits(value, valueDigits);
 		dimension.set(Constants.UNIT_SIZE, Constants.UNIT_SIZE);
 		position.set(x * Constants.UNIT_SIZE, y * Constants.UNIT_SIZE);
@@ -61,7 +58,6 @@ public class Unit extends AbstractUnit {
 
 	@Override
 	public void update(float deltaTime) {
-		totalTime += deltaTime;
 		if (isFluctuated) {
 			fluctuationsTime += deltaTime;
 			if (fluctuationsTime < FLUCTUATIONS_TIME) {

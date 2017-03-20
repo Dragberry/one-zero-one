@@ -196,8 +196,8 @@ public class LevelSettings {
 			return JSON.fromJson(clazz, stateStr);
 		} catch (Exception exc) {
 			Gdx.app.error(TAG, "Unable to load level state!", exc);
-			return null;
 		}
+		return null;
 	}
 
 	private Preferences loadLevelStatePrefs() {
