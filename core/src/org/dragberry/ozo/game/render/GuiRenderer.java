@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 public class GuiRenderer implements Renderer {
 
 	private static final float DIGIT_STATE_SCALE = 0.8f;
+	private static final float UI_PANELS_SCALE = Constants.VIEWPORT_GUI_WIDTH / 480f;
 	private final GlyphLayout goal =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goal"));
 	private final GlyphLayout goalToLose =  new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.format("ozo.goalToLose"));
 	private final GlyphLayout timeStr = new GlyphLayout(Assets.instance.fonts.gui_l, Assets.instance.translation.format("ozo.time"));
@@ -25,6 +26,12 @@ public class GuiRenderer implements Renderer {
 	private GlyphLayout steps;
 
 	private OrthographicCamera camera;
+
+	private int uiTopPanelWidth;
+	private int uiTopPanelHeight;
+	private int uiBottomPanelWidth;
+	private int uiBottomPanelHeight;
+	private float uiBottomPanelY;
 	
 	public GuiRenderer() {
 		init();
@@ -36,19 +43,45 @@ public class GuiRenderer implements Renderer {
         camera = new OrthographicCamera();
 		camera.setToOrtho(true, Constants.VIEWPORT_GUI_WIDTH, height);
         camera.update();
+
+		uiTopPanelWidth = Assets.instance.level.uiTop.getRegionWidth();
+		uiTopPanelHeight = Assets.instance.level.uiTop.getRegionHeight();
+		uiBottomPanelWidth = Assets.instance.level.uiTop.getRegionWidth();
+		uiBottomPanelHeight = Assets.instance.level.uiTop.getRegionHeight();
+		uiBottomPanelY =  camera.viewportHeight - uiBottomPanelHeight * UI_PANELS_SCALE;
 	}
 	
 	@Override
 	public void render(SpriteBatch batch) {
 		batch.setProjectionMatrix(camera.combined);
 		batch.setColor(Color.WHITE);
+
+		renderTopUI(batch);
+		renderBottomUI(batch);
+
 		renderTime(batch);
 		renderLevelName(batch);
 		renderSteps(batch);
 		renderState(batch);
 		renderGoals(batch);
 	}
-	
+
+	private void renderTopUI(SpriteBatch batch) {
+		batch.draw(Assets.instance.level.uiTop,
+				0, 0,
+				0, 0,
+				uiTopPanelWidth, uiTopPanelHeight,
+				UI_PANELS_SCALE, UI_PANELS_SCALE, 0);
+	}
+
+	private void renderBottomUI(SpriteBatch batch) {
+		batch.draw(Assets.instance.level.uiBottom,
+				0, uiBottomPanelY,
+				0, 0,
+				uiBottomPanelWidth, uiBottomPanelHeight,
+				UI_PANELS_SCALE, UI_PANELS_SCALE, 0);
+	}
+
 	private void renderGoals(SpriteBatch batch) {
 		BitmapFont font = Assets.instance.fonts.gui_s;
 		font.draw(batch, goal, 10, 15);

@@ -93,11 +93,15 @@ public class Assets implements Disposable, AssetErrorListener {
 	public class AssetLevel {
 
 		public final AtlasRegion background;
+		public final AtlasRegion uiTop;
+		public final AtlasRegion uiBottom;
 		public final AssetUnit unit;
 		public final AssetDigits digits;
 
 		public AssetLevel(TextureAtlas atlas) {
 			background = atlas.findRegion("background");
+			uiTop = atlas.findRegion("ui_top");
+			uiBottom = atlas.findRegion("ui_bottom");
 			unit = new AssetUnit(atlas);
 			digits = new AssetDigits(atlas);
 		}
