@@ -2,11 +2,13 @@ package org.dragberry.ozo.game.level;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
+import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.RandomGenerator;
 import org.dragberry.ozo.game.level.goal.AbstractGoal;
@@ -14,6 +16,8 @@ import org.dragberry.ozo.game.level.goal.Goal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
+import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.DigitUtil;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -27,13 +31,13 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     private final static String TAG = Level.class.getName();
 
-	protected final static int DEFAULT_WIDTH = 6;
-    protected final static int DEFAULT_HEIGHT = 8;
+    private final static int DEFAULT_WIDTH = 6;
+    private final static int DEFAULT_HEIGHT = 8;
 
     public final transient Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     public final transient Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
-    
-    protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
+
+    private Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
     public transient LS settings;
     public int width;
@@ -48,6 +52,28 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
 	public transient boolean started = false;
 
+    private enum State {
+        FIXED, IN_MOTION
+    }
+
+    private transient State state;
+    public transient Unit selectedUnit;
+    private transient Array<Unit> neighbors;
+
+    private transient float motionTime ;
+
+    private transient int negCount;
+    private transient int negSum;
+    private transient int posCount;
+    private transient int posSum;
+    private transient int zeroCount;
+
+    public transient Array<TextureRegion> posCountDigits;
+    public transient Array<TextureRegion> posSumDigits;
+    public transient Array<TextureRegion> zeroCountDigits;
+    public transient Array<TextureRegion> lostNumbersDigits;
+    public transient Array<TextureRegion> negCountDigits;
+    public transient Array<TextureRegion> negSumDigits;
 
     public Level() {}
 
@@ -70,6 +96,15 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         this.settings = settings;
         addGoals(settings);
         units = new Unit[width][height];
+        neighbors = new Array<Unit>(4);
+
+        posCountDigits = new Array<TextureRegion>(4);
+        posSumDigits = new Array<TextureRegion>(4);
+        zeroCountDigits = new Array<TextureRegion>(4);
+        lostNumbersDigits = new Array<TextureRegion>(4);
+        negCountDigits = new Array<TextureRegion>(4);
+        negSumDigits = new Array<TextureRegion>(4);
+
         createGenerators();
     }
     
@@ -77,7 +112,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     	generators = Collections.emptyMap();
     }
 
-    public Unit generateUnit(int x, int y, Unit selectedUnit, Unit unit) {
+    protected Unit generateUnit(int x, int y, Unit selectedUnit, Unit unit) {
     	Generator gen = null;
     	if (!generators.isEmpty()) {
     		gen = generators.get(new Generator.Id(x, y));
@@ -107,7 +142,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     protected abstract void addGoals(LS settings);
 
-    public boolean isLost(Unit selectedUnit, Array<Unit> neighbors) {
+    private boolean isLost() {
         for (AbstractGoal goal : goalsToLose) {
             if (goal.isReached(units, selectedUnit, neighbors)) {
                 return true;
@@ -116,7 +151,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         return false;
     }
 
-    public boolean isWon(Unit selectedUnit, Array<Unit> neighbors) {
+    private boolean isWon() {
         boolean reached = true;
         for (AbstractGoal goal : goalsToWin) {
             if (!goal.isReached(units, selectedUnit, neighbors)) {
@@ -140,6 +175,25 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     public void update(float deltaTime) {
+        if (started) {
+            time += deltaTime;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    units[x][y].update(deltaTime);
+                }
+            }
+        }
+        if (state == State.IN_MOTION) {
+            motionTime += deltaTime;
+            if (motionTime >= Constants.UNIT_MOTION_TIME + 0.1) {
+                state = State.FIXED;
+                motionTime = 0;
+                finishStepExecution();
+            } else {
+                updateMotion(deltaTime);
+            }
+        }
+
         for (AbstractGoal goal : goalsToWin) {
             goal.update(deltaTime);
         }
@@ -161,7 +215,22 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     public void reset(boolean restore) {
+        selectedUnit = null;
+        neighbors.clear();
+        state = State.FIXED;
+        motionTime = 0;
+
+        negCount = 0;
+        negSum = 0;
+        posCount = 0;
+        posSum = 0;
+        zeroCount = 0;
+
         resetUnits(restore);
+
+        updateStateForUnit();
+        resolveStateDigits();
+
         if (!restore) {
             time = 0;
             steps = 0;
@@ -190,5 +259,265 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     @Override
     public String toString() {
         return settings == null ? "Unknown level" : "Level: " + settings.levelId;
+    }
+
+    public boolean inStepMotion() {
+        return state == State.IN_MOTION;
+    }
+
+    public Unit selectUnit(float xCoord, float yCoord) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (units[x][y].bounds.contains(xCoord, yCoord)) {
+                    Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
+                    return units[x][y];
+                }
+            }
+        }
+        return null;
+    }
+
+    public void deselectAllUnits() {
+        selectedUnit = null;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                units[x][y].unselect();
+                units[x][y].unselectNeighbor();
+            }
+        }
+    }
+
+    public boolean isUnitSelectedAgain(Unit currentSelectedUnit) {
+        return selectedUnit == currentSelectedUnit;
+    }
+
+    public void startStepMotion() {
+        selectedUnit.triggerSelectionEffect();
+        for (Unit neighbor : neighbors) {
+            neighbor.triggerSelectionEffect();
+        }
+        // step execution is started
+        state = State.IN_MOTION;
+    }
+
+    public void processFirstSection(Unit currentSelectedUnit) {
+        // unit first selection
+        selectedUnit = currentSelectedUnit;
+        selectedUnit.select();
+        selectedUnit.triggerSelectionEffect();
+        getNeighbors(selectedUnit);
+        for (Unit neighbor : neighbors) {
+            neighbor.selectNeighbor();
+            neighbor.triggerSelectionEffect();
+        }
+    }
+
+    private void getNeighbors(Unit unit) {
+        neighbors.clear();
+        if (unit.y != 0) {
+            neighbors.add(units[unit.x][unit.y - 1]);
+        }
+        if (unit.x != width - 1) {
+            neighbors.add(units[unit.x + 1][unit.y]);
+        }
+        if (unit.y != height - 1) {
+            neighbors.add(units[unit.x][unit.y + 1]);
+        }
+        if (unit.x != 0) {
+            neighbors.add(units[unit.x - 1][unit.y]);
+        }
+    }
+
+    private void updateMotion(float deltaTime) {
+        float step = deltaTime * Constants.UNIT_SPEED;
+        shiftTopUnits(step);
+        shiftRightUnits(step);
+        shiftBottomUnits(step);
+        shiftLeftUnits(step);
+    }
+
+    private void shiftTopUnits(float step) {
+        for (int y = selectedUnit.y + 1; y < height; y++) {
+            Unit unitToMove = units[selectedUnit.x][y];
+            unitToMove.moveTo(Unit.Direction.SOUTH, step);
+        }
+    }
+
+    private void shiftRightUnits(float step) {
+        for (int x = selectedUnit.x + 1; x < width; x++) {
+            Unit unitToMove = units[x][selectedUnit.y];
+            unitToMove.moveTo(Unit.Direction.WEST, step);
+        }
+    }
+
+    private void shiftBottomUnits(float step) {
+        for (int y = selectedUnit.y - 1; y >= 0; y--) {
+            Unit unitToMove = units[selectedUnit.x][y];
+            unitToMove.moveTo(Unit.Direction.NORTH, step);
+        }
+    }
+
+    private void shiftLeftUnits(float step) {
+        for (int x = selectedUnit.x - 1; x >= 0; x--) {
+            Unit unitToMove = units[x][selectedUnit.y];
+            unitToMove.moveTo(Unit.Direction.EAST, step);
+        }
+    }
+
+    private void finishStepExecution() {
+        // sum neighbors
+        selectedUnit.previousValue = selectedUnit.getValue();
+        int valueToAdd = 0;
+        for (Unit neighbor : neighbors) {
+            valueToAdd +=neighbor.getValue();
+            neighbor.previousValue = neighbor.getValue();
+        }
+        selectedUnit.addValue(valueToAdd);
+        // logical shift all units
+        // fix and recalculate position
+        shiftTopUnits(selectedUnit);
+        shiftRightUnits(selectedUnit);
+        shiftBottomUnits(selectedUnit);
+        shiftLeftUnits(selectedUnit);
+        refreshState();
+        steps++;
+        if (isGameFinished()) {
+            settings.saveState(this, false);
+            savedState = false;
+            return;
+        }
+        selectedUnit.unselect();
+        selectedUnit = null;
+    }
+
+    private boolean isGameFinished() {
+        if (isLost()) {
+            GameController.instance.onGameLost(this);
+            return true;
+        }
+        if (isWon()) {
+            GameController.instance.onGameWon(this);
+            return true;
+        }
+        return false;
+    }
+
+    private void shiftBottomUnits(Unit selectedUnit) {
+        Unit neighbor = null;
+        if (selectedUnit.y != 0) {
+            neighbor = units[selectedUnit.x][selectedUnit.y - 1];
+        }
+        if (neighbor != null) {
+            for (int y = selectedUnit.y - 1; y > 0; y--) {
+                Unit unitToMove = units[selectedUnit.x][y - 1];
+                units[selectedUnit.x][y] = unitToMove;
+                unitToMove.moveTo(selectedUnit.x, y);
+            }
+            units[selectedUnit.x][0] = generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
+        }
+    }
+
+    private void shiftTopUnits(Unit selectedUnit) {
+        Unit neighbor = null;
+        if (selectedUnit.y != height - 1) {
+            neighbor = units[selectedUnit.x][selectedUnit.y + 1];
+        }
+        if (neighbor != null) {
+            for (int y = selectedUnit.y + 1; y < height - 1; y++) {
+                Unit unitToMove = units[selectedUnit.x][y + 1];
+                units[selectedUnit.x][y] = unitToMove;
+                unitToMove.moveTo(selectedUnit.x, y);
+            }
+            units[selectedUnit.x][height - 1] = generateUnit(selectedUnit.x, height - 1, selectedUnit, neighbor);
+        }
+    }
+
+    private void shiftRightUnits(Unit selectedUnit) {
+        Unit neighbor = null;
+        if (selectedUnit.x != width - 1) {
+            neighbor = units[selectedUnit.x + 1][selectedUnit.y];
+        }
+        if (neighbor != null) {
+            for (int x = selectedUnit.x + 1; x < width - 1; x++) {
+                Unit unitToMove = units[x + 1][selectedUnit.y];
+                units[x][selectedUnit.y] = unitToMove;
+                unitToMove.moveTo(x, selectedUnit.y);
+            }
+            units[width - 1][selectedUnit.y] = generateUnit(width - 1, selectedUnit.y, selectedUnit, neighbor);
+        }
+    }
+
+    private void shiftLeftUnits(Unit selectedUnit) {
+        Unit neighbor = null;
+        if (selectedUnit.x != 0) {
+            neighbor = units[selectedUnit.x - 1][selectedUnit.y];
+        }
+        if (neighbor != null) {
+            for (int x = selectedUnit.x - 1; x > 0; x--) {
+                Unit unitToMove = units[x - 1][selectedUnit.y];
+                units[x][selectedUnit.y] = unitToMove;
+                unitToMove.moveTo(x, selectedUnit.y);
+            }
+            units[0][selectedUnit.y] = generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
+        }
+    }
+
+    private void refreshState() {
+        updateLostNumbers();
+        negCount = 0;
+        negSum = 0;
+        posCount = 0;
+        posSum = 0;
+        zeroCount = 0;
+        updateStateForUnit();
+        resolveStateDigits();
+    }
+
+    private void updateLostNumbers() {
+        int pos = 0;
+        int neg = 0;
+        if (selectedUnit.previousValue > 0) {
+            pos += selectedUnit.previousValue;
+        } else if (selectedUnit.previousValue < 0) {
+            neg += -selectedUnit.previousValue;
+        }
+        int value;
+        for (Unit unit : neighbors) {
+            value = unit.previousValue;
+            if (value > 0) {
+                pos += value;
+            } else if (value < 0) {
+                neg += -value;
+            }
+        }
+        if (neg != 0 && pos != 0) {
+            lostNumbers += pos < neg ? pos : neg;
+        }
+    }
+
+    private void updateStateForUnit() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int value = units[x][y].getValue();
+                if (value < 0) {
+                    negCount++;
+                    negSum += value;
+                } else if (value > 0) {
+                    posCount++;
+                    posSum += value;
+                } else {
+                    zeroCount++;
+                }
+            }
+        }
+    }
+
+    private void resolveStateDigits() {
+        DigitUtil.resolveDigits(posCount, posCountDigits, false);
+        DigitUtil.resolveDigits(posSum, posSumDigits);
+        DigitUtil.resolveDigits(zeroCount, zeroCountDigits, false);
+        DigitUtil.resolveDigits(lostNumbers, lostNumbersDigits, false);
+        DigitUtil.resolveDigits(negCount, negCountDigits, false);
+        DigitUtil.resolveDigits(negSum, negSumDigits);
     }
 }

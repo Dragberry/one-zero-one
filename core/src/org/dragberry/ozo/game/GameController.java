@@ -1,6 +1,11 @@
 package org.dragberry.ozo.game;
 
-import java.text.MessageFormat;
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.Vector3;
 
 import org.dragberry.ozo.common.audit.AuditEventType;
 import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
@@ -9,137 +14,38 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.objects.Unit;
-import org.dragberry.ozo.game.objects.Unit.Direction;
 import org.dragberry.ozo.game.util.CameraHelper;
-import org.dragberry.ozo.game.util.Constants;
-import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.screen.popup.DefeatPopup;
 import org.dragberry.ozo.screen.popup.PausePopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import java.text.MessageFormat;
 
 public class GameController extends InputAdapter {
 
 	private static final String TAG = GameController.class.getName();
 
-	private enum State {
-		FIXED, IN_MOTION
-	}
-
-	private State state;
-	private float motionTime ;
-	private Unit selectedUnit;
-	
 	public Level<?> level;
-
-	private Array<Unit> neighbors;
-
-	private int negCount;
-	private int negSum;
-	private int posCount;
-	private int posSum;
-	private int zeroCount;
-	
-	public Array<TextureRegion> posCountDigits;
-	public Array<TextureRegion> posSumDigits;
-	public Array<TextureRegion> zeroCountDigits;
-	public Array<TextureRegion> lostNumbersDigits;
-	public Array<TextureRegion> negCountDigits;
-	public Array<TextureRegion> negSumDigits;
 
 	public LevelAttemptAuditEventRequest attempt;
 
 	public static GameController instance;
 	static {
 		instance = new GameController();
-		instance.neighbors = new Array<Unit>(4);
-
-		instance.posCountDigits = new Array<TextureRegion>(4);
-		instance.posSumDigits = new Array<TextureRegion>(4);
-		instance.zeroCountDigits = new Array<TextureRegion>(4);
-		instance.lostNumbersDigits = new Array<TextureRegion>(4);
-		instance.negCountDigits = new Array<TextureRegion>(4);
-		instance.negSumDigits = new Array<TextureRegion>(4);
-
 		instance.attempt = new LevelAttemptAuditEventRequest();
 		instance.attempt.setUserId(DirectedGame.game.platform.getUser().getId());
 	}
 
 	public GameController init(Level<?> level, boolean restore) {
-		instance.neighbors.clear();
-		instance.negCount = 0;
-		instance.negSum = 0;
-		instance.posCount = 0;
-		instance.posSum = 0;
-		instance.zeroCount = 0;
-
-		state = State.FIXED;
-		motionTime = 0;
-		selectedUnit = null;
-
 		this.level = level;
 		this.level.reset(restore);
-		updateStateForUnit();
-		resolveStateDigits();
 		return this;
 	}
 
-	private void updateStateForUnit() {
-		for (int x = 0; x < level.width; x++) {
-			for (int y = 0; y < level.height; y++) {
-				int value = level.units[x][y].getValue();
-				if (value < 0) {
-					negCount++;
-					negSum += value;
-				} else if (value > 0) {
-					posCount++;
-					posSum += value;
-				} else {
-					zeroCount++;
-				}
-			}
-		}
-	}
-
-	private void resolveStateDigits() {
-		DigitUtil.resolveDigits(posCount, posCountDigits, false);
-		DigitUtil.resolveDigits(posSum, posSumDigits);
-		DigitUtil.resolveDigits(zeroCount, zeroCountDigits, false);
-		DigitUtil.resolveDigits(level.lostNumbers, lostNumbersDigits, false);
-		DigitUtil.resolveDigits(negCount, negCountDigits, false);
-		DigitUtil.resolveDigits(negSum, negSumDigits);
-	}
-
 	public void update(float deltaTime) {
-    	if (level.started) {
-    		level.time += deltaTime;
-    		for (int x = 0; x < level.width; x++) {
-    			for (int y = 0; y < level.height; y++) {
-					level.units[x][y].update(deltaTime);
-    			}
-    		}
-    	}
 		level.update(deltaTime);
-    	if (state == State.IN_MOTION) {
-    		motionTime += deltaTime;
-    		if (motionTime >= Constants.UNIT_MOTION_TIME + 0.1) {
-        		state = State.FIXED;
-        		motionTime = 0;
-        		finishStepExecution();
-        	} else {
-        		updateMotion(deltaTime);
-        	}
-    	}
     	handleDebugInput(deltaTime);
 		CameraHelper.INSTANCE.update(deltaTime);
     }
@@ -153,274 +59,61 @@ public class GameController extends InputAdapter {
 		attempt.setStatus(status);
 	}
 
-	private boolean isGameFinished() {
-		if (level.isLost(selectedUnit, neighbors)) {
-			level.started = false;
-			DirectedGame.game.setPopup(DirectedGame.game.getScreen(DefeatPopup.class));
-
-			populateLevelAttempt(LevelAttemptStatus.FAILED);
-			DirectedGame.game.logAuditEvent(attempt);
-			return true;
-		}
-		if (level.isWon(selectedUnit, neighbors)) {
-			level.started = false;
-
-			NewLevelResultsRequest newResults = level.formNewResults();
-			newResults.setLevelId(level.settings.levelId);
-			newResults.setUserId(DirectedGame.game.platform.getUser().getId());
-			Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
-
-			NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
-			level.settings.completed = true;
-			level.settings.updateResults(response);
-
-			DirectedGame.game.platform.getHttpClient().executeTask(
-					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-							newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
-
-						@Override
-						public void onComplete(NewLevelResultsResponse result) {
-							level.settings.updateResults(result);
-						}
-					});
-
-			DirectedGame.game.setPopup(DirectedGame.game.getScreen(VictoryPopup.class).init(response));
-
-			populateLevelAttempt(LevelAttemptStatus.SUCCESS);
-			DirectedGame.game.logAuditEvent(attempt);
-			return true;
-		}
-		return false;
+	public void onGameLost(Level<?> level) {
+		level.started = false;
+		DirectedGame.game.setPopup(DirectedGame.game.getScreen(DefeatPopup.class));
+		populateLevelAttempt(LevelAttemptStatus.FAILED);
+		DirectedGame.game.logAuditEvent(attempt);
 	}
 
-	private void updateMotion(float deltaTime) {
-    	float step = deltaTime * Constants.UNIT_SPEED;
-		shiftTopUnits(step);
-		shiftRightUnits(step);
-		shiftBottomUnits(step);
-		shiftLeftUnits(step);
-    }
-    
-    private void shiftTopUnits(float step) {
-    	for (int y = selectedUnit.y + 1; y < level.height; y++) {
-			Unit unitToMove = level.units[selectedUnit.x][y];
-			unitToMove.moveTo(Direction.SOUTH, step);
-		}
-    }
-    
-    private void shiftRightUnits(float step) {
-    	for (int x = selectedUnit.x + 1; x < level.width; x++) {
-			Unit unitToMove = level.units[x][selectedUnit.y];
-			unitToMove.moveTo(Direction.WEST, step);
-		}
-    }
-    
-    private void shiftBottomUnits(float step) {
-    	for (int y = selectedUnit.y - 1; y >= 0; y--) {
-			Unit unitToMove = level.units[selectedUnit.x][y];
-			unitToMove.moveTo(Direction.NORTH, step);
-		}
-    }
-    
-    private void shiftLeftUnits(float step) {
-    	for (int x = selectedUnit.x - 1; x >= 0; x--) {
-			Unit unitToMove = level.units[x][selectedUnit.y];
-			unitToMove.moveTo(Direction.EAST, step);
-		}
-    }
+	public void onGameWon(final Level<?> level) {
+		level.started = false;
 
-    private void finishStepExecution() {
-    	// sum neighbors
-    	selectedUnit.previousValue = selectedUnit.getValue();
-    	int valueToAdd = 0;
-    	for (Unit neighbor : neighbors) {
-    		valueToAdd +=neighbor.getValue();
-			neighbor.previousValue = neighbor.getValue();
-    	}
-    	selectedUnit.addValue(valueToAdd);
-    	// logical shift all units
-    	// fix and recalculate position
-    	shiftTopUnits(selectedUnit);
-    	shiftRightUnits(selectedUnit);
-    	shiftBottomUnits(selectedUnit);
-    	shiftLeftUnits(selectedUnit);
-		refreshState();
-    	level.steps++;
-    	if (isGameFinished()) {
-			level.settings.saveState(level, false);
-			level.savedState = false;
+		NewLevelResultsRequest newResults = level.formNewResults();
+		newResults.setLevelId(level.settings.levelId);
+		newResults.setUserId(DirectedGame.game.platform.getUser().getId());
+		Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
+
+		NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
+		level.settings.completed = true;
+		level.settings.updateResults(response);
+
+		DirectedGame.game.platform.getHttpClient().executeTask(
+				new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+						newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
+
+					@Override
+					public void onComplete(NewLevelResultsResponse result) {
+						level.settings.updateResults(result);
+					}
+				});
+
+		DirectedGame.game.setPopup(DirectedGame.game.getScreen(VictoryPopup.class).init(response));
+
+		populateLevelAttempt(LevelAttemptStatus.SUCCESS);
+		DirectedGame.game.logAuditEvent(attempt);
+	}
+
+    private void onScreenTouch(float xCoord, float yCoord) {
+		if (level.inStepMotion()) {
+			// level is in motion
 			return;
 		}
-    	selectedUnit.unselect();
-    	selectedUnit = null;
-    }
-
-	private void updateLostNumbers() {
-		int pos = 0;
-		int neg = 0;
-		if (selectedUnit.previousValue > 0) {
-			pos += selectedUnit.previousValue;
-		} else if (selectedUnit.previousValue < 0) {
-			neg += -selectedUnit.previousValue;
+		Unit currentSelectedUnit = level.selectUnit(xCoord, yCoord);
+		if (currentSelectedUnit == null) {
+			// unit is border unit
+			level.deselectAllUnits();
+			return;
 		}
-		int value;
-		for (Unit unit : neighbors) {
-			value = unit.previousValue;
-			if (value > 0) {
-				pos += value;
-			} else if (value < 0) {
-				neg += -value;
-			}
+		if (level.isUnitSelectedAgain(currentSelectedUnit)) {
+			level.startStepMotion();
+			return;
 		}
-		if (neg != 0 && pos != 0) {
-			level.lostNumbers += pos < neg ? pos : neg;
+		if (level.selectedUnit != null) {
+			level.deselectAllUnits();
+		} else {
+			level.processFirstSection(currentSelectedUnit);
 		}
-	}
-
-	private void refreshState() {
-		updateLostNumbers();
-		negCount = 0;
-		negSum = 0;
-		posCount = 0;
-		posSum = 0;
-		zeroCount = 0;
-		updateStateForUnit();
-		resolveStateDigits();
-	}
-
-	private void shiftBottomUnits(Unit selectedUnit) {
-		Unit neighbor = null;
-		if (selectedUnit.y != 0) {
-			neighbor = level.units[selectedUnit.x][selectedUnit.y - 1];
-		}
-		if (neighbor != null) {
-			for (int y = selectedUnit.y - 1; y > 0; y--) {
-				Unit unitToMove = level.units[selectedUnit.x][y - 1];
-				level.units[selectedUnit.x][y] = unitToMove;
-				unitToMove.moveTo(selectedUnit.x, y);
-			}
-			level.units[selectedUnit.x][0] = level.generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
-		}
-	}
-    
-    private void shiftTopUnits(Unit selectedUnit) {
-		Unit neighbor = null;
-		if (selectedUnit.y != level.height - 1) {
-			neighbor = level.units[selectedUnit.x][selectedUnit.y + 1];
-		}
-		if (neighbor != null) {
-			for (int y = selectedUnit.y + 1; y < level.height - 1; y++) {
-				Unit unitToMove = level.units[selectedUnit.x][y + 1];
-				level.units[selectedUnit.x][y] = unitToMove;
-				unitToMove.moveTo(selectedUnit.x, y);
-			}
-			level.units[selectedUnit.x][level.height - 1] = level.generateUnit(selectedUnit.x, level.height - 1, selectedUnit, neighbor);
-		}
-	}
-
-	private void shiftRightUnits(Unit selectedUnit) {
-		Unit neighbor = null;
-		if (selectedUnit.x != level.width - 1) {
-			neighbor = level.units[selectedUnit.x + 1][selectedUnit.y];
-		}
-		if (neighbor != null) {
-			for (int x = selectedUnit.x + 1; x < level.width - 1; x++) {
-				Unit unitToMove = level.units[x + 1][selectedUnit.y];
-				level.units[x][selectedUnit.y] = unitToMove;
-				unitToMove.moveTo(x, selectedUnit.y);
-			}
-			level.units[level.width - 1][selectedUnit.y] = level.generateUnit(level.width - 1, selectedUnit.y, selectedUnit, neighbor);
-		}
-	}
-
-	private void shiftLeftUnits(Unit selectedUnit) {
-		Unit neighbor = null;
-		if (selectedUnit.x != 0) {
-			neighbor = level.units[selectedUnit.x - 1][selectedUnit.y];
-		}
-		if (neighbor != null) {
-			for (int x = selectedUnit.x - 1; x > 0; x--) {
-				Unit unitToMove = level.units[x - 1][selectedUnit.y];
-				level.units[x][selectedUnit.y] = unitToMove;
-				unitToMove.moveTo(x, selectedUnit.y);
-			}
-			level.units[0][selectedUnit.y] = level.generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
-		}
-	}
-	
-    private Unit getSelectedUnit(float xCoord, float yCoord) {
-    	for (int x = 0; x < level.width; x++) {
-			for (int y = 0; y < level.height; y++) {
-				if (level.units[x][y].bounds.contains(xCoord, yCoord)) {
-					Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
-					return level.units[x][y];
-				}
-			}
-    	}
-    	return null;
-    }
-    
-    private void deselectAllUnits() {
-    	selectedUnit = null;
-    	for (int x = 0; x < level.width; x++) {
-			for (int y = 0; y < level.height; y++) {
-				level.units[x][y].unselect();
-				level.units[x][y].unselectNeighbor();
-			}
-    	}
-    }
-    
-    private void getNeighbors(Unit unit) {
-    	neighbors.clear();
-    	if (unit.y != 0) {
-    		neighbors.add(level.units[unit.x][unit.y - 1]);
-    	}
-    	if (unit.x != level.width - 1) {
-    		neighbors.add(level.units[unit.x + 1][unit.y]);
-    	}
-    	if (unit.y != level.height - 1) {
-    		neighbors.add(level.units[unit.x][unit.y + 1]);
-    	}
-    	if (unit.x != 0) {
-    		neighbors.add(level.units[unit.x - 1][unit.y]);
-    	}
-    }
-    
-    private void onScreenTouch(float xCoord, float yCoord) {
-    	if (state == State.IN_MOTION) {
-    		// if game in motion, break control
-    		return;
-    	}
-    	Unit currentSelectedUnit = getSelectedUnit(xCoord, yCoord);
-    	if (currentSelectedUnit == null) {
-    		// unit is border unit
-    		deselectAllUnits();
-    		return;
-    	}
-    	if (selectedUnit == currentSelectedUnit) {
-			selectedUnit.triggerSelectionEffect();
-			for (Unit neighbor : neighbors) {
-				neighbor.triggerSelectionEffect();
-			}
-    		// step execution is started
-    		state = State.IN_MOTION;
-    		return;
-    	}
-    	if (selectedUnit != null) {
-    		// unit is not selected or another unit is selected
-			deselectAllUnits();
-		} 
-    	if (selectedUnit == null) {
-    		// unit first selection
-    		selectedUnit = currentSelectedUnit;
-    		selectedUnit.select();
-			selectedUnit.triggerSelectionEffect();
-    		getNeighbors(selectedUnit);
-    		for (Unit neighbor : neighbors) {
-    			neighbor.selectNeighbor();
-				neighbor.triggerSelectionEffect();
-			}
-    	}
     }
 
 	private boolean isBorderUnit(Unit selectedUnit) {

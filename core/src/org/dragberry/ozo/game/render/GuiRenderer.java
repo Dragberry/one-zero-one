@@ -126,12 +126,12 @@ public class GuiRenderer implements Renderer {
 		float posX = camera.viewportWidth / 2;
 		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.level.digits.minus.getRegionHeight();
 		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.level.digits.minus.getRegionHeight();
-		DigitUtil.draw(batch, GameController.instance.zeroCountDigits,
+		DigitUtil.draw(batch, GameController.instance.level.zeroCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, GameController.instance.lostNumbersDigits,
+		DigitUtil.draw(batch, GameController.instance.level.lostNumbersDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
@@ -150,12 +150,12 @@ public class GuiRenderer implements Renderer {
 				ball.getRegionWidth(), ball.getRegionHeight(),
 				false, true);
 		posX = camera.viewportWidth / 2 - ball.getRegionWidth();
-		DigitUtil.draw(batch, GameController.instance.posCountDigits,
+		DigitUtil.draw(batch, GameController.instance.level.posCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, GameController.instance.posSumDigits,
+		DigitUtil.draw(batch, GameController.instance.level.posSumDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
@@ -175,12 +175,12 @@ public class GuiRenderer implements Renderer {
 		
 		posX = camera.viewportWidth / 2 + ball.getRegionWidth();
 		
-		DigitUtil.draw(batch, GameController.instance.negCountDigits,
+		DigitUtil.draw(batch, GameController.instance.level.negCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
-		DigitUtil.draw(batch, GameController.instance.negSumDigits,
+		DigitUtil.draw(batch, GameController.instance.level.negSumDigits,
 				posX, downY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
