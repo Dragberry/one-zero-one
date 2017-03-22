@@ -37,7 +37,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     public final transient Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     public final transient Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
 
-    private Map<Generator.Id, Generator> generators = Collections.emptyMap();
+    protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
     
     public transient LS settings;
     public int width;
