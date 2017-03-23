@@ -1,13 +1,13 @@
 package org.dragberry.ozo.game.level.generator;
 
-import org.dragberry.ozo.game.objects.Unit;
-
 public abstract class Generator {
 
 	public static class Id {
 		int x;
 		int y;
-		
+
+		public Id() {}
+
 		public Id(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -33,7 +33,9 @@ public abstract class Generator {
 		}
 	}
 	
-	public final Id id;
+	public Id id;
+
+	public Generator() {}
 
 	public Generator(int x, int y) {
 		this.id = new Id(x, y);

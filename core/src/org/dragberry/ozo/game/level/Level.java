@@ -58,7 +58,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     private transient State state;
     public transient Unit selectedUnit;
-    private transient Array<Unit> neighbors;
+    protected transient Array<Unit> neighbors;
 
     private transient float motionTime ;
 
@@ -75,7 +75,9 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     public transient Array<TextureRegion> negCountDigits;
     public transient Array<TextureRegion> negSumDigits;
 
-    public Level() {}
+    public Level() {
+        initTransientFields();
+    }
 
     /**
      * Call this method when level has been restored
@@ -96,6 +98,11 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         this.settings = settings;
         addGoals(settings);
         units = new Unit[width][height];
+        initTransientFields();
+        createGenerators();
+    }
+
+    private void initTransientFields() {
         neighbors = new Array<Unit>(4);
 
         posCountDigits = new Array<TextureRegion>(4);
@@ -104,15 +111,49 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         lostNumbersDigits = new Array<TextureRegion>(4);
         negCountDigits = new Array<TextureRegion>(4);
         negSumDigits = new Array<TextureRegion>(4);
+    }
 
-        createGenerators();
+    public void reset(boolean restore) {
+        selectedUnit = null;
+        neighbors.clear();
+        state = State.FIXED;
+        motionTime = 0;
+
+        negCount = 0;
+        negSum = 0;
+        posCount = 0;
+        posSum = 0;
+        zeroCount = 0;
+
+        for (Generator generator : generators.values()) {
+            generator.reset();
+        }
+
+        resetUnits(restore);
+
+        updateStateForUnit();
+        resolveStateDigits();
+
+        if (!restore) {
+            time = 0;
+            steps = 0;
+            lostNumbers = 0;
+        }
+        started = false;
+        for (Goal goal : goalsToWin) {
+            goal.reset();
+        }
+        for (Goal goal : goalsToLose) {
+            goal.reset();
+        }
+
     }
     
     protected void createGenerators() {
     	generators = Collections.emptyMap();
     }
 
-    protected Unit generateUnit(int x, int y, Unit selectedUnit, Unit unit) {
+    protected Unit generateUnit(int x, int y, Unit unit) {
     	Generator gen = null;
     	if (!generators.isEmpty()) {
     		gen = generators.get(new Generator.Id(x, y));
@@ -214,44 +255,10 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         return results;
     }
 
-    public void reset(boolean restore) {
-        selectedUnit = null;
-        neighbors.clear();
-        state = State.FIXED;
-        motionTime = 0;
-
-        negCount = 0;
-        negSum = 0;
-        posCount = 0;
-        posSum = 0;
-        zeroCount = 0;
-
-        resetUnits(restore);
-
-        updateStateForUnit();
-        resolveStateDigits();
-
-        if (!restore) {
-            time = 0;
-            steps = 0;
-            lostNumbers = 0;
-        }
-        started = false;
-        for (Goal goal : goalsToWin) {
-            goal.reset();
-        }
-        for (Goal goal : goalsToLose) {
-            goal.reset();
-        }
-        for (Generator generator : generators.values()) {
-            generator.reset();
-        }
-    }
-
     private void resetUnits(boolean restore) {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                units[x][y] = restore ? units[x][y].init() : generateUnit(x, y, null, units[x][y]);
+                units[x][y] = restore ? units[x][y].init() : generateUnit(x, y, units[x][y]);
             }
         }
     }
@@ -373,6 +380,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
             neighbor.previousValue = neighbor.getValue();
         }
         selectedUnit.addValue(valueToAdd);
+
+        updateGeneratorsState();
         // logical shift all units
         // fix and recalculate position
         shiftTopUnits(selectedUnit);
@@ -389,6 +398,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         selectedUnit.unselect();
         selectedUnit = null;
     }
+
+    protected void updateGeneratorsState() {}
 
     private boolean isGameFinished() {
         if (isLost()) {
@@ -413,7 +424,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
                 units[selectedUnit.x][y] = unitToMove;
                 unitToMove.moveTo(selectedUnit.x, y);
             }
-            units[selectedUnit.x][0] = generateUnit(selectedUnit.x, 0, selectedUnit, neighbor);
+            units[selectedUnit.x][0] = generateUnit(selectedUnit.x, 0, neighbor);
         }
     }
 
@@ -428,7 +439,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
                 units[selectedUnit.x][y] = unitToMove;
                 unitToMove.moveTo(selectedUnit.x, y);
             }
-            units[selectedUnit.x][height - 1] = generateUnit(selectedUnit.x, height - 1, selectedUnit, neighbor);
+            units[selectedUnit.x][height - 1] = generateUnit(selectedUnit.x, height - 1, neighbor);
         }
     }
 
@@ -443,7 +454,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
                 units[x][selectedUnit.y] = unitToMove;
                 unitToMove.moveTo(x, selectedUnit.y);
             }
-            units[width - 1][selectedUnit.y] = generateUnit(width - 1, selectedUnit.y, selectedUnit, neighbor);
+            units[width - 1][selectedUnit.y] = generateUnit(width - 1, selectedUnit.y, neighbor);
         }
     }
 
@@ -458,7 +469,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
                 units[x][selectedUnit.y] = unitToMove;
                 unitToMove.moveTo(x, selectedUnit.y);
             }
-            units[0][selectedUnit.y] = generateUnit(0, selectedUnit.y, selectedUnit, neighbor);
+            units[0][selectedUnit.y] = generateUnit(0, selectedUnit.y, neighbor);
         }
     }
 

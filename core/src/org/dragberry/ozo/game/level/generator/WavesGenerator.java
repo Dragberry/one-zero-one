@@ -15,6 +15,8 @@ public class WavesGenerator extends Generator {
     private int border;
     private int mid;
 
+    public WavesGenerator() {}
+
     public WavesGenerator(int x, int y, int width, int height) {
         super(x, y);
         reset(width, height);

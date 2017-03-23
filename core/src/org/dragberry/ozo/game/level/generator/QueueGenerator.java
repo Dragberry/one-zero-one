@@ -2,8 +2,10 @@ package org.dragberry.ozo.game.level.generator;
 
 public class QueueGenerator extends Generator {
 
-	private final int initialValue;
+	private int initialValue;
 	private int value;
+
+	public QueueGenerator() {}
 
 	public QueueGenerator(int initialValue, int x, int y) {
 		super(x, y);
