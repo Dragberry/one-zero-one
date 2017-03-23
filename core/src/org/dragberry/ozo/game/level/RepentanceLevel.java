@@ -22,7 +22,7 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	protected void createGenerators() {
 		positivePosition = new RepentanceGenerator.PositivePosition();
 
-		generators = new HashMap<Generator.Id, Generator>((width - 2) * (height - 2));
+		generators = new HashMap<String, Generator>((width - 2) * (height - 2));
 		int index;
 		Generator gen;
 		for (index = 0; index < width; index++) {
@@ -70,6 +70,9 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	@Override
 	public void reset(boolean restore) {
 		super.reset(restore);
+		if (positivePosition == null) {
+			positivePosition = new RepentanceGenerator.PositivePosition();
+		}
 		for (Generator generator : generators.values()) {
 			if (generator instanceof RepentanceGenerator) {
 				((RepentanceGenerator) generator).setPositivePosition(positivePosition);

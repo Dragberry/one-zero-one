@@ -3,7 +3,7 @@ package org.dragberry.ozo.game.level.generator;
 import com.badlogic.gdx.math.MathUtils;
 
 /**
- * Generator of -1,0,1,0,...
+ * Generator of -1,0,-1,0,...
  * @author Maksim Drahun
  *
  */
@@ -54,8 +54,6 @@ public class RepentanceGenerator extends Generator {
 	@Override
 	public void reset() {
 		value = initialValue;
-		positivePosition.position = -1;
-		positivePosition.enabled = false;
 	}
 
 	public void setPositivePosition(PositivePosition positivePosition) {

@@ -17,7 +17,7 @@ public class ChessboardLevel extends ReachTheGoalLevel {
 	
 	@Override
 	protected void createGenerators() {
-		generators = new HashMap<Generator.Id, Generator>((width - 2) * (height - 2));
+		generators = new HashMap<String, Generator>((width - 2) * (height - 2));
 		int index;
 		Generator gen;
 		for (index = 0; index < width; index++) {

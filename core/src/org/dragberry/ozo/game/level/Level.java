@@ -37,7 +37,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     public final transient Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     public final transient Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
 
-    protected Map<Generator.Id, Generator> generators = Collections.emptyMap();
+    protected Map<String, Generator> generators = Collections.emptyMap();
     
     public transient LS settings;
     public int width;
@@ -156,7 +156,10 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     protected Unit generateUnit(int x, int y, Unit unit) {
     	Generator gen = null;
     	if (!generators.isEmpty()) {
-    		gen = generators.get(new Generator.Id(x, y));
+    		gen = generators.get(Generator.getId(x, y));
+            for (Map.Entry<String, Generator> entry : generators.entrySet()) {
+                Gdx.app.debug(TAG, entry.getKey() + " " + entry.getValue());
+            }
     	}
     	if (gen == null) {
     		gen = getDefaultGenerator(x, y);

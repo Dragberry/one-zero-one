@@ -34,10 +34,10 @@ public class MushroomRainLevel extends ReachTheGoalLevel {
 
     @Override
     protected void createGenerators() {
-        generators = new HashMap<Generator.Id, Generator>();
-        generators.put(new Generator.Id(0, height - 1), ConstGenerator.NEG_ONE);
-        generators.put(new Generator.Id(0, height - 2), ConstGenerator.NEG_ONE);
-        generators.put(new Generator.Id(width - 1, height - 1), ConstGenerator.NEG_ONE);
-        generators.put(new Generator.Id(width - 1, height - 2), ConstGenerator.NEG_ONE);
+        generators = new HashMap<String, Generator>();
+        generators.put(Generator.getId(0, height - 1), ConstGenerator.NEG_ONE);
+        generators.put(Generator.getId(0, height - 2), ConstGenerator.NEG_ONE);
+        generators.put(Generator.getId(width - 1, height - 1), ConstGenerator.NEG_ONE);
+        generators.put(Generator.getId(width - 1, height - 2), ConstGenerator.NEG_ONE);
     }
 }

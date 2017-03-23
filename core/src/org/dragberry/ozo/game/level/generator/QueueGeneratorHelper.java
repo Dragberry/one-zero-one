@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class QueueGeneratorHelper {
 
-	public static Map<Generator.Id, Generator> createGenerators(int width, int height) {
-		Map<Generator.Id, Generator> generators = new HashMap<Generator.Id, Generator>((width - 1) * (height - 1));
+	public static Map<String, Generator> createGenerators(int width, int height) {
+		Map<String, Generator> generators = new HashMap<String, Generator>((width - 1) * (height - 1));
 		int index;
 		Generator gen;
 		for (index = 0; index < width; index++) {

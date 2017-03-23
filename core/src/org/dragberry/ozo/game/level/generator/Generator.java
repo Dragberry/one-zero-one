@@ -1,44 +1,19 @@
 package org.dragberry.ozo.game.level.generator;
 
-public abstract class Generator {
+import java.io.Serializable;
 
-	public static class Id {
-		int x;
-		int y;
+public abstract class Generator implements Serializable {
 
-		public Id() {}
-
-		public Id(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			if (obj instanceof Id) {
-				return x == ((Id) obj).x && y == ((Id) obj).y;
-			}
-			return false;
-		}
-		
-		@Override
-		public int hashCode() {
-			return x * 101 + y;
-		}
-	}
-	
-	public Id id;
+	public String id;
 
 	public Generator() {}
 
 	public Generator(int x, int y) {
-		this.id = new Id(x, y);
+		this.id = getId(x, y);
+	}
+
+	public static final String getId(int x, int y) {
+		return (x + "_" + y).intern();
 	}
 	
 	public abstract int next(int step, int selectedX, int selectedY);
