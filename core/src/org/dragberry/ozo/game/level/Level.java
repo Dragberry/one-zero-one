@@ -157,9 +157,6 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     	Generator gen = null;
     	if (!generators.isEmpty()) {
     		gen = generators.get(Generator.getId(x, y));
-            for (Map.Entry<String, Generator> entry : generators.entrySet()) {
-                Gdx.app.debug(TAG, entry.getKey() + " " + entry.getValue());
-            }
     	}
     	if (gen == null) {
     		gen = getDefaultGenerator(x, y);
@@ -375,6 +372,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     private void finishStepExecution() {
+        updateGeneratorsStateBeforeStep();
+
         // sum neighbors
         selectedUnit.previousValue = selectedUnit.getValue();
         int valueToAdd = 0;
@@ -384,13 +383,15 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         }
         selectedUnit.addValue(valueToAdd);
 
-        updateGeneratorsState();
         // logical shift all units
         // fix and recalculate position
         shiftTopUnits(selectedUnit);
         shiftRightUnits(selectedUnit);
         shiftBottomUnits(selectedUnit);
         shiftLeftUnits(selectedUnit);
+
+        updateGeneratorsStateAfterStep();
+
         refreshState();
         steps++;
         if (isGameFinished()) {
@@ -402,7 +403,9 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         selectedUnit = null;
     }
 
-    protected void updateGeneratorsState() {}
+    protected void updateGeneratorsStateAfterStep() {}
+
+    protected void updateGeneratorsStateBeforeStep() {}
 
     private boolean isGameFinished() {
         if (isLost()) {

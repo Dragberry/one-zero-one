@@ -48,7 +48,7 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 		if (neighbors.size < 4) {
 			return false;
 		}
-		float previousSign = Math.signum(selectedUnit.previousValue);
+		float previousSign = Math.signum(selectedUnit.getValue());
 		for (Object obj : neighbors) {
 			Unit neighbor = (Unit) obj;
 			float sign = Math.signum(neighbor.getValue());
@@ -61,7 +61,7 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	}
 
 	@Override
-	protected void updateGeneratorsState() {
+	protected void updateGeneratorsStateBeforeStep() {
 		if (isCross()) {
 			positivePosition.updatePosition();
 		}
