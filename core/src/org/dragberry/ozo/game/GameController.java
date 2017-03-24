@@ -111,7 +111,8 @@ public class GameController extends InputAdapter {
 		}
 		if (level.selectedUnit != null) {
 			level.deselectAllUnits();
-		} else {
+		}
+		if (level.selectedUnit == null) {
 			level.processFirstSection(currentSelectedUnit);
 		}
     }

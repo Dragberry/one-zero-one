@@ -45,10 +45,10 @@ public class HighwayGenerator extends Generator {
 	@Override
 	public int next(int step, int selectedX, int selectedY) {
 		value = value == 0 ? -1 : 0;
-		if (positiveState.vertical && (y == 0 || y == positiveState.height - 1)) {
+		if (positiveState.vertical && selectedX == x) {
 			return 1;
 		}
-		if (positiveState.horizontal && (x == 0 || x == positiveState.width - 1)) {
+		if (positiveState.horizontal && selectedY == y) {
 			return 1;
 		}
 		return value;
