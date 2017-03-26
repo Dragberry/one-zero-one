@@ -59,8 +59,8 @@ public class LevelProvider {
         levels.add(new NoAnnihilationLevelSettings(NoAnnihilationQueueLevel.class, L016_UNSAFE_REGULARITY, 9, 99));
         levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, L017_STORM, 9, 99));
         levels.add(new ReachTheGoalLevelSettings(RepentanceLevel.class, L018_REPENTANCE, -25, 5));
-        levels.add(new ReachTheGoalLevelSettings(HighwayLevel.class, L019_HIGHWAY, -50, 10));
-        levels.add(new ReachTheGoalLevelSettings(FibonacciLevel.class, L020_FIBONACCI, -50, 8));
+        levels.add(new ReachTheGoalLevelSettings(HighwayLevel.class, L019_HIGHWAY, -35, 10));
+        levels.add(new ReachTheGoalLevelSettings(FibonacciLevel.class, L020_FIBONACCI, -30, 8));
         levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, L021_TSUNAMI, 99, 999));
 
     }
