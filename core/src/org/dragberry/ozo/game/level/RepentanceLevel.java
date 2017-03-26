@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class RepentanceLevel extends ReachTheGoalLevel {
 
-	private transient RepentanceGenerator.PositivePosition positivePosition;
+	private transient RepentanceGenerator.ThirdValueState thirdValueState;
 
 	public RepentanceLevel() {}
 
@@ -20,21 +20,21 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	
 	@Override
 	protected void createGenerators() {
-		positivePosition = new RepentanceGenerator.PositivePosition();
+		thirdValueState = new RepentanceGenerator.ThirdValueState();
 
 		generators = new HashMap<String, Generator>((width - 2) * (height - 2));
 		int index;
 		Generator gen;
 		for (index = 0; index < width; index++) {
-			gen = new RepentanceGenerator(index % 2 == 0 ? 0 : -1, index, 0, positivePosition);
+			gen = new RepentanceGenerator(index % 2 == 0 ? 0 : -1, index, 0, thirdValueState);
 			generators.put(gen.id, gen);
-			gen = new RepentanceGenerator((index + (height - 1)) % 2 == 0 ? 0 : -1, index, height - 1, positivePosition);
+			gen = new RepentanceGenerator((index + (height - 1)) % 2 == 0 ? 0 : -1, index, height - 1, thirdValueState);
 			generators.put(gen.id, gen);
 		}
 		for (index = 0; index < height; index++) {
-			gen = new RepentanceGenerator(index % 2 == 0 ? 0 : -1, 0, index, positivePosition);
+			gen = new RepentanceGenerator(index % 2 == 0 ? 0 : -1, 0, index, thirdValueState);
 			generators.put(gen.id, gen);
-			gen = new RepentanceGenerator((index  + (width - 1)) % 2 == 0 ? 0 : -1, width - 1, index, positivePosition);
+			gen = new RepentanceGenerator((index  + (width - 1)) % 2 == 0 ? 0 : -1, width - 1, index, thirdValueState);
 			generators.put(gen.id, gen);
 		}
 	}
@@ -61,21 +61,21 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	}
 
 	@Override
-	protected void updateGeneratorsStateBeforeStep() {
+	protected void updateGeneratorsBeforeStepCalculation() {
 		if (isCross()) {
-			positivePosition.updatePosition();
+			thirdValueState.updatePosition();
 		}
 	}
 
 	@Override
 	public void reset(boolean restore) {
 		super.reset(restore);
-		if (positivePosition == null) {
-			positivePosition = new RepentanceGenerator.PositivePosition();
+		if (thirdValueState == null) {
+			thirdValueState = new RepentanceGenerator.ThirdValueState();
 		}
 		for (Generator generator : generators.values()) {
 			if (generator instanceof RepentanceGenerator) {
-				((RepentanceGenerator) generator).setPositivePosition(positivePosition);
+				((RepentanceGenerator) generator).setThirdValueState(thirdValueState);
 			}
 		}
 	}

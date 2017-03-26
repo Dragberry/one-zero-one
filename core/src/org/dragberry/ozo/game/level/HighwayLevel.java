@@ -69,12 +69,12 @@ public class HighwayLevel extends ReachTheGoalLevel {
 
 
 	@Override
-	protected void updateGeneratorsStateBeforeStep() {
+	protected void updateGeneratorsBeforeStepCalculation() {
 		positiveState.updateState(isVertical(), isHorizontal());
 	}
 
 	@Override
-	protected void updateGeneratorsStateAfterStep() {
+	protected void updateGeneratorsAfterStep() {
 		positiveState.updateState(false, false);
 	}
 

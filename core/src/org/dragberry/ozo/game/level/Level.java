@@ -372,7 +372,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     private void finishStepExecution() {
-        updateGeneratorsStateBeforeStep();
+        updateGeneratorsBeforeStepCalculation();
 
         // sum neighbors
         selectedUnit.previousValue = selectedUnit.getValue();
@@ -383,6 +383,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         }
         selectedUnit.addValue(valueToAdd);
 
+        updateGeneratorsAfterStepCalculation();
+
         // logical shift all units
         // fix and recalculate position
         shiftTopUnits(selectedUnit);
@@ -390,7 +392,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         shiftBottomUnits(selectedUnit);
         shiftLeftUnits(selectedUnit);
 
-        updateGeneratorsStateAfterStep();
+        updateGeneratorsAfterStep();
 
         refreshState();
         steps++;
@@ -403,9 +405,11 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         selectedUnit = null;
     }
 
-    protected void updateGeneratorsStateAfterStep() {}
+    protected void updateGeneratorsAfterStep() {}
 
-    protected void updateGeneratorsStateBeforeStep() {}
+    protected void updateGeneratorsBeforeStepCalculation() {}
+
+    protected void updateGeneratorsAfterStepCalculation() {}
 
     private boolean isGameFinished() {
         if (isLost()) {
