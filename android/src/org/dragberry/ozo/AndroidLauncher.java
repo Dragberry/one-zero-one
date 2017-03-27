@@ -1,9 +1,11 @@
 package org.dragberry.ozo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import org.dragberry.ozo.admob.AdsController;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.HttpTask;
 import org.dragberry.ozo.platform.Platform;
@@ -190,6 +193,13 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 		if (isConnected()) {
 			new HttpRequestTask<>(httpTask).execute();
 		}
+	}
+
+	@Override
+	public void openMarketUrl() {
+		Uri marketUri = Uri.parse(Constants.ANDROID_PLAY_MARKET_URL);
+		Intent intent = new Intent(Intent.ACTION_VIEW, marketUri);
+		getContext().startActivity(intent);
 	}
 
 	private class HttpRequestTask<P, R> extends AsyncTask<Void, Void, R> {

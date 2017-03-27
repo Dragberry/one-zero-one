@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 public class MainMenuScreen extends AbstractGameScreen {
@@ -81,6 +82,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 		stage.addActor(createExitBtn());
 
 		game.platform.getAdsController().showBannerAdNew();
+
+		if (game.obsolete) {
+			DirectedGame.game.setPopup(DirectedGame.game.getScreen(WrongVersionPopup.class).init());
+		}
 	}
 
 	@Override

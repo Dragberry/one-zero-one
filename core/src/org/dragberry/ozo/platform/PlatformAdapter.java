@@ -31,4 +31,7 @@ public class PlatformAdapter implements Platform {
     public AdsController getAdsController() {
         return adsController;
     }
+
+    @Override
+    public void openMarketUrl() {}
 }

@@ -14,4 +14,6 @@ public interface Platform {
     HttpClient getHttpClient();
 
     AdsController getAdsController();
+
+    void openMarketUrl();
 }

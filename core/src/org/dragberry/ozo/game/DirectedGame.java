@@ -45,6 +45,8 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public static DirectedGame game;
 
+	public boolean obsolete;
+
 	public final Platform platform;
 
 	private boolean auditEnabled;
@@ -138,7 +140,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
 		logAuditEvent(createSimpleAuditRequest(AuditEventType.LAUNCH_APPLICATION));
 
-		levelProvider = new LevelProvider(platform);
+		levelProvider = new LevelProvider();
 	 	levelProvider.loadResults();
 
 		popupState = PopupState.HIDDEN;

@@ -10,15 +10,16 @@ import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.common.levelresult.LevelResults;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
+import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
-import org.dragberry.ozo.platform.Platform;
 
 import java.util.Map;
 
@@ -34,10 +35,7 @@ public class LevelProvider {
 
     public final LevelSettings freeplayLevel;
 
-    private final Platform platform;
-
-    public LevelProvider(Platform platform) {
-        this.platform = platform;
+    public LevelProvider() {
         freeplayLevel = new ReachTheGoalLevelSettings(Levels.L999_FREEPLAY, -999, 9999);
 
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
@@ -66,19 +64,27 @@ public class LevelProvider {
     }
 
     public void loadResults() {
+        if (!Constants.APP_VERSION.equals(null)) {
+            // TODO check version
+            DirectedGame.game.obsolete = true;
+        }
         Gdx.app.debug(TAG, "loadResults...");
         freeplayLevel.load();
         for (LevelSettings levelSettings : levels) {
             levelSettings.load();
         }
 
-        if (platform.getHttpClient().isConnected()) {
-            platform.getHttpClient().executeTask(
+        if (DirectedGame.game.platform.getHttpClient().isConnected()) {
+            DirectedGame.game.platform.getHttpClient().executeTask(
                     new GetHttpTask<AllLevelResults>(AllLevelResults.class, HttpClient.URL.GET_ALL_RESULTS,
-                            platform.getUser().getId()) {
+                            DirectedGame.game.platform.getUser().getId()) {
 
                 @Override
                 public void onComplete(AllLevelResults result) {
+                    if (!Constants.APP_VERSION.equals(null)) {
+                        // TODO check version
+                        DirectedGame.game.obsolete = true;
+                    }
                     Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = result.getLevelResults();
 
@@ -94,11 +100,11 @@ public class LevelProvider {
     private void processLevel(Map<String, LevelResults> allResults, final LevelSettings levelSettings) {
         LevelResults results = allResults.get(levelSettings.levelId);
         NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
-        newResultsRequest.setUserId(platform.getUser().getId());
+        newResultsRequest.setUserId(DirectedGame.game.platform.getUser().getId());
         levelSettings.save();
         if (!newResultsRequest.getResults().isEmpty()) {
             Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
-            platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+            DirectedGame.game.platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
                     newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
 
                 @Override
