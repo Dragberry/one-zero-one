@@ -17,7 +17,6 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
-import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
@@ -79,7 +78,7 @@ public class LevelProvider {
                 @Override
                 public void onComplete(AllLevelResults result) {
                     if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
-                        DirectedGame.game.obsolete = true;
+                        DirectedGame.game.wrongAppVersion = true;
                     }
                     Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = result.getLevelResults();
@@ -89,7 +88,12 @@ public class LevelProvider {
                         processLevel(allResults, levelSettings);
                     }
                 }
-            });
+
+                        @Override
+                        public void onFail() {
+                            super.onFail();
+                        }
+                    });
         }
     }
 

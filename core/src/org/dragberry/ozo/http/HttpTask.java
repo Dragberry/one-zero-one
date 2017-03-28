@@ -2,7 +2,10 @@ package org.dragberry.ozo.http;
 
 import com.badlogic.gdx.Gdx;
 
+import org.dragberry.ozo.game.DirectedGame;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
@@ -27,6 +30,13 @@ public abstract class HttpTask<P, R> {
     public final R execute() {
         try {
             return doRequest();
+        } catch (HttpClientErrorException exc) {
+            if (HttpStatus.GONE.equals(exc.getStatusCode())) {
+                DirectedGame.game.wrongAppVersion = true;
+                Gdx.app.error(TAG, "Application version is wrong!");
+            } else {
+                Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
+            }
         } catch (Exception exc) {
             Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
         }

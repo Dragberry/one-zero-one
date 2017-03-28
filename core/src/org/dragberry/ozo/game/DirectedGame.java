@@ -46,7 +46,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public static DirectedGame game;
 
-	public boolean obsolete;
+	public boolean wrongAppVersion;
 
 	public final Platform platform;
 
@@ -471,7 +471,7 @@ public abstract class DirectedGame implements ApplicationListener {
 				@Override
 				public void onComplete(AuditEventResponse result) {
 					if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
-						DirectedGame.game.obsolete = true;
+						DirectedGame.game.wrongAppVersion = true;
 					}
 					Gdx.app.debug(TAG, "Audit event was logged: " + request);
 				}
