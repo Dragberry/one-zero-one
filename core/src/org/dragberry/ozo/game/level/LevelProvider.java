@@ -5,6 +5,7 @@ import static org.dragberry.ozo.common.level.Levels.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
+import org.dragberry.ozo.common.CommonConstants;
 import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.common.levelresult.AllLevelResults;
 import org.dragberry.ozo.common.levelresult.LevelResults;
@@ -64,10 +65,6 @@ public class LevelProvider {
     }
 
     public void loadResults() {
-        if (!Constants.APP_VERSION.equals(null)) {
-            // TODO check version
-            DirectedGame.game.obsolete = true;
-        }
         Gdx.app.debug(TAG, "loadResults...");
         freeplayLevel.load();
         for (LevelSettings levelSettings : levels) {
@@ -81,8 +78,7 @@ public class LevelProvider {
 
                 @Override
                 public void onComplete(AllLevelResults result) {
-                    if (!Constants.APP_VERSION.equals(null)) {
-                        // TODO check version
+                    if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
                         DirectedGame.game.obsolete = true;
                     }
                     Gdx.app.debug(TAG, "task completed...");

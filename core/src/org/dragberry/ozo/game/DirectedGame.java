@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.ArrayMap;
 
+import org.dragberry.ozo.common.audit.AuditEventResponse;
 import org.dragberry.ozo.game.level.LevelProvider;
 import org.dragberry.ozo.common.CommonConstants;
 import org.dragberry.ozo.common.audit.AuditEventRequest;
@@ -464,11 +465,14 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	public void logAuditEvent(final AuditEventRequest request) {
 		if (auditEnabled && !platform.getUser().isDefault()) {
-			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, Void>(
-					request, Void.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {
+			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, AuditEventResponse>(
+					request, AuditEventResponse.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {
 
 				@Override
-				public void onComplete(Void result) {
+				public void onComplete(AuditEventResponse result) {
+					if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
+						DirectedGame.game.obsolete = true;
+					}
 					Gdx.app.debug(TAG, "Audit event was logged: " + request);
 				}
 			});

@@ -4,9 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public interface Constants {
 
-    String APP_VERSION = "2.0.0";
     String ANDROID_PLAY_MARKET_URL = "https://play.google.com/store/apps/details?id=org.dragberry.ozo";
-
 
     String TEXTURE_ATLAS_OBJECTS = "images/block_1/onezeroone.atlas";
     String TRANSLATION = "i18n/translation";
