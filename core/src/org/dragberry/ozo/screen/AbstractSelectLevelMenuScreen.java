@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 
 /**
  * Created by maksim on 28.01.17.
@@ -65,6 +66,10 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
                 });
 
         rebuildStage();
+
+        if (game.wrongAppVersion) {
+            game.setPopup(game.getScreen(WrongVersionPopup.class).init());
+        }
     }
 
     private void rebuildStage() {

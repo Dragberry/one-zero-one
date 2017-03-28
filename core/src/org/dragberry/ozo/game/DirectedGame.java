@@ -25,6 +25,7 @@ import org.dragberry.ozo.screen.ActionExecutor;
 import org.dragberry.ozo.screen.GameScreen;
 import org.dragberry.ozo.screen.MainMenuScreen;
 import org.dragberry.ozo.screen.popup.AbstractPopup;
+import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 import org.dragberry.ozo.screen.transitions.PopupTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
@@ -219,6 +220,10 @@ public abstract class DirectedGame implements ApplicationListener {
     public void setPopup(AbstractPopup popupScreen) {
     	int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
+
+		if (wrongAppVersion) {
+			popupScreen = getScreen(WrongVersionPopup.class).init();
+		}
         
         if (popupScreen != null) {
         	popupState = PopupState.SHOWING;
@@ -470,9 +475,6 @@ public abstract class DirectedGame implements ApplicationListener {
 
 				@Override
 				public void onComplete(AuditEventResponse result) {
-					if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
-						DirectedGame.game.wrongAppVersion = true;
-					}
 					Gdx.app.debug(TAG, "Audit event was logged: " + request);
 				}
 			});

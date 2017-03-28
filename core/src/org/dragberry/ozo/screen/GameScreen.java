@@ -4,6 +4,7 @@ import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.screen.popup.ObjectivePopup;
+import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -55,7 +56,11 @@ public class GameScreen extends AbstractGameScreen {
 	@Override
 	public void show() {
 		Gdx.app.debug(getClass().getName(), "Game screen is shown");
-		game.setPopup(objectivePopup);
+		if (game.wrongAppVersion) {
+			game.setPopup(game.getScreen(WrongVersionPopup.class).init());
+		} else {
+			game.setPopup(objectivePopup);
+		}
 	}
 
 	@Override

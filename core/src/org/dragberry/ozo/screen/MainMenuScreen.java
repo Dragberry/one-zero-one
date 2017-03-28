@@ -84,7 +84,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		game.platform.getAdsController().showBannerAdNew();
 
 		if (game.wrongAppVersion) {
-			DirectedGame.game.setPopup(DirectedGame.game.getScreen(WrongVersionPopup.class).init());
+			game.setPopup(game.getScreen(WrongVersionPopup.class).init());
 		}
 	}
 
