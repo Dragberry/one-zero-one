@@ -50,20 +50,35 @@ public class GameController extends InputAdapter {
 		CameraHelper.INSTANCE.update(deltaTime);
     }
 
+	public void logLevelAttempt(LevelAttemptStatus status) {
+		populateLevelAttempt(status);
+		DirectedGame.game.logAuditEvent(attempt);
+	}
+
 	private void populateLevelAttempt(LevelAttemptStatus status) {
-		attempt.setType(AuditEventType.FINISH_LEVEL);
+		attempt.setType(AuditEventType.LEVEL_ATTEMPT);
 		attempt.setLevelId(level.settings.levelId);
-		attempt.setLostUnits(level.lostNumbers);
-		attempt.setTime((int) level.time);
-		attempt.setSteps(level.steps);
 		attempt.setStatus(status);
+		switch (status) {
+			case FAILED:
+			case INTERRUPTED:
+			case PAUSED:
+			case SUCCESS:
+				attempt.setLostUnits(level.lostNumbers);
+				attempt.setTime((int) level.time);
+				attempt.setSteps(level.steps);
+				break;
+			default:
+				attempt.setLostUnits(null);
+				attempt.setTime(null);
+				attempt.setSteps(null);
+		}
 	}
 
 	public void onGameLost(Level<?> level) {
 		level.started = false;
 		DirectedGame.game.setPopup(DirectedGame.game.getScreen(DefeatPopup.class));
-		populateLevelAttempt(LevelAttemptStatus.FAILED);
-		DirectedGame.game.logAuditEvent(attempt);
+		logLevelAttempt(LevelAttemptStatus.FAILED);
 	}
 
 	public void onGameWon(final Level<?> level) {
@@ -90,8 +105,7 @@ public class GameController extends InputAdapter {
 
 		DirectedGame.game.setPopup(DirectedGame.game.getScreen(VictoryPopup.class).init(response));
 
-		populateLevelAttempt(LevelAttemptStatus.SUCCESS);
-		DirectedGame.game.logAuditEvent(attempt);
+		logLevelAttempt(LevelAttemptStatus.SUCCESS);
 	}
 
     private void onScreenTouch(float xCoord, float yCoord) {
@@ -187,7 +201,6 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				populateLevelAttempt(LevelAttemptStatus.INTERRUPTED);
 				DirectedGame.game.setPopup(DirectedGame.game.getScreen(PausePopup.class).init(level, attempt));
 				break;
 		}

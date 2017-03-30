@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import org.dragberry.ozo.common.audit.LevelAttemptAuditEventRequest;
+import org.dragberry.ozo.common.audit.LevelAttemptStatus;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.level.Level;
@@ -77,7 +78,9 @@ public class PausePopup extends AbstractPopup {
 
                     @Override
                     public void execute() {
+                        GameController.instance.logLevelAttempt(LevelAttemptStatus.INTERRUPTED);
                         GameController.instance.init(level, false);
+                        GameController.instance.logLevelAttempt(LevelAttemptStatus.NEW);
                         level.started = true;
                     }
                 });
@@ -97,7 +100,7 @@ public class PausePopup extends AbstractPopup {
                     public void execute() {
                         level.settings.saveState(level, true);
                         level.savedState = true;
-                        game.logAuditEvent(levelAttempt);
+                        GameController.instance.logLevelAttempt(LevelAttemptStatus.PAUSED);
                         game.back();
                     }
                 });

@@ -125,7 +125,7 @@ public abstract class DirectedGame implements ApplicationListener {
 					prefs.flush();
 					platform.getUser().setUserId(result);
 
-					logAuditEvent(createSimpleAuditRequest(AuditEventType.LAUNCH_APPLICATION));
+					logAuditEvent(createSimpleAuditRequest(AuditEventType.START_APPLICATION));
 				}
 			});
 		} else {
@@ -139,7 +139,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
 		loadGameSettings(platform);
 
-		logAuditEvent(createSimpleAuditRequest(AuditEventType.LAUNCH_APPLICATION));
+		logAuditEvent(createSimpleAuditRequest(AuditEventType.START_APPLICATION));
 
 		levelProvider = new LevelProvider();
 	 	levelProvider.loadResults();
@@ -436,7 +436,6 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public <LS extends LevelSettings> void playLevel(LS currentLevelSettings, Class<? extends AbstractGameScreen> callerClass) {
-        logAuditEvent(createSimpleAuditRequest(AuditEventType.START_LEVEL));
 		this.currentLevelSettings = currentLevelSettings;
         try {
 			boolean restore = false;
@@ -464,6 +463,7 @@ public abstract class DirectedGame implements ApplicationListener {
     }
 
 	public void logAuditEvent(final AuditEventRequest request) {
+		Gdx.app.debug(TAG, "Audit event is ready to log: " + request);
 		if (auditEnabled && !platform.getUser().isDefault()) {
 			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, AuditEventResponse>(
 					request, AuditEventResponse.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {

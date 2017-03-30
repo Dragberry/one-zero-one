@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import org.dragberry.ozo.common.audit.LevelAttemptStatus;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.level.Level;
@@ -111,7 +112,9 @@ public class ObjectivePopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				GameController.instance.logLevelAttempt(LevelAttemptStatus.INTERRUPTED);
 				GameController.instance.init(level, false);
+				GameController.instance.logLevelAttempt(LevelAttemptStatus.NEW);
 				level.started = true;
 				game.setPopup(null);
 			}
@@ -124,6 +127,7 @@ public class ObjectivePopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				GameController.instance.logLevelAttempt(LevelAttemptStatus.CONTINUED);
 				level.started = true;
 				game.setPopup(null);
 			}
@@ -136,6 +140,7 @@ public class ObjectivePopup extends AbstractPopup {
 		btn.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				GameController.instance.logLevelAttempt(LevelAttemptStatus.NEW);
 				level.started = true;
 				game.setPopup(null);
 			}
