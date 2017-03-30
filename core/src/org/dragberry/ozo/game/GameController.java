@@ -17,6 +17,7 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
+import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.popup.DefeatPopup;
 import org.dragberry.ozo.screen.popup.PausePopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
@@ -29,10 +30,7 @@ public class GameController extends InputAdapter {
 
 	public Level<?> level;
 
-	public static GameController instance;
-	static {
-		instance = new GameController();
-	}
+	public static GameController instance = new GameController();
 
 	public GameController init(Level<?> level, boolean restore) {
 		this.level = level;
@@ -101,7 +99,7 @@ public class GameController extends InputAdapter {
 					}
 				});
 
-		DirectedGame.game.setPopup(DirectedGame.game.getScreen(VictoryPopup.class).init(response));
+		DirectedGame.game.setPopup(DirectedGame.game.getScreen(level.getGameFinishedPopup()).init(response));
 
 		logLevelAttempt(LevelAttemptStatus.SUCCESS);
 	}

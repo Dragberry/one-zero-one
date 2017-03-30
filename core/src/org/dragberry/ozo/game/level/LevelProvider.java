@@ -13,6 +13,7 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
+import org.dragberry.ozo.game.level.settings.FreeplayReachTheGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
@@ -36,7 +37,7 @@ public class LevelProvider {
     public final LevelSettings freeplayLevel;
 
     public LevelProvider() {
-        freeplayLevel = new ReachTheGoalLevelSettings(Levels.L999_FREEPLAY, -999, 9999);
+        freeplayLevel = new FreeplayReachTheGoalLevelSettings(FreeplayLevel.class, Levels.L999_FREEPLAY, -4);
 
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));

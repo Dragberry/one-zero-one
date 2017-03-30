@@ -18,6 +18,9 @@ import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
+import org.dragberry.ozo.screen.popup.AbstractGameFinishedPopup;
+import org.dragberry.ozo.screen.popup.AbstractPopup;
+import org.dragberry.ozo.screen.popup.VictoryPopup;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -183,7 +186,11 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     protected abstract void addGoals(LS settings);
 
-    private boolean isLost() {
+    public Class<? extends AbstractGameFinishedPopup> getGameFinishedPopup() {
+        return VictoryPopup.class;
+    }
+
+    protected boolean isLost() {
         for (AbstractGoal goal : goalsToLose) {
             if (goal.isReached(units, selectedUnit, neighbors)) {
                 return true;
@@ -411,7 +418,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
 
     protected void updateGeneratorsAfterStepCalculation() {}
 
-    private boolean isGameFinished() {
+    protected boolean isGameFinished() {
         if (isLost()) {
             GameController.instance.onGameLost(this);
             return true;

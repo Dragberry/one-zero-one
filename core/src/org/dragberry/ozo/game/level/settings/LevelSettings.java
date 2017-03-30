@@ -58,7 +58,7 @@ public class LevelSettings {
 		loadSingleResult(LevelResultName.LOST_UNITS, prefs);
 	}
 
-	private void loadSingleResult(LevelResultName name, Preferences prefs) {
+	protected void loadSingleResult(LevelResultName name, Preferences prefs) {
 		LevelSingleResult<Integer> result = new LevelSingleResult<Integer>();
 		String personal = prefs.getString(name.personal());
 		result.setPersonal(personal.isEmpty() ? null : Integer.valueOf(personal));
@@ -84,7 +84,7 @@ public class LevelSettings {
 		updateSingleResult(LevelResultName.LOST_UNITS, prefs);
 	}
 
-	private void updateSingleResult(LevelResultName name, Preferences prefs) {
+	protected void updateSingleResult(LevelResultName name, Preferences prefs) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
 		prefs.putString(name.personal(), result.getPersonal() == null ? EMPTY : result.getPersonal().toString());
 		prefs.putString(name.worlds(), result.getWorlds() == null ? EMPTY : result.getWorlds().toString());
@@ -115,13 +115,14 @@ public class LevelSettings {
 
 	public NewLevelResultsResponse checkLocalResults(NewLevelResultsRequest newResults) {
 		NewLevelResultsResponse response = new NewLevelResultsResponse();
-		checkSingleLocalResult(newResults, response, LevelResultName.TIME);
-		checkSingleLocalResult(newResults, response, LevelResultName.STEPS);
-		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS);
+		checkSingleLocalResult(newResults, response, LevelResultName.TIME, LESS_RESULT_COMPORATOR);
+		checkSingleLocalResult(newResults, response, LevelResultName.STEPS, LESS_RESULT_COMPORATOR);
+		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS, LESS_RESULT_COMPORATOR);
 		return response;
 	}
 
-	private void checkSingleLocalResult(NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name) {
+	protected void checkSingleLocalResult(
+			NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name, ResultComporator resultComporator) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
 		NewLevelResultRequest<Integer> newResult = newResults.getResults().get(name);
 		NewLevelResultResponse<Integer> resultResponse = new NewLevelResultResponse<Integer>();
@@ -131,18 +132,40 @@ public class LevelSettings {
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
-		} else if (result.getWorlds() != null && newResult.getValue() < result.getWorlds()) {
+		} else if (result.getWorlds() != null && resultComporator.isRecordBeaten(newResult.getValue(), result.getWorlds())) {
 			resultResponse.setWorlds(true);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
-		} else if (result.getPersonal() != null && newResult.getValue() < result.getPersonal()) {
+		} else if (result.getPersonal() != null && resultComporator.isRecordBeaten(newResult.getValue(), result.getPersonal())) {
 			resultResponse.setWorlds(false);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
 		}
 	}
+
+	protected interface ResultComporator {
+
+		boolean isRecordBeaten(Integer newValue, Integer value);
+
+	}
+
+	protected static final ResultComporator LESS_RESULT_COMPORATOR = new ResultComporator() {
+
+		@Override
+		public boolean isRecordBeaten(Integer newValue, Integer value) {
+			return newValue < value;
+		}
+	};
+
+	protected static final ResultComporator GREATER_RESULT_COMPORATOR = new ResultComporator() {
+
+		@Override
+		public boolean isRecordBeaten(Integer newValue, Integer value) {
+			return newValue > value;
+		}
+	};
 
 	/**
 	 * Updates level results by new one. Called when levels are loaded from the server first time
