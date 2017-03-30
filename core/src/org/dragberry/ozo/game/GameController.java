@@ -29,13 +29,9 @@ public class GameController extends InputAdapter {
 
 	public Level<?> level;
 
-	public LevelAttemptAuditEventRequest attempt;
-
 	public static GameController instance;
 	static {
 		instance = new GameController();
-		instance.attempt = new LevelAttemptAuditEventRequest();
-		instance.attempt.setUserId(DirectedGame.game.platform.getUser().getId());
 	}
 
 	public GameController init(Level<?> level, boolean restore) {
@@ -51,11 +47,12 @@ public class GameController extends InputAdapter {
     }
 
 	public void logLevelAttempt(LevelAttemptStatus status) {
-		populateLevelAttempt(status);
-		DirectedGame.game.logAuditEvent(attempt);
+		DirectedGame.game.logAuditEvent(populateLevelAttempt(status));
 	}
 
-	private void populateLevelAttempt(LevelAttemptStatus status) {
+	private LevelAttemptAuditEventRequest populateLevelAttempt(LevelAttemptStatus status) {
+		LevelAttemptAuditEventRequest attempt = new LevelAttemptAuditEventRequest();
+		attempt.setUserId(DirectedGame.game.platform.getUser().getId());
 		attempt.setType(AuditEventType.LEVEL_ATTEMPT);
 		attempt.setLevelId(level.settings.levelId);
 		attempt.setStatus(status);
@@ -73,6 +70,7 @@ public class GameController extends InputAdapter {
 				attempt.setTime(null);
 				attempt.setSteps(null);
 		}
+		return attempt;
 	}
 
 	public void onGameLost(Level<?> level) {
@@ -201,7 +199,7 @@ public class GameController extends InputAdapter {
 		switch (keycode) {
 			case Input.Keys.BACK:
 			case Input.Keys.ESCAPE:
-				DirectedGame.game.setPopup(DirectedGame.game.getScreen(PausePopup.class).init(level, attempt));
+				DirectedGame.game.setPopup(DirectedGame.game.getScreen(PausePopup.class).init(level));
 				break;
 		}
 		return false;

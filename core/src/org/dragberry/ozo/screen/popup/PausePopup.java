@@ -20,13 +20,10 @@ import org.dragberry.ozo.game.DirectedGame;
 
 public class PausePopup extends AbstractPopup {
 
-    private LevelAttemptAuditEventRequest levelAttempt;
-
     private Level<?> level;
 
-    public PausePopup init(Level<?> level, LevelAttemptAuditEventRequest attempt) {
+    public PausePopup init(Level<?> level) {
         this.level = level;
-        this.levelAttempt = attempt;
         return this;
     }
 
