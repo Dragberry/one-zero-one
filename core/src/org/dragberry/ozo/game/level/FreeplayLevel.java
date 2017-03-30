@@ -34,6 +34,9 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
 
     @Override
     protected void addGoals(FreeplayReachTheGoalLevelSettings settings) {
+        if (goalValue == 0) {
+            goalValue = settings.goal;
+        }
         goal = new DynamicReachGoal(goalValue < settings.goal ? goalValue : settings.goal);
         addGoalToLose(goal);
     }
@@ -41,7 +44,10 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
     @Override
     protected boolean isGameFinished() {
         int maxValue = getMaxValue();
-        
+        if (maxValue >= -goalValue * 2) {
+            goalValue = goalValue * 2;
+            goal.updateGoal(goalValue);
+        }
         if (isLost()) {
             GameController.instance.onGameWon(this);
             return true;

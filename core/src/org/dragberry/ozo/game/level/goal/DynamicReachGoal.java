@@ -14,7 +14,7 @@ import org.dragberry.ozo.game.objects.Unit;
 public class DynamicReachGoal extends AbstractGoal {
 
     private GoalUnit unit;
-    private int goal;
+    public int goal;
 
     public DynamicReachGoal(int goal) {
         this.goal = goal;
@@ -41,4 +41,8 @@ public class DynamicReachGoal extends AbstractGoal {
         unit.render(batch);
     }
 
+    public void updateGoal(int goalValue) {
+        goal = goalValue;
+        unit.setValue(goalValue);
+    }
 }

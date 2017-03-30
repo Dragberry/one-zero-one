@@ -37,7 +37,7 @@ public class LevelProvider {
     public final LevelSettings freeplayLevel;
 
     public LevelProvider() {
-        freeplayLevel = new FreeplayReachTheGoalLevelSettings(FreeplayLevel.class, Levels.L999_FREEPLAY, -4);
+        freeplayLevel = new FreeplayReachTheGoalLevelSettings(FreeplayLevel.class, Levels.L999_FREEPLAY, -5);
 
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
