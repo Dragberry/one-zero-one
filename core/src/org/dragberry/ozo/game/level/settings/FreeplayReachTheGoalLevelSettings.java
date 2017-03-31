@@ -15,11 +15,13 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
 
     private static final String TAG = FreeplayReachTheGoalLevelSettings.class.getName();
 
-	public final int goal;
+	public final float ratio;
+    public final int posGoalValue;
 
-    public FreeplayReachTheGoalLevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String name, int goal) {
+    public FreeplayReachTheGoalLevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String name, float ratio, int posGoal) {
         super(clazz, name);
-        this.goal = goal;
+        this.ratio = ratio;
+        this.posGoalValue = posGoal;
     }
 
     @Override

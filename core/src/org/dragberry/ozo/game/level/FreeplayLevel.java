@@ -7,12 +7,9 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.game.GameController;
 import org.dragberry.ozo.game.level.goal.DynamicReachGoal;
-import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.FreeplayReachTheGoalLevelSettings;
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 import org.dragberry.ozo.game.objects.Unit;
 import org.dragberry.ozo.screen.popup.AbstractGameFinishedPopup;
-import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.popup.FreeplayFinishedPopup;
 
 /**
@@ -23,8 +20,10 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
 
     private final static String TAG = FreeplayLevel.class.getName();
 
-    private int goalValue;
-    private transient DynamicReachGoal goal;
+    private int posGoalValue;
+    private float ratio;
+    private transient DynamicReachGoal negGoal;
+    private transient DynamicReachGoal posGoal;
 
     public FreeplayLevel() {}
 
@@ -34,19 +33,24 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
 
     @Override
     protected void addGoals(FreeplayReachTheGoalLevelSettings settings) {
-        if (goalValue == 0) {
-            goalValue = settings.goal;
+        if (posGoalValue == 0) {
+            posGoalValue = settings.posGoalValue;
+            ratio = settings.ratio;
         }
-        goal = new DynamicReachGoal(goalValue < settings.goal ? goalValue : settings.goal);
-        addGoalToLose(goal);
+        posGoal = new DynamicReachGoal(settings.posGoalValue, posGoalValue > settings.posGoalValue ? posGoalValue : settings.posGoalValue);
+        negGoal = new DynamicReachGoal((int) -(settings.posGoalValue * ratio), (int) -(posGoalValue * ratio));
+        addGoalToLose(negGoal);
+        addGoalToWin(posGoal);
     }
 
     @Override
     protected boolean isGameFinished() {
         int maxValue = getMaxValue();
-        if (maxValue >= -goalValue * 2) {
-            goalValue = goalValue * 2;
-            goal.updateGoal(goalValue);
+        if (maxValue >= posGoalValue) {
+            posGoalValue = posGoalValue * 2;
+            posGoal.updateGoal(posGoalValue);
+            ratio -= 0.02f;
+            negGoal.updateGoal((int) -(posGoalValue * ratio));
         }
         if (isLost()) {
             GameController.instance.onGameWon(this);
@@ -59,6 +63,7 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
     public Class<? extends AbstractGameFinishedPopup> getGameFinishedPopup() {
         return FreeplayFinishedPopup.class;
     }
+
 
     @Override
     public NewLevelResultsRequest formNewResults() {
@@ -79,5 +84,14 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
             }
         }
         return maxValue;
+    }
+
+    @Override
+    public void reset(boolean restore) {
+        super.reset(restore);
+        if (!restore) {
+            posGoalValue = settings.posGoalValue;
+            ratio = settings.ratio;
+        }
     }
 }

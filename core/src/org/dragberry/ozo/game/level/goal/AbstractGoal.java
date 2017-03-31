@@ -23,7 +23,7 @@ public abstract class AbstractGoal implements Goal {
     }
 
     @Override
-    public void reset() {
+    public void reset(boolean restore) {
         // empty by default
     }
 }

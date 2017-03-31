@@ -19,5 +19,5 @@ public interface Goal {
 
     void update(float deltaTime);
 
-    void reset();
+    void reset(boolean restore);
 }

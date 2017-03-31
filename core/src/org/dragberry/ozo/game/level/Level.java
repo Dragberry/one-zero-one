@@ -144,10 +144,10 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         }
         started = false;
         for (Goal goal : goalsToWin) {
-            goal.reset();
+            goal.reset(restore);
         }
         for (Goal goal : goalsToLose) {
-            goal.reset();
+            goal.reset(restore);
         }
 
     }

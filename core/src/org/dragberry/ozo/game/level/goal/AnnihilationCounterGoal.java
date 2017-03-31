@@ -94,7 +94,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	}
 
 	@Override
-	public void reset() {
+	public void reset(boolean restore) {
 		this.posUnit.setValue(goal);
 		this.negUnit.setValue(-goal);
 		this.annihilationCounter = 0;

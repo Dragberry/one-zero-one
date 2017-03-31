@@ -16,7 +16,10 @@ public class DynamicReachGoal extends AbstractGoal {
     private GoalUnit unit;
     public int goal;
 
-    public DynamicReachGoal(int goal) {
+    private final int initialGoal;
+
+    public DynamicReachGoal(int initialGoal, int goal) {
+        this.initialGoal = initialGoal;
         this.goal = goal;
         this.unit = new GoalUnit(goal);
         this.dimension = unit.dimension;
@@ -44,5 +47,13 @@ public class DynamicReachGoal extends AbstractGoal {
     public void updateGoal(int goalValue) {
         goal = goalValue;
         unit.setValue(goalValue);
+    }
+
+    @Override
+    public void reset(boolean restore) {
+        if (!restore) {
+            goal = initialGoal;
+            unit.setValue(goal);
+        }
     }
 }

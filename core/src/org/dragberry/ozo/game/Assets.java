@@ -153,10 +153,12 @@ public class Assets implements Disposable, AssetErrorListener {
 
 		public static AssetFonts create(int screenWidth) {
 			switch (screenWidth) {
+				case 240:
+					return new AssetFonts(18, 23, 26, 28, 26, 32);
+				case 540:
 				case 720:
+				case 768:
 					return new AssetFonts(24, 28, 36, 40, 30, 36);
-				case 480:
-					return new AssetFonts(16, 17, 26, 28, 28, 34);
 				case 1080:
 				case 1200:
 				case 1440:
