@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
@@ -30,6 +31,8 @@ public class LevelSettings {
 	private static final String STATE = "state";
 	public static final String EMPTY = "";
 
+	public final Array<String> rules;
+
 	public final Class<? extends Level<? extends LevelSettings>> clazz;
     public final String levelId;
     public final String name;
@@ -38,12 +41,20 @@ public class LevelSettings {
 
 	public final LevelResults results = new LevelResults();
 
-    public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String levelId) {
+    public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String levelId, String... ruleKeys) {
         this.clazz = clazz;
         this.levelId = levelId;
         this.name = Assets.instance.translation.get(levelId);
+		this.rules = new Array<String>();
+		for (String key : ruleKeys) {
+			rules.add(Assets.instance.translation.get(key));
+		}
         load();
     }
+
+	public LevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String levelId) {
+		this(clazz, levelId, new String[0]);
+	}
     
     public void load() {
     	load(loadPreferences());

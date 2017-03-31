@@ -23,7 +23,6 @@ public class DynamicReachGoal extends AbstractGoal {
         this.goal = goal;
         this.unit = new GoalUnit(goal);
         this.dimension = unit.dimension;
-        this.msg = Assets.instance.translation.format("ozo.goal.justReahGoalLE", goal);
     }
 
     @Override

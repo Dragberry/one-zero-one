@@ -2,10 +2,12 @@ package org.dragberry.ozo.game.level.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
 
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
+import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
 
 /**
@@ -19,7 +21,7 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
     public final int posGoalValue;
 
     public FreeplayReachTheGoalLevelSettings(Class<? extends Level<? extends LevelSettings>> clazz, String name, float ratio, int posGoal) {
-        super(clazz, name);
+        super(clazz, name, "ozo.rule.getTheLargestValue" ,"ozo.rule.reachTheLoseGoal", "ozo.rule.dynamicGrowth");
         this.ratio = ratio;
         this.posGoalValue = posGoal;
     }

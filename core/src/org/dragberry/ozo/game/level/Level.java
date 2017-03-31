@@ -40,6 +40,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     public final transient Array<AbstractGoal> goalsToWin = new Array<AbstractGoal>();
     public final transient Array<AbstractGoal> goalsToLose = new Array<AbstractGoal>();
 
+    public transient Array<String> rules;
+
     protected Map<String, Generator> generators = Collections.emptyMap();
     
     public transient LS settings;
@@ -88,9 +90,10 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
      */
     public void setSettings(LS settings) {
         this.settings = settings;
+        addRules(settings);
         addGoals(settings);
     }
-    
+
     public Level(LS settings) {
         this(settings, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
@@ -100,6 +103,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         this.height = height;
         this.settings = settings;
         addGoals(settings);
+        addRules(settings);
         units = new Unit[width][height];
         initTransientFields();
         createGenerators();
@@ -185,6 +189,10 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     protected abstract void addGoals(LS settings);
+
+    protected void addRules(LS settings) {
+        rules = settings.rules;
+    }
 
     public Class<? extends AbstractGameFinishedPopup> getGameFinishedPopup() {
         return VictoryPopup.class;

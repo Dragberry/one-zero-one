@@ -23,6 +23,9 @@ public class ObjectivePopup extends AbstractPopup {
 
 	private boolean restore;
 
+	private Label rulesLbl;
+	private Table rulesTbl;
+
 	private Label winLbl;
 	private Table winTbl;
 	private Label loseLbl;
@@ -47,20 +50,40 @@ public class ObjectivePopup extends AbstractPopup {
 		popupWindow.clear();
 		winTbl.clear();
 		loseTbl.clear();
+		rulesTbl.clear();
 
-		popupWindow.add(winLbl).fill().expand();
-		popupWindow.row().expand().fill();
+		if (level.rules.size != 0) {
+			popupWindow.add(rulesLbl).fill().expand();
+			popupWindow.row().expand().fill();
 
-		populateTable(winTbl, level.goalsToWin);
-		popupWindow.add(winTbl).expand().fill();
-		popupWindow.row();
+			int index;
+			index = 1;
+			for (String rule : level.rules) {
+				rulesTbl.add(new Label(index++ +". ", Assets.instance.skin.skin))
+						.colspan(1).fill().expand().pad(5f);
+				Label ruleLbl = new Label(rule, Assets.instance.skin.skin);
+				ruleLbl.setWrap(true);
+				ruleLbl.setAlignment(Align.left);
+				rulesTbl.add(ruleLbl).colspan(19).fill().expand().pad(5f);
+				rulesTbl.row();
+			}
+			popupWindow.add(rulesTbl).expand().fill();
+			popupWindow.row();
+		} else {
+			popupWindow.add(winLbl).fill().expand();
+			popupWindow.row().expand().fill();
 
-		popupWindow.add(loseLbl).fill().expand();
-		popupWindow.row().expand().fill();
+			populateTable(winTbl, level.goalsToWin);
+			popupWindow.add(winTbl).expand().fill();
+			popupWindow.row();
 
-		populateTable(loseTbl, level.goalsToLose);
-		popupWindow.add(loseTbl).expand().fill();
-		popupWindow.row();
+			popupWindow.add(loseLbl).fill().expand();
+			popupWindow.row().expand().fill();
+
+			populateTable(loseTbl, level.goalsToLose);
+			popupWindow.add(loseTbl).expand().fill();
+			popupWindow.row();
+		}
 
 		if (restore) {
 			popupWindow.add(continueBtn).fill().expand().pad(10f);
@@ -77,10 +100,12 @@ public class ObjectivePopup extends AbstractPopup {
 		int index;
 		index = 1;
 		for (Goal goal : goals) {
-			Label goalLbl = new Label(" " + index++ +". " + goal.getMessage(), Assets.instance.skin.skin);
-			goalLbl.setWrap(true);
-			goalLbl.setAlignment(Align.center);
-			tbl.add(goalLbl).fill().expand();
+			tbl.add(new Label(index++ +". ", Assets.instance.skin.skin))
+					.colspan(1).fill().expand().pad(5f);
+			Label ruleLbl = new Label(goal.getMessage(), Assets.instance.skin.skin);
+			ruleLbl.setWrap(true);
+			ruleLbl.setAlignment(Align.left);
+			tbl.add(ruleLbl).colspan(19).fill().expand().pad(5f);
 			tbl.row();
 		}
 	}
@@ -89,6 +114,11 @@ public class ObjectivePopup extends AbstractPopup {
 	protected void buildStage(float viewportWidth, float viewportHeight) {
 		popupWindow.setWidth(viewportWidth * 0.75f);
 		popupWindow.setHeight(viewportHeight * 0.75f);
+
+		rulesTbl = new Table();
+
+		rulesLbl = new Label(Assets.instance.translation.get("ozo.rules"), Assets.instance.skin.skin);
+		rulesLbl.setAlignment(Align.center);
 
 		winLbl = new Label(Assets.instance.translation.get("ozo.toWin"), Assets.instance.skin.skin);
 		winLbl.setAlignment(Align.center);

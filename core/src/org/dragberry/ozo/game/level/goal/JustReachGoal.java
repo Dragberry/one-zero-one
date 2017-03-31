@@ -15,19 +15,19 @@ public class JustReachGoal extends AbstractGoal {
 
     public enum Operator {
 
-        LESS("ozo.goal.justReahGoalLE", new OperatorExecutor() {
+        LESS("ozo.goal.justReachGoalLE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck <= goalValue;
             }
         }),
-        EQUALS("ozo.goal.justReahGoalE", new OperatorExecutor() {
+        EQUALS("ozo.goal.justReachGoalE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck == goalValue;
             }
         }),
-        MORE("ozo.goal.justReahGoalGE", new OperatorExecutor() {
+        MORE("ozo.goal.justReachGoalGE", new OperatorExecutor() {
             @Override
             public boolean execute(int goalValue, int valueToCheck) {
                 return valueToCheck >= goalValue;
