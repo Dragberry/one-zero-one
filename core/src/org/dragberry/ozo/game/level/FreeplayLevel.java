@@ -20,6 +20,9 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
 
     private final static String TAG = FreeplayLevel.class.getName();
 
+    private final static float MIN_RATIO = 0.1f;
+    private final static float RATIO_STEP = 0.06f;
+
     private int posGoalValue;
     private float ratio;
     private transient DynamicReachGoal negGoal;
@@ -49,7 +52,8 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
         if (maxValue >= posGoalValue) {
             posGoalValue = posGoalValue * 2;
             posGoal.updateGoal(posGoalValue);
-            ratio -= 0.02f;
+            ratio -= RATIO_STEP;
+            ratio = ratio < MIN_RATIO ? MIN_RATIO : ratio;
             negGoal.updateGoal((int) -(posGoalValue * ratio));
         }
         if (isLost()) {
