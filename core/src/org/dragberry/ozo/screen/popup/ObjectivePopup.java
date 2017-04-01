@@ -64,7 +64,7 @@ public class ObjectivePopup extends AbstractPopup {
 				Label ruleLbl = new Label(rule, Assets.instance.skin.skin);
 				ruleLbl.setWrap(true);
 				ruleLbl.setAlignment(Align.left);
-				rulesTbl.add(ruleLbl).colspan(19).fill().expand().pad(5f);
+				rulesTbl.add(ruleLbl).colspan(29).fill().expand().pad(5f);
 				rulesTbl.row();
 			}
 			popupWindow.add(rulesTbl).expand().fill();
@@ -105,7 +105,7 @@ public class ObjectivePopup extends AbstractPopup {
 			Label ruleLbl = new Label(goal.getMessage(), Assets.instance.skin.skin);
 			ruleLbl.setWrap(true);
 			ruleLbl.setAlignment(Align.left);
-			tbl.add(ruleLbl).colspan(19).fill().expand().pad(5f);
+			tbl.add(ruleLbl).colspan(29).fill().expand().pad(5f);
 			tbl.row();
 		}
 	}

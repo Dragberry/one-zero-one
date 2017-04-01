@@ -67,16 +67,9 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
         rebuildStage();
     }
 
-    private void rebuildStage() {
-        Table table = new Table();
-        table.setFillParent(true);
+    protected void addLevelsAtTop(Table scrollTable) {}
 
-        Label label = new Label(screenTitle, Assets.instance.skin.skin);
-        label.setAlignment(Align.center);
-        table.add(label).fill().expand().pad(game.platform.getAdsController().isBannerShown() ? 125f : 50f, 50f, 25f, 50f);
-        table.row();
-
-        Table scrollTable = new Table();
+    protected void addDefaultLevels(Table scrollTable) {
         LevelState state = LevelState.COMPLETED;
         for (LevelSettings levelSettings : game.levelProvider.levels) {
             if (state == LevelState.COMPLETED && !levelSettings.completed) {
@@ -89,6 +82,22 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
             scrollTable.add(createLevelBtn(state, levelSettings)).fillX().expand(true, false).pad(5, 10, 5, 10);
             scrollTable.row();
         }
+    }
+
+    private void rebuildStage() {
+        Table table = new Table();
+        table.setFillParent(true);
+
+        Label label = new Label(screenTitle, Assets.instance.skin.skin);
+        label.setAlignment(Align.center);
+        table.add(label).fill().expand().pad(game.platform.getAdsController().isBannerShown() ? 125f : 50f, 50f, 25f, 50f);
+        table.row();
+
+        Table scrollTable = new Table();
+
+        addLevelsAtTop(scrollTable);
+        addDefaultLevels(scrollTable);
+
         ScrollPane scroller = new ScrollPane(scrollTable);
         table.add(scroller).fill().expand();
         table.row().fill().expand();
@@ -113,7 +122,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     public void pause() {
     }
 
-    private TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
+    protected TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
         TextButton btn = new TextButton(levelSettings.name, Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
         addButtonListener(state, btn, levelSettings);
         return btn;

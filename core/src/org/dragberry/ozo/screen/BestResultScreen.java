@@ -1,6 +1,7 @@
 package org.dragberry.ozo.screen;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -27,4 +28,10 @@ public class BestResultScreen extends AbstractSelectLevelMenuScreen {
         });
     }
 
+    @Override
+    protected void addLevelsAtTop(Table scrollTable) {
+        scrollTable.add(createLevelBtn(LevelState.COMPLETED, game.levelProvider.freeplayLevel))
+                .fillX().expand(true, false).pad(5, 10, 5, 10);
+        scrollTable.row();
+    }
 }
