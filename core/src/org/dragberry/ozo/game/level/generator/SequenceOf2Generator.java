@@ -23,8 +23,12 @@ public abstract class SequenceOf2Generator extends Generator {
 		}
 
 		public void updatePosition() {
+			updatePosition(4);
+		}
+
+		public void updatePosition(int maxPosition) {
 			enabled = true;
-			position = MathUtils.random(1, 4);
+			position = MathUtils.random(1, maxPosition);
 		}
 	}
 
@@ -44,7 +48,7 @@ public abstract class SequenceOf2Generator extends Generator {
 
 	@Override
 	public int next(int step, int selectedX, int selectedY) {
-		value = value == 0 ? -1 : 0;
+		value = defaultValue();
 		if (thirdValueState.isReady()) {
 			return 1;
 		}
