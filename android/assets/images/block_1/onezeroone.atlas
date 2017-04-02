@@ -5,126 +5,126 @@ filter: Nearest,Nearest
 repeat: none
 background
   rotate: false
-  xy: 1, 145
+  xy: 1, 218
   size: 480, 800
   orig: 480, 800
   offset: 0, 0
   index: -1
 ui_bottom
   rotate: false
-  xy: 1, 51
-  size: 480, 92
-  orig: 480, 92
+  xy: 1, 131
+  size: 480, 85
+  orig: 480, 85
   offset: 0, 0
   index: -1
 ui_top
   rotate: false
-  xy: 483, 853
-  size: 480, 92
-  orig: 480, 92
+  xy: 483, 933
+  size: 480, 85
+  orig: 480, 85
   offset: 0, 0
   index: -1
 unit_neg
   rotate: false
-  xy: 483, 723
+  xy: 1, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 unit_neutral
   rotate: false
-  xy: 483, 593
+  xy: 483, 803
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 unit_pos
   rotate: false
-  xy: 613, 723
+  xy: 131, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 n+
   rotate: false
-  xy: 1, 26
+  xy: 965, 995
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n-
   rotate: false
-  xy: 965, 922
+  xy: 483, 778
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n0
   rotate: false
-  xy: 483, 568
+  xy: 613, 908
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n1
   rotate: false
-  xy: 613, 698
+  xy: 261, 106
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n2
   rotate: false
-  xy: 743, 828
+  xy: 965, 970
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n3
   rotate: false
-  xy: 1, 1
+  xy: 984, 995
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n4
   rotate: false
-  xy: 20, 26
+  xy: 483, 753
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n5
   rotate: false
-  xy: 965, 897
+  xy: 502, 778
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n6
   rotate: false
-  xy: 984, 922
+  xy: 613, 883
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n7
   rotate: false
-  xy: 483, 543
+  xy: 632, 908
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n8
   rotate: false
-  xy: 502, 568
+  xy: 261, 81
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
 n9
   rotate: false
-  xy: 613, 673
+  xy: 280, 106
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
