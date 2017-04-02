@@ -3,6 +3,7 @@ package org.dragberry.ozo.game.level.goal;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.objects.GoalUnit;
 import org.dragberry.ozo.game.objects.Unit;
+import org.dragberry.ozo.game.util.StringConstants;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -72,13 +73,23 @@ public class MultiGoal extends AbstractGoal {
     }
 
     public String buildMessage() {
-    	String values = "";
+        boolean allTheSame = true;
+        int previous = 0;
+    	StringBuilder values = new StringBuilder(StringConstants.EMPTY);
     	for (int index = 0; index < goals.length; index++) {
-    		values += index == goals.length - 1 
-    				?  goals[index].goalValue : goals[index].goalValue + ",";
-    		
+            if (allTheSame && previous != 0 && previous != goals[index].goalValue) {
+                allTheSame = false;
+            }
+            previous = goals[index].goalValue;
+
+            values.append(goals[index].goalValue);
+            if (index != goals.length - 1 ) {
+                values.append(StringConstants.COMMA).append(StringConstants.SPACE);
+            }
     	}
-        return Assets.instance.translation.format("ozo.goal.multiGoal", goals.length, values);
+        return Assets.instance.translation.format(
+                allTheSame ? "ozo.goal.multiGoalAllTheSame" : "ozo.goal.multiGoal", goals.length,
+                allTheSame ? goals[0].goalValue : values);
     }
 
     private void clearGoals() {

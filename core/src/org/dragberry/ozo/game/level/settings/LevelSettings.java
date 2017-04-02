@@ -14,6 +14,7 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.level.Level;
+import org.dragberry.ozo.game.util.StringConstants;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class LevelSettings {
 
 	private static final String COMPLETED = "completed";
 	private static final String STATE = "state";
-	public static final String EMPTY = "";
 
 	public final Array<String> rules;
 
@@ -97,9 +97,9 @@ public class LevelSettings {
 
 	protected void updateSingleResult(LevelResultName name, Preferences prefs) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
-		prefs.putString(name.personal(), result.getPersonal() == null ? EMPTY : result.getPersonal().toString());
-		prefs.putString(name.worlds(), result.getWorlds() == null ? EMPTY : result.getWorlds().toString());
-		prefs.putString(name.owner(), result.getOwner() == null ? EMPTY : result.getOwner());
+		prefs.putString(name.personal(), result.getPersonal() == null ? StringConstants.EMPTY : result.getPersonal().toString());
+		prefs.putString(name.worlds(), result.getWorlds() == null ? StringConstants.EMPTY : result.getWorlds().toString());
+		prefs.putString(name.owner(), result.getOwner() == null ? StringConstants.EMPTY : result.getOwner());
 		Gdx.app.debug(TAG, "updateSingleResult: " + name + "=" + result);
 	}
 
@@ -240,7 +240,7 @@ public class LevelSettings {
 
 	public void saveState(Level<? extends LevelSettings> level, boolean shouldSave) {
 		Preferences prefs = loadLevelStatePrefs();
-		prefs.putString(STATE, shouldSave ? JSON.toJson(level) : EMPTY);
+		prefs.putString(STATE, shouldSave ? JSON.toJson(level) : StringConstants.EMPTY);
 		prefs.flush();
 	}
 

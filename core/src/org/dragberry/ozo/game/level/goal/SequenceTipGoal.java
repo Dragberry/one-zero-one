@@ -13,9 +13,6 @@ import org.dragberry.ozo.game.objects.Unit;
 
 public class SequenceTipGoal extends AbstractGoal {
 
-    private int prevPrev = -1;
-    private int prev = 0;
-
     private GlyphLayout title;
     private GlyphLayout sequence;
 

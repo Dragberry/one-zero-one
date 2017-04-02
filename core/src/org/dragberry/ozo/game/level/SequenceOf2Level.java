@@ -6,12 +6,13 @@ import org.dragberry.ozo.game.level.generator.SequenceOf2Generator;
 import org.dragberry.ozo.game.level.generator.ZeroMinusOneGenerator;
 import org.dragberry.ozo.game.level.goal.SequenceTipGoal;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.util.StringConstants;
 
 import java.util.HashMap;
 
 public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 
-	protected static final String DELIMITER = ", ";
+	protected static final String DELIMITER = StringConstants.COMMA + StringConstants.SPACE;
 
 	protected int sequenceValue = -1;
 
