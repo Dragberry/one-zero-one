@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class AbstractGoal implements Goal {
 
-    public Vector2 dimension;
+    public Vector2 dimension = new Vector2();
     
     protected String msg;
 

@@ -19,7 +19,7 @@ public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 	public SequenceOf2Level(ReachTheGoalLevelSettings settings) {
 		super(settings);
 	}
-	
+
 	@Override
 	protected void createGenerators() {
 		thirdValueState = new SequenceOf2Generator.ThirdValueState();

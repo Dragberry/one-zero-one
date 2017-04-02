@@ -30,7 +30,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 		this.negUnit = new GoalUnit(-goal);
 		this.zeroUnit = new GoalUnit(0);
 		this.layout = new GlyphLayout(Assets.instance.fonts.gui_xs, "+");
-		this.dimension = new Vector2(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y); 
+		this.dimension.set(posUnit.dimension.x + layout.width + negUnit.dimension.x, negUnit.dimension.y);
 		this.msg = Assets.instance.translation.format("ozo.goal.annihilationGoal", goal);
 	}
 

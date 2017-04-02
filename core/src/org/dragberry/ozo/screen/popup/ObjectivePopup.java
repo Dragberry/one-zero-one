@@ -100,6 +100,9 @@ public class ObjectivePopup extends AbstractPopup {
 		int index;
 		index = 1;
 		for (Goal goal : goals) {
+			if (goal.getMessage() == null) {
+				continue;
+			}
 			tbl.add(new Label(index++ +". ", Assets.instance.skin.skin))
 					.colspan(1).fill().expand().pad(5f);
 			Label ruleLbl = new Label(goal.getMessage(), Assets.instance.skin.skin);
