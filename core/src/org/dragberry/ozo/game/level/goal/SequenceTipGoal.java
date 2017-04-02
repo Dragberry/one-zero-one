@@ -11,7 +11,7 @@ import org.dragberry.ozo.game.objects.Unit;
  * Created by maksim on 02.04.17.
  */
 
-public class FibonacciTipGoal extends AbstractGoal {
+public class SequenceTipGoal extends AbstractGoal {
 
     private int prevPrev = -1;
     private int prev = 0;
@@ -21,7 +21,7 @@ public class FibonacciTipGoal extends AbstractGoal {
 
     private boolean rendered = false;
 
-    public FibonacciTipGoal() {
+    public SequenceTipGoal() {
         title = new GlyphLayout(Assets.instance.fonts.gui_m, Assets.instance.translation.get("ozo.sequence"));
         sequence = new GlyphLayout();
     }

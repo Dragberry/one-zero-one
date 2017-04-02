@@ -44,8 +44,8 @@ public class GameRenderer implements Disposable {
 
 	public void render() {
 		batch.begin();
-		levelRenderer.render(batch);
 		guiRenderer.render(batch);
+		levelRenderer.render(batch);
 		batch.end();
 		renderDebugInfo(shapeRenderer);
 	}

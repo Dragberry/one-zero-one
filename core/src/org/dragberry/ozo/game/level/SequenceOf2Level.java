@@ -4,20 +4,31 @@ import org.dragberry.ozo.game.level.generator.ConstGenerator;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.SequenceOf2Generator;
 import org.dragberry.ozo.game.level.generator.ZeroMinusOneGenerator;
+import org.dragberry.ozo.game.level.goal.SequenceTipGoal;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 import java.util.HashMap;
 
 public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 
+	protected static final String DELIMITER = ", ";
+
 	protected int sequenceValue = -1;
 
 	private transient SequenceOf2Generator.ThirdValueState thirdValueState;
+	private transient SequenceTipGoal tip;
 
 	public SequenceOf2Level() {}
 
 	public SequenceOf2Level(ReachTheGoalLevelSettings settings) {
 		super(settings);
+	}
+
+	@Override
+	protected void addGoals(ReachTheGoalLevelSettings settings) {
+		super.addGoals(settings);
+		tip = new SequenceTipGoal();
+		addGoalToWin(tip);
 	}
 
 	@Override
@@ -58,7 +69,14 @@ public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 		}
 	}
 
-	protected abstract void updateSequence();
+	protected void updateSequence() {
+		updateSequenceValue();
+		tip.updateSequence(getSequence());
+	}
+
+	protected abstract void updateSequenceValue();
+
+	protected abstract String getSequence();
 
 	@Override
 	public void reset(boolean restore) {
@@ -73,6 +91,9 @@ public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 		}
 		if (!restore) {
 			sequenceValue = -1;
+			tip.updateSequence(null);
+		} else {
+			tip.updateSequence(getSequence());
 		}
 	}
 }

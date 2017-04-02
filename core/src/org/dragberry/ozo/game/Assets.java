@@ -163,7 +163,7 @@ public class Assets implements Disposable, AssetErrorListener {
 				case 1200:
 				case 1440:
 				case 1600:
-					return new AssetFonts(17, 18, 25, 27, 50, 54);
+					return new AssetFonts(17, 18, 25, 27, 38, 42);
 				default:
 					float factorGui = screenWidth /  Constants.VIEWPORT_GUI_WIDTH;
 					return new AssetFonts(

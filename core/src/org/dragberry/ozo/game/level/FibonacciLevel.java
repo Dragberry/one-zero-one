@@ -1,12 +1,11 @@
 package org.dragberry.ozo.game.level;
 
-import org.dragberry.ozo.game.level.goal.FibonacciTipGoal;
+import org.dragberry.ozo.game.level.goal.SequenceTipGoal;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
 
 public class FibonacciLevel extends SequenceOf2Level {
 
 	private int previousSequenceValue = 0;
-	private transient FibonacciTipGoal tip;
 
 	public FibonacciLevel() {}
 
@@ -15,43 +14,34 @@ public class FibonacciLevel extends SequenceOf2Level {
 	}
 
 	@Override
-	protected void addGoals(ReachTheGoalLevelSettings settings) {
-		super.addGoals(settings);
-		tip = new FibonacciTipGoal();
-		addGoalToWin(tip);
-	}
-
-	@Override
-	protected void updateSequence() {
+	protected void updateSequenceValue() {
 		int prev = previousSequenceValue;
 		previousSequenceValue = sequenceValue;
 		sequenceValue += prev;
-		tip.updateSequence(getSequence());
 	}
 
 	@Override
 	public void reset(boolean restore) {
-		super.reset(restore);
 		if (!restore) {
 			previousSequenceValue = 0;
-			tip.updateSequence(null);
-		} else {
-			tip.updateSequence(getSequence());
 		}
+		super.reset(restore);
 	}
 
-	private String getSequence() {
+	@Override
+	protected String getSequence() {
 		StringBuilder seq = new StringBuilder();
-		int prev = 0;
-		int value = -1;
-		while (prev != previousSequenceValue || value != sequenceValue) {
-			if (prev != 0) {
-				seq.append(", ");
+		int prev = sequenceValue - previousSequenceValue;
+		int value = previousSequenceValue;
+		int counter = 0;
+		while (counter < 5 && value < 0) {
+			if (counter != 0) {
+				seq.append(DELIMITER);
 			}
 			seq.append(-value);
-			int temp = prev;
-			prev = value;
-			value += temp;
+			prev = value - prev;
+			value = value - prev;
+			counter++;
 		}
 		return seq.toString();
 	}

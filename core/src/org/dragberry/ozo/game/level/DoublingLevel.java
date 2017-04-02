@@ -15,8 +15,25 @@ public class DoublingLevel extends SequenceOf2Level {
     }
 
     @Override
-    protected void updateSequence() {
+    protected void updateSequenceValue() {
         sequenceValue *= 2;
+    }
+
+    @Override
+    protected String getSequence() {
+        StringBuilder seq = new StringBuilder();
+        int seqValue = sequenceValue / 2;
+        int counter = 0;
+        while (counter < 5 && seqValue < 0) {
+            if (counter != 0) {
+                seq.append(DELIMITER);
+            }
+            seq.append(-seqValue);
+            seqValue /= 2;
+            counter++;
+        }
+
+        return seq.toString();
     }
 
 }
