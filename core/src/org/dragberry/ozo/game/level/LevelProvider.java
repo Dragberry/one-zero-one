@@ -103,6 +103,10 @@ public class LevelProvider {
 
     private void processLevel(Map<String, LevelResults> allResults, final LevelSettings levelSettings) {
         LevelResults results = allResults.get(levelSettings.levelId);
+        if (results == null) {
+            DirectedGame.game.wrongAppVersion = true;
+            return;
+        }
         NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
         newResultsRequest.setUserId(DirectedGame.game.platform.getUser().getId());
         levelSettings.save();
