@@ -19,7 +19,7 @@ public class SequenceTipGoal extends AbstractGoal {
     private boolean rendered = false;
 
     public SequenceTipGoal() {
-        title = new GlyphLayout(Assets.instance.fonts.gui_m, Assets.instance.translation.get("ozo.sequence"));
+        title = new GlyphLayout(Assets.instance.fonts.gui_s, Assets.instance.translation.get("ozo.sequence"));
         sequence = new GlyphLayout();
     }
 
@@ -31,10 +31,10 @@ public class SequenceTipGoal extends AbstractGoal {
     @Override
     public void render(SpriteBatch batch, float x, float y) {
         if (rendered) {
-            Assets.instance.fonts.gui_m.draw(batch, title,
-                    x + 15, y + 12);
+            Assets.instance.fonts.gui_s.draw(batch, title,
+                    x + 15, y + 25);
             Assets.instance.fonts.gui_s.draw(batch, sequence,
-                    x + 15, y + 12 + sequence.height * 2);
+                    x + 15, y + 25 + sequence.height * 1.5f);
         }
     }
 
