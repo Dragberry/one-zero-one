@@ -1,7 +1,6 @@
 package org.dragberry.ozo.game.level;
 
-import org.dragberry.ozo.game.level.goal.SequenceTipGoal;
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.level.settings.SequenceReachTheGoalLevelSettings;
 
 public class FibonacciLevel extends SequenceOf2Level {
 
@@ -9,7 +8,7 @@ public class FibonacciLevel extends SequenceOf2Level {
 
 	public FibonacciLevel() {}
 
-	public FibonacciLevel(ReachTheGoalLevelSettings settings) {
+	public FibonacciLevel(SequenceReachTheGoalLevelSettings settings) {
 		super(settings);
 	}
 

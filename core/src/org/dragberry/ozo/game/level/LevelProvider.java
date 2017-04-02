@@ -18,6 +18,7 @@ import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachMultiGoalLevelSettings;
 import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.level.settings.SequenceReachTheGoalLevelSettings;
 import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
@@ -59,9 +60,10 @@ public class LevelProvider {
         levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, L017_STORM, 9, 99));
         levels.add(new ReachTheGoalLevelSettings(RepentanceLevel.class, L018_REPENTANCE, -25, 5));
         levels.add(new ReachTheGoalLevelSettings(HighwayLevel.class, L019_HIGHWAY, -35, 10));
-        levels.add(new ReachTheGoalLevelSettings(DoublingLevel.class, L020_DOUBLING, -129, 8));
-        levels.add(new ReachTheGoalLevelSettings(FibonacciLevel.class, L021_FIBONACCI, -145, 12));
-        levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, L022_TSUNAMI, 99, 999));
+        levels.add(new SequenceReachTheGoalLevelSettings(DoublingLevel.class, L020_DOUBLING, -129, 8, -1));
+        levels.add(new SequenceReachTheGoalLevelSettings(FibonacciLevel.class, L021_FIBONACCI, -145, 12, -1));
+        levels.add(new SequenceReachTheGoalLevelSettings(RepentanceSequenceLevel.class, L022_SERIAL_REPENTANCE, -30, 5, 0));
+        levels.add(new NoAnnihilationLevelSettings(NoAnnihilationWavesLevel.class, L023_TSUNAMI, 99, 999));
 
     }
 

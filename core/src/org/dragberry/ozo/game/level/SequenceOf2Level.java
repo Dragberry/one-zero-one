@@ -4,30 +4,32 @@ import org.dragberry.ozo.game.level.generator.ConstGenerator;
 import org.dragberry.ozo.game.level.generator.Generator;
 import org.dragberry.ozo.game.level.generator.SequenceOf2Generator;
 import org.dragberry.ozo.game.level.generator.ZeroMinusOneGenerator;
+import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.goal.SequenceTipGoal;
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.level.settings.SequenceReachTheGoalLevelSettings;
 import org.dragberry.ozo.game.util.StringConstants;
 
 import java.util.HashMap;
 
-public abstract class SequenceOf2Level extends ReachTheGoalLevel {
+public abstract class SequenceOf2Level extends Level<SequenceReachTheGoalLevelSettings> {
 
 	protected static final String DELIMITER = StringConstants.COMMA + StringConstants.SPACE;
 
-	protected int sequenceValue = -1;
+	protected int sequenceValue;
 
-	private transient SequenceOf2Generator.ThirdValueState thirdValueState;
+	protected transient SequenceOf2Generator.ThirdValueState thirdValueState;
 	private transient SequenceTipGoal tip;
 
 	public SequenceOf2Level() {}
 
-	public SequenceOf2Level(ReachTheGoalLevelSettings settings) {
+	public SequenceOf2Level(SequenceReachTheGoalLevelSettings settings) {
 		super(settings);
 	}
 
 	@Override
-	protected void addGoals(ReachTheGoalLevelSettings settings) {
-		super.addGoals(settings);
+	protected void addGoals(SequenceReachTheGoalLevelSettings settings) {
+		addGoalToWin(new JustReachGoal(settings.goal, settings.operator));
+		addGoalToLose(new JustReachGoal(settings.goalToLose, JustReachGoal.Operator.LESS));
 		tip = new SequenceTipGoal();
 		addGoalToWin(tip);
 	}
@@ -58,7 +60,7 @@ public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 		return x % 2 == y % 2 ? ConstGenerator.NEG_ONE : ConstGenerator.ZERO;
 	}
 
-	private boolean isStepResultMatchedSequnceValue() {
+	protected boolean isStepResultMatchedSequnceValue() {
 		return selectedUnit.getValue() == sequenceValue;
 	}
 
@@ -91,7 +93,7 @@ public abstract class SequenceOf2Level extends ReachTheGoalLevel {
 			}
 		}
 		if (!restore) {
-			sequenceValue = -1;
+			sequenceValue = settings.initialSequence;
 			tip.updateSequence(null);
 		} else {
 			tip.updateSequence(getSequence());

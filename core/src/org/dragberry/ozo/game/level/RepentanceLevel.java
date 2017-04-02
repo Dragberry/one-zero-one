@@ -42,6 +42,12 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 	
 	@Override
 	protected Generator getDefaultGenerator(int x, int y) {
+		if (x == 1 && y == 2) {
+			return  ConstGenerator.NEG_ONE;
+		}
+		if (x == 4 && y == 4) {
+			return ConstGenerator.ZERO;
+		}
 		return x % 2 == y % 2 ? ConstGenerator.NEG_ONE : ConstGenerator.ZERO;
 	}
 
@@ -50,8 +56,7 @@ public class RepentanceLevel extends ReachTheGoalLevel {
 			return false;
 		}
 		float previousSign = Math.signum(selectedUnit.getValue());
-		for (Object obj : neighbors) {
-			Unit neighbor = (Unit) obj;
+		for (Unit neighbor : neighbors) {
 			float sign = Math.signum(neighbor.getValue());
 			if (previousSign != sign) {
 				return false;

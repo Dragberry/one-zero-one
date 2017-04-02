@@ -1,6 +1,6 @@
 package org.dragberry.ozo.game.level;
 
-import org.dragberry.ozo.game.level.settings.ReachTheGoalLevelSettings;
+import org.dragberry.ozo.game.level.settings.SequenceReachTheGoalLevelSettings;
 
 /**
  * Created by maksim on 01.04.17.
@@ -10,7 +10,7 @@ public class DoublingLevel extends SequenceOf2Level {
 
     public DoublingLevel() {}
 
-    public DoublingLevel(ReachTheGoalLevelSettings settings) {
+    public DoublingLevel(SequenceReachTheGoalLevelSettings settings) {
         super(settings);
     }
 
