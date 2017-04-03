@@ -177,7 +177,19 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     protected Generator getDefaultGenerator(int x, int y) {
-    	 return RandomGenerator.DEFAUTL;
+    	 return RandomGenerator.DEFAUTL.adjust(getTotal());
+    }
+
+    private int getTotal() {
+        int total = 0;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (units[x][y] != null) {
+                    total += units[x][y].getValue();
+                }
+            }
+        }
+        return total;
     }
 
     protected void addGoalToWin(AbstractGoal goalToWin) {
