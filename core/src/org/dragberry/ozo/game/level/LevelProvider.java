@@ -92,12 +92,7 @@ public class LevelProvider {
                         processLevel(allResults, levelSettings);
                     }
                 }
-
-                        @Override
-                        public void onFail() {
-                            super.onFail();
-                        }
-                    });
+            });
         }
     }
 

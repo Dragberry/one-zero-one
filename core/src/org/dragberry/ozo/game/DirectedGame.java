@@ -42,6 +42,7 @@ public abstract class DirectedGame implements ApplicationListener {
 	private final static String TAG = DirectedGame.class.getName();
 
 	private static final String USER_ID = "userID";
+	private static final String USER_NAME = "userName";
 	private static final String SETTINGS_EXTENSION = ".settings";
 
 	public static DirectedGame game;
@@ -113,23 +114,12 @@ public abstract class DirectedGame implements ApplicationListener {
 		Gdx.app.debug(TAG, "load game settings...");
 		final Preferences prefs = Gdx.app.getPreferences(getClass() + SETTINGS_EXTENSION);
 		String userId = prefs.getString(USER_ID);
+		String userName = prefs.getString(USER_NAME);
 		if (userId.isEmpty()) {
-			Gdx.app.debug(TAG, "User id is not exist for taht application. Sending request to create new user");
-			platform.getHttpClient().executeTask(new PostHttpTask<String, String>(
-					CommonConstants.DEFAULT_USER_ID, String.class, HttpClient.URL.NEW_USER) {
-
-				@Override
-				public void onComplete(String result) {
-					Gdx.app.debug(TAG, "New user has been created with id=" + result);
-					prefs.putString(USER_ID, result);
-					prefs.flush();
-					platform.getUser().setUserId(result);
-
-					logAuditEvent(createSimpleAuditRequest(AuditEventType.START_APPLICATION));
-				}
-			});
+			Gdx.app.debug(TAG, "User id is not exist for that application. Sending request to create new user");
 		} else {
-			platform.getUser().setUserId(userId);
+			game.platform.getUser().setUserId(userId);
+			game.platform.getUser().setUserName(userName);
 		}
 	}
 

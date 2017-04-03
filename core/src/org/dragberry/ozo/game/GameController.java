@@ -89,15 +89,17 @@ public class GameController extends InputAdapter {
 		level.settings.completed = true;
 		level.settings.updateResults(response);
 
-		DirectedGame.game.platform.getHttpClient().executeTask(
-				new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-						newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
+		if (!DirectedGame.game.platform.getUser().isDefault()) {
+			DirectedGame.game.platform.getHttpClient().executeTask(
+					new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+							newResults, NewLevelResultsResponse.class, HttpClient.URL.NEW_RESULT) {
 
-					@Override
-					public void onComplete(NewLevelResultsResponse result) {
-						level.settings.updateResults(result);
-					}
-				});
+						@Override
+						public void onComplete(NewLevelResultsResponse result) {
+							level.settings.updateResults(result);
+						}
+					});
+		}
 
 		DirectedGame.game.setPopup(DirectedGame.game.getScreen(level.getGameFinishedPopup()).init(response));
 

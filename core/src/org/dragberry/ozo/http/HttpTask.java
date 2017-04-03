@@ -15,6 +15,24 @@ import java.text.MessageFormat;
  */
 public abstract class HttpTask<P, R> {
 
+    public static class Result<T> {
+        public final T result;
+        public final HttpStatus status;
+
+        public Result(T result) {
+            this(result, null);
+        }
+
+        public Result(HttpStatus status) {
+            this(null, status);
+        }
+
+        public Result(T result, HttpStatus status) {
+            this.status = status;
+            this.result = result;
+        }
+    }
+
     private static final String TAG = HttpTask.class.getName();
 
     public static RestTemplate restTemplate;
@@ -27,15 +45,18 @@ public abstract class HttpTask<P, R> {
         this.resultClass = resultClass;
     }
 
-    public final R execute() {
+
+
+    public final Result<R> execute() {
         try {
-            return doRequest();
+            return new Result<R>(doRequest());
         } catch (HttpClientErrorException exc) {
             if (HttpStatus.GONE.equals(exc.getStatusCode())) {
                 DirectedGame.game.wrongAppVersion = true;
                 Gdx.app.error(TAG, "Application version is wrong!");
             } else {
                 Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
+                return new Result<R>(exc.getStatusCode());
             }
         } catch (Exception exc) {
             Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
@@ -47,7 +68,7 @@ public abstract class HttpTask<P, R> {
 
     public abstract void onComplete(R result);
 
-    public void onFail() {
+    public void onFail(HttpStatus status) {
         // on fail
     }
 

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.screen.popup.NewUserPopup;
 import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
@@ -85,7 +86,10 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 		if (game.wrongAppVersion) {
 			DirectedGame.game.setPopup(DirectedGame.game.getScreen(WrongVersionPopup.class).init());
+		} else if (game.platform.getUser().isDefault() && game.platform.getHttpClient().isConnected()) {
+			DirectedGame.game.setPopup(DirectedGame.game.getScreen(NewUserPopup.class).init());
 		}
+
 	}
 
 	@Override

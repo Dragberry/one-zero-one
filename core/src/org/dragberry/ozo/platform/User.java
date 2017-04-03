@@ -9,5 +9,9 @@ public interface User {
 
     void setUserId(String userId);
 
+    String getName();
+
+    void setUserName(String userName);
+
     boolean isDefault();
 }

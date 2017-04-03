@@ -202,7 +202,7 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 		getContext().startActivity(intent);
 	}
 
-	private class HttpRequestTask<P, R> extends AsyncTask<Void, Void, R> {
+	private class HttpRequestTask<P, R> extends AsyncTask<Void, Void, HttpTask.Result<R>> {
 
 		private final HttpTask<P, R> httpTask;
 
@@ -211,16 +211,16 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 		}
 
 		@Override
-		protected R doInBackground(Void... params) {
+		protected HttpTask.Result<R> doInBackground(Void... params) {
 			return httpTask.execute();
 		}
 
 		@Override
-		protected void onPostExecute(R result) {
-			if (result == null) {
-				httpTask.onFail();
+		protected void onPostExecute(HttpTask.Result<R> result) {
+			if (result.result == null) {
+				httpTask.onFail(result.status);
 			} else {
-				httpTask.onComplete(result);
+				httpTask.onComplete(result.result);
 			}
 		}
 
