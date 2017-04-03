@@ -13,6 +13,7 @@ import org.dragberry.ozo.common.user.NewUserRequest;
 import org.dragberry.ozo.common.user.NewUserResponse;
 import org.dragberry.ozo.game.Assets;
 import org.dragberry.ozo.game.DirectedGame;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.StringConstants;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
@@ -28,9 +29,9 @@ public class NewUserPopup extends AbstractPopup {
 
     private static final String USER_ID = "userID";
     private static final String USER_NAME = "userName";
-    private static final String SETTINGS_EXTENSION = ".settings";
 
     private TextField userNameTxt;
+    private TextButton registerBtn;
     private Label errorLbl;
 
     public NewUserPopup init() {
@@ -43,7 +44,7 @@ public class NewUserPopup extends AbstractPopup {
 
     @Override
     protected void rebuildStage() {
-
+        registerBtn.setDisabled(false);
     }
 
     @Override
@@ -66,7 +67,8 @@ public class NewUserPopup extends AbstractPopup {
         errorLbl.setVisible(false);
         popupWindow.add(errorLbl).fill().expand().pad(10f);
         popupWindow.row();
-        popupWindow.add(createOkBtn()).fill().expand().pad(10f);
+        registerBtn = createOkBtn();
+        popupWindow.add(registerBtn).fill().expand().pad(10f);
         popupWindow.row();
         popupWindow.add(createContinueBtn()).fill().expand().pad(10f);
         popupWindow.row();
@@ -91,6 +93,7 @@ public class NewUserPopup extends AbstractPopup {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 errorLbl.setVisible(true);
+                registerBtn.setDisabled(true);
                 String userName = userNameTxt.getText();
                 if (userName.length() < 3 || userName.length() > 32) {
                     errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameLength"));
@@ -104,7 +107,7 @@ public class NewUserPopup extends AbstractPopup {
                     @Override
                     public void onComplete(NewUserResponse result) {
                         Gdx.app.debug(TAG, "New user has been created with id=" + result);
-                        final Preferences prefs = Gdx.app.getPreferences(getClass() + SETTINGS_EXTENSION);
+                        final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
                         prefs.putString(USER_ID, result.getUserId());
                         prefs.putString(USER_NAME, result.getUserName());
                         prefs.flush();
@@ -117,6 +120,7 @@ public class NewUserPopup extends AbstractPopup {
 
                     @Override
                     public void onFail(HttpStatus status) {
+                        registerBtn.setDisabled(false);
                         errorLbl.setVisible(true);
                         if (HttpStatus.CONFLICT == status) {
                             errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameExists"));

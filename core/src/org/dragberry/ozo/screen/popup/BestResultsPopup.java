@@ -62,7 +62,6 @@ public class BestResultsPopup extends AbstractPopup {
 
 
 		Label lbl;
-		String owner = Assets.instance.translation.get("ozo.owner");
 		for (Map.Entry<LevelResultName, LevelSingleResult<Integer>> result : levelSettings.results.getResults().entrySet()) {
 			LevelSingleResult<Integer> value = result.getValue();
 
@@ -82,8 +81,8 @@ public class BestResultsPopup extends AbstractPopup {
 			resultTable.add(lbl).colspan(1).fill().expand().pad(3f, 0f, 0f, 10f);
 			resultTable.row();
 
-			lbl = new Label(owner + StringConstants.SPACE
-					+ value.getOwner() == null ? StringConstants.DASH : value.getOwner(), skin);
+			lbl = new Label(Assets.instance.translation.get("ozo.owner") + StringConstants.SPACE
+					+ (value.getOwner() == null ? StringConstants.DASH : value.getOwner()), skin);
 			lbl.setWrap(true);
 			lbl.setAlignment(Align.left);
 			resultTable.add(lbl).colspan(6).fill().expand().pad(0f, 20f, 0f, 10f);

@@ -17,6 +17,7 @@ import org.dragberry.ozo.common.audit.AuditEventRequest;
 import org.dragberry.ozo.common.audit.AuditEventType;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
+import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.platform.Platform;
@@ -43,7 +44,6 @@ public abstract class DirectedGame implements ApplicationListener {
 
 	private static final String USER_ID = "userID";
 	private static final String USER_NAME = "userName";
-	private static final String SETTINGS_EXTENSION = ".settings";
 
 	public static DirectedGame game;
 
@@ -112,7 +112,7 @@ public abstract class DirectedGame implements ApplicationListener {
      */
 	public void loadGameSettings(final Platform platform) {
 		Gdx.app.debug(TAG, "load game settings...");
-		final Preferences prefs = Gdx.app.getPreferences(getClass() + SETTINGS_EXTENSION);
+		final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
 		String userId = prefs.getString(USER_ID);
 		String userName = prefs.getString(USER_NAME);
 		if (userId.isEmpty()) {

@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 
 public interface Constants {
 
+    String SETTINGS_PATH = "ozo.settings";
+
     String ANDROID_PLAY_MARKET_URL = "https://play.google.com/store/apps/details?id=org.dragberry.ozo";
 
     String TEXTURE_ATLAS_OBJECTS = "images/block_1/onezeroone.atlas";

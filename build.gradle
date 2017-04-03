@@ -25,7 +25,7 @@ allprojects {
 
         springAndroidRestVersion = "1.0.1.RELEASE"
         jacksonDatabindVersion = "2.8.7"
-        ozoBackendVersion = "1.0.0"
+        ozoBackendVersion = "2.0.0"
     }
 
     repositories {

@@ -12,9 +12,9 @@ public interface HttpClient {
 
     interface URL {
 
-        String ROOT = "http://10.0.2.2:8087/ozo-backend-war/app/" + CommonConstants.APP_VERSION;
+//        String ROOT = "http://10.0.2.2:8087/ozo-backend-war/app/" + CommonConstants.APP_VERSION;
 //        String ROOT = "http://192.168.0.104:8080/ozo-backend-war/app/" + CommonConstants.APP_VERSION;
-//        String ROOT = "http://dragberry.mycloud.by/ozo-backend-test/app/" + CommonConstants.APP_VERSION;
+        String ROOT = "http://dragberry.mycloud.by/ozo-backend-test/app/" + CommonConstants.APP_VERSION;
 
         String NEW_USER = "/user/new";
 
