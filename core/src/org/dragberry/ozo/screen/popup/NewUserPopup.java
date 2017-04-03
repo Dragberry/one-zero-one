@@ -48,8 +48,6 @@ public class NewUserPopup extends AbstractPopup {
 
     @Override
     protected void buildStage(float viewportWidth, float viewportHeight) {
-        popupWindow.setWidth(viewportWidth * 0.75f);
-        popupWindow.setHeight(viewportHeight * 0.375f);
         Label msgLbl = new Label(
                 Assets.instance.translation.get("ozo.registration"),
                 Assets.instance.skin.skin.get("header", Label.LabelStyle.class));
@@ -70,7 +68,12 @@ public class NewUserPopup extends AbstractPopup {
         popupWindow.row();
         popupWindow.add(createOkBtn()).fill().expand().pad(10f);
         popupWindow.row();
+        popupWindow.add(createContinueBtn()).fill().expand().pad(10f);
+        popupWindow.row();
         popupWindow.add(createExitBtn()).fill().expand().pad(10f);
+
+        popupWindow.setWidth(popupWindow.getPrefWidth());
+        popupWindow.setHeight(popupWindow.getPrefHeight());
     }
 
 
@@ -83,7 +86,7 @@ public class NewUserPopup extends AbstractPopup {
     }
 
     private TextButton createOkBtn() {
-        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.ok"), Assets.instance.skin.skin);
+        TextButton btn = new TextButton(Assets.instance.translation.get("ozo.register"), Assets.instance.skin.skin);
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

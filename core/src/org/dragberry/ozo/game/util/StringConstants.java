@@ -9,4 +9,5 @@ public interface StringConstants {
     String COMMA = ",";
     String EMPTY = "";
     String SPACE = " ";
+    String DASH = "-";
 }
