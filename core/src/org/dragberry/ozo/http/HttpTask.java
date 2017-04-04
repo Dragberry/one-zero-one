@@ -6,6 +6,7 @@ import org.dragberry.ozo.game.DirectedGame;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
@@ -45,8 +46,6 @@ public abstract class HttpTask<P, R> {
         this.resultClass = resultClass;
     }
 
-
-
     public final Result<R> execute() {
         try {
             return new Result<R>(doRequest());
@@ -58,6 +57,9 @@ public abstract class HttpTask<P, R> {
                 Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
                 return new Result<R>(exc.getStatusCode());
             }
+        } catch(HttpServerErrorException exc ) {
+            Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
+            return new Result<R>(exc.getStatusCode());
         } catch (Exception exc) {
             Gdx.app.error(TAG, toString() + " was completed with errors:", exc);
         }
@@ -69,6 +71,10 @@ public abstract class HttpTask<P, R> {
     public abstract void onComplete(R result);
 
     public void onFail(HttpStatus status) {
+        // on fail
+    }
+
+    public void onFail() {
         // on fail
     }
 

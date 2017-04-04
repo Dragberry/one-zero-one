@@ -13,6 +13,7 @@ import org.dragberry.ozo.common.levelresult.NewLevelResultResponse;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsRequest;
 import org.dragberry.ozo.common.levelresult.NewLevelResultsResponse;
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.util.StringConstants;
 
@@ -117,7 +118,7 @@ public class LevelSettings {
 				results.getResults().get(entry.getKey()).setPersonal(entry.getValue().getValue());
 				if (entry.getValue().isWorlds()) {
 					results.getResults().get(entry.getKey()).setWorlds(entry.getValue().getValue());
-					results.getResults().get(entry.getKey()).setOwner(newResults.getUserId());
+					results.getResults().get(entry.getKey()).setOwner(newResults.getUserName());
 				}
 			}
 		}
@@ -126,6 +127,8 @@ public class LevelSettings {
 
 	public NewLevelResultsResponse checkLocalResults(NewLevelResultsRequest newResults) {
 		NewLevelResultsResponse response = new NewLevelResultsResponse();
+		response.setUserName(DirectedGame.game.platform.getUser().getName());
+		response.setUserId(DirectedGame.game.platform.getUser().getId());
 		checkSingleLocalResult(newResults, response, LevelResultName.TIME, LESS_RESULT_COMPORATOR);
 		checkSingleLocalResult(newResults, response, LevelResultName.STEPS, LESS_RESULT_COMPORATOR);
 		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS, LESS_RESULT_COMPORATOR);

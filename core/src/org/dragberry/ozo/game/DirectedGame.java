@@ -116,10 +116,11 @@ public abstract class DirectedGame implements ApplicationListener {
 		String userId = prefs.getString(USER_ID);
 		String userName = prefs.getString(USER_NAME);
 		if (userId.isEmpty()) {
-			Gdx.app.debug(TAG, "User id is not exist for that application. Sending request to create new user");
+			Gdx.app.debug(TAG, "User id is not exist for that application.");
 		} else {
 			game.platform.getUser().setUserId(userId);
 			game.platform.getUser().setUserName(userName);
+			Gdx.app.debug(TAG, "User was loaded: [id=" + userId + "][name=" + userName + "]");
 		}
 	}
 
