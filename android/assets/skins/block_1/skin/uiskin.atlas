@@ -5,54 +5,22 @@ filter: Nearest,Nearest
 repeat: none
 logo
   rotate: false
-  xy: 1, 133
+  xy: 1, 138
   size: 640, 352
   orig: 640, 352
   offset: 0, 0
   index: -1
 default-window
   rotate: false
-  xy: 1, 54
+  xy: 1, 59
   size: 51, 77
   split: 26, 24, 37, 39
   orig: 51, 77
   offset: 0, 0
   index: -1
-default-input-text-cursor
-  rotate: false
-  xy: 643, 434
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
-default-input-text-focused
-  rotate: false
-  xy: 643, 434
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
-default-input-text-selection
-  rotate: false
-  xy: 643, 434
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
-default-input-text
-  rotate: false
-  xy: 643, 434
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
 default-round
   rotate: false
-  xy: 643, 434
+  xy: 643, 439
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
@@ -60,15 +28,7 @@ default-round
   index: -1
 default-level-closed-down
   rotate: false
-  xy: 1, 1
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
-default-level-closed
-  rotate: false
-  xy: 54, 80
+  xy: 1, 6
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
@@ -76,15 +36,7 @@ default-level-closed
   index: -1
 default-level-opened-down
   rotate: false
-  xy: 643, 381
-  size: 51, 51
-  split: 25, 25, 25, 25
-  orig: 51, 51
-  offset: 0, 0
-  index: -1
-default-level-opened
-  rotate: false
-  xy: 696, 434
+  xy: 54, 85
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
@@ -92,9 +44,55 @@ default-level-opened
   index: -1
 default-round-down
   rotate: false
-  xy: 54, 27
+  xy: 643, 386
   size: 51, 51
   split: 25, 25, 25, 25
   orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-input-text
+  rotate: false
+  xy: 696, 439
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-level-closed
+  rotate: false
+  xy: 54, 32
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-level-opened
+  rotate: false
+  xy: 107, 85
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-input-text-focused
+  rotate: false
+  xy: 643, 333
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-input-text-cursor
+  rotate: false
+  xy: 696, 412
+  size: 3, 25
+  orig: 3, 25
+  offset: 0, 0
+  index: -1
+default-input-text-selection
+  rotate: false
+  xy: 1, 1
+  size: 3, 3
+  orig: 3, 3
   offset: 0, 0
   index: -1

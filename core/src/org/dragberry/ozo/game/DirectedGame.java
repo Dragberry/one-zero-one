@@ -18,6 +18,7 @@ import org.dragberry.ozo.common.audit.AuditEventType;
 import org.dragberry.ozo.game.level.Level;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.game.util.Constants;
+import org.dragberry.ozo.game.util.StringConstants;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 import org.dragberry.ozo.platform.Platform;
@@ -41,9 +42,6 @@ import java.util.Map;
 public abstract class DirectedGame implements ApplicationListener {
 
 	private final static String TAG = DirectedGame.class.getName();
-
-	private static final String USER_ID = "userID";
-	private static final String USER_NAME = "userName";
 
 	public static DirectedGame game;
 
@@ -113,8 +111,8 @@ public abstract class DirectedGame implements ApplicationListener {
 	public void loadGameSettings(final Platform platform) {
 		Gdx.app.debug(TAG, "load game settings...");
 		final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
-		String userId = prefs.getString(USER_ID);
-		String userName = prefs.getString(USER_NAME);
+		String userId = prefs.getString(StringConstants.USER_ID);
+		String userName = prefs.getString(StringConstants.USER_NAME);
 		if (userId.isEmpty()) {
 			Gdx.app.debug(TAG, "User id is not exist for that application.");
 		} else {

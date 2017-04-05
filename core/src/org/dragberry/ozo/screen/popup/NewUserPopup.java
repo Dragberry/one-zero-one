@@ -27,9 +27,6 @@ public class NewUserPopup extends AbstractPopup {
 
     private final static String TAG = NewUserPopup.class.getName();
 
-    private static final String USER_ID = "userID";
-    private static final String USER_NAME = "userName";
-
     private TextField userNameTxt;
     private TextButton registerBtn;
     private Label errorLbl;
@@ -99,6 +96,7 @@ public class NewUserPopup extends AbstractPopup {
                 String userName = userNameTxt.getText();
                 if (userName.length() < 3 || userName.length() > 32) {
                     errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameLength"));
+                    Gdx.input.setInputProcessor(stage);
                     return;
                 }
                 NewUserRequest req = new NewUserRequest();
@@ -110,8 +108,8 @@ public class NewUserPopup extends AbstractPopup {
                     public void onComplete(NewUserResponse result) {
                         Gdx.app.debug(TAG, "New user has been created with id=" + result);
                         final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
-                        prefs.putString(USER_ID, result.getUserId());
-                        prefs.putString(USER_NAME, result.getUserName());
+                        prefs.putString(StringConstants.USER_ID, result.getUserId());
+                        prefs.putString(StringConstants.USER_NAME, result.getUserName());
                         prefs.flush();
                         game.platform.getUser().setUserId(result.getUserId());
                         game.platform.getUser().setUserName(result.getUserName());

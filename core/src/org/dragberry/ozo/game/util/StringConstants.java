@@ -10,4 +10,9 @@ public interface StringConstants {
     String EMPTY = "";
     String SPACE = " ";
     String DASH = "-";
+
+    String USER_ID = "userID";
+    String USER_NAME = "userName";
+
+
 }
