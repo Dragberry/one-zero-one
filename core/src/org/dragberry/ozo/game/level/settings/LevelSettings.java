@@ -131,14 +131,14 @@ public class LevelSettings {
 		response.setUserName(DirectedGame.game.platform.getUser().getName());
 		response.setUserId(DirectedGame.game.platform.getUser().getId());
 		response.setLevelId(newResults.getLevelId());
-		checkSingleLocalResult(newResults, response, LevelResultName.TIME, LESS_RESULT_COMPORATOR);
-		checkSingleLocalResult(newResults, response, LevelResultName.STEPS, LESS_RESULT_COMPORATOR);
-		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS, LESS_RESULT_COMPORATOR);
+		checkSingleLocalResult(newResults, response, LevelResultName.TIME);
+		checkSingleLocalResult(newResults, response, LevelResultName.STEPS);
+		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS);
 		return response;
 	}
 
 	protected void checkSingleLocalResult(
-			NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name, ResultComparator resultComporator) {
+			NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
 		NewLevelResultRequest<Integer> newResult = newResults.getResults().get(name);
 		NewLevelResultResponse<Integer> resultResponse = new NewLevelResultResponse<Integer>();
@@ -148,12 +148,12 @@ public class LevelSettings {
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
-		} else if (result.getWorlds() != null && resultComporator.isRecordBeaten(newResult.getValue(), result.getWorlds())) {
+		} else if (result.getWorlds() != null && name.isRecordBeaten(result.getWorlds(), newResult.getValue())) {
 			resultResponse.setWorlds(true);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
-		} else if (result.getPersonal() == null || resultComporator.isRecordBeaten(newResult.getValue(), result.getPersonal())) {
+		} else if (result.getPersonal() == null || name.isRecordBeaten(result.getPersonal(), newResult.getValue())) {
 			resultResponse.setWorlds(false);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());

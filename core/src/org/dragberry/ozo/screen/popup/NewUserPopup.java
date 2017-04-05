@@ -44,7 +44,9 @@ public class NewUserPopup extends AbstractPopup {
 
     @Override
     protected void rebuildStage() {
-        registerBtn.setDisabled(false);
+        userNameTxt.selectAll();
+        errorLbl.setText(StringConstants.EMPTY);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -83,7 +85,6 @@ public class NewUserPopup extends AbstractPopup {
         String pattern = Assets.instance.translation.get("ozo.inputYourName");
         TextField field = new TextField(pattern, Assets.instance.skin.skin);
         field.setAlignment(Align.center);
-        field.selectAll();
         return field;
     }
 
@@ -92,8 +93,9 @@ public class NewUserPopup extends AbstractPopup {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                errorLbl.setText(StringConstants.EMPTY);
                 errorLbl.setVisible(true);
-                registerBtn.setDisabled(true);
+                Gdx.input.setInputProcessor(null);
                 String userName = userNameTxt.getText();
                 if (userName.length() < 3 || userName.length() > 32) {
                     errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameLength"));
@@ -118,15 +120,25 @@ public class NewUserPopup extends AbstractPopup {
 
                         errorLbl.setText(StringConstants.EMPTY);
                         errorLbl.setVisible(false);
+                        Gdx.input.setInputProcessor(stage);
                         game.setPopup(null);
                     }
 
                     @Override
                     public void onFail(HttpStatus status) {
-                        registerBtn.setDisabled(false);
+                        Gdx.input.setInputProcessor(stage);
                         errorLbl.setVisible(true);
-                        if (HttpStatus.CONFLICT == status) {
-                            errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameExists"));
+                        switch (status) {
+                            case CONFLICT:
+                                errorLbl.setText(Assets.instance.translation.get("ozo.err.userNameExists"));
+                                break;
+                            case SERVICE_UNAVAILABLE:
+                            case BAD_GATEWAY:
+                                errorLbl.setText(Assets.instance.translation.get("ozo.err.serverUnavailable"));
+                                break;
+                            case INTERNAL_SERVER_ERROR:
+                                errorLbl.setText(Assets.instance.translation.get("ozo.err.serverError"));
+                                break;
                         }
                     }
                 });

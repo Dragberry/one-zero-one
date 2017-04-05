@@ -41,7 +41,7 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
     @Override
     public NewLevelResultsResponse checkLocalResults(NewLevelResultsRequest newResults) {
         NewLevelResultsResponse response = new NewLevelResultsResponse();
-        checkSingleLocalResult(newResults, response, LevelResultName.MAX_VALUE, GREATER_RESULT_COMPORATOR);
+        checkSingleLocalResult(newResults, response, LevelResultName.MAX_VALUE);
         return response;
     }
 }
