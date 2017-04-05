@@ -113,6 +113,9 @@ public class NewUserPopup extends AbstractPopup {
                         prefs.flush();
                         game.platform.getUser().setUserId(result.getUserId());
                         game.platform.getUser().setUserName(result.getUserName());
+
+                        game.levelProvider.refreshResultsWithOwner();
+
                         errorLbl.setText(StringConstants.EMPTY);
                         errorLbl.setVisible(false);
                         game.setPopup(null);

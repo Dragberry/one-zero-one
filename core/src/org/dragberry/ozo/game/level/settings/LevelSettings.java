@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 
+import org.dragberry.ozo.common.CommonConstants;
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelResults;
 import org.dragberry.ozo.common.levelresult.LevelSingleResult;
@@ -129,6 +130,7 @@ public class LevelSettings {
 		NewLevelResultsResponse response = new NewLevelResultsResponse();
 		response.setUserName(DirectedGame.game.platform.getUser().getName());
 		response.setUserId(DirectedGame.game.platform.getUser().getId());
+		response.setLevelId(newResults.getLevelId());
 		checkSingleLocalResult(newResults, response, LevelResultName.TIME, LESS_RESULT_COMPORATOR);
 		checkSingleLocalResult(newResults, response, LevelResultName.STEPS, LESS_RESULT_COMPORATOR);
 		checkSingleLocalResult(newResults, response, LevelResultName.LOST_UNITS, LESS_RESULT_COMPORATOR);
@@ -136,7 +138,7 @@ public class LevelSettings {
 	}
 
 	protected void checkSingleLocalResult(
-			NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name, ResultComporator resultComporator) {
+			NewLevelResultsRequest newResults, NewLevelResultsResponse response, LevelResultName name, ResultComparator resultComporator) {
 		LevelSingleResult<Integer> result = results.getResults().get(name);
 		NewLevelResultRequest<Integer> newResult = newResults.getResults().get(name);
 		NewLevelResultResponse<Integer> resultResponse = new NewLevelResultResponse<Integer>();
@@ -151,7 +153,7 @@ public class LevelSettings {
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
 			response.getResults().put(name, resultResponse);
-		} else if (result.getPersonal() != null && resultComporator.isRecordBeaten(newResult.getValue(), result.getPersonal())) {
+		} else if (result.getPersonal() == null || resultComporator.isRecordBeaten(newResult.getValue(), result.getPersonal())) {
 			resultResponse.setWorlds(false);
 			resultResponse.setPersonal(true);
 			resultResponse.setValue(newResult.getValue());
@@ -159,13 +161,22 @@ public class LevelSettings {
 		}
 	}
 
-	protected interface ResultComporator {
+	public synchronized void refreshResultsWithOwner() {
+		for (LevelSingleResult<Integer> result : results.getResults().values()) {
+			if (CommonConstants.DEFAULT_USER_NAME.equals(result.getOwner())) {
+				result.setOwner(DirectedGame.game.platform.getUser().getName());
+			}
+		}
+		save();
+	}
+
+	protected interface ResultComparator {
 
 		boolean isRecordBeaten(Integer newValue, Integer value);
 
 	}
 
-	protected static final ResultComporator LESS_RESULT_COMPORATOR = new ResultComporator() {
+	protected static final ResultComparator LESS_RESULT_COMPORATOR = new ResultComparator() {
 
 		@Override
 		public boolean isRecordBeaten(Integer newValue, Integer value) {
@@ -173,7 +184,7 @@ public class LevelSettings {
 		}
 	};
 
-	protected static final ResultComporator GREATER_RESULT_COMPORATOR = new ResultComporator() {
+	protected static final ResultComparator GREATER_RESULT_COMPORATOR = new ResultComparator() {
 
 		@Override
 		public boolean isRecordBeaten(Integer newValue, Integer value) {

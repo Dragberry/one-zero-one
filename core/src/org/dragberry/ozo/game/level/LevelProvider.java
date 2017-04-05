@@ -24,6 +24,8 @@ import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by maksim on 02.03.17.
@@ -83,8 +85,8 @@ public class LevelProvider {
                 public void onComplete(AllLevelResults result) {
                     if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
                         DirectedGame.game.wrongAppVersion = true;
+                        return;
                     }
-                    Gdx.app.debug(TAG, "task completed...");
                     Map<String, LevelResults> allResults = result.getLevelResults();
 
                     processLevel(allResults, freeplayLevel);
@@ -97,27 +99,48 @@ public class LevelProvider {
     }
 
     private void processLevel(Map<String, LevelResults> allResults, final LevelSettings levelSettings) {
-        LevelResults results = allResults.get(levelSettings.levelId);
-        if (results == null) {
-            DirectedGame.game.wrongAppVersion = true;
-            return;
-        }
-        NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
-        newResultsRequest.setUserId(DirectedGame.game.platform.getUser().getId());
-        levelSettings.save();
-        if (!newResultsRequest.getResults().isEmpty()) {
-            Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
-            DirectedGame.game.platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
-                    newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
+        synchronized (levelSettings) {
+            LevelResults results = allResults.get(levelSettings.levelId);
+            if (results == null) {
+                DirectedGame.game.wrongAppVersion = true;
+                return;
+            }
+            NewLevelResultsRequest newResultsRequest = levelSettings.updateResults(results);
+            newResultsRequest.setUserId(DirectedGame.game.platform.getUser().getId());
+            levelSettings.save();
+            if (!newResultsRequest.getResults().isEmpty() &&  !DirectedGame.game.platform.getUser().isDefault()) {
+                Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
+                DirectedGame.game.platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
+                        newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
 
+                    @Override
+                    public void onComplete(NewLevelResultsResponse result) {
+                        Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
+                        levelSettings.updateResults(result);
+                        levelSettings.save();
+                    }
+                });
+            }
+        }
+    }
+
+    public void refreshResultsWithOwner() {
+        es.submit(new Runnable() {
+            @Override
+            public void run() {
+                freeplayLevel.refreshResultsWithOwner();
+            }
+        });
+
+        for (final LevelSettings levelSettings : levels) {
+            es.submit(new Runnable() {
                 @Override
-                public void onComplete(NewLevelResultsResponse result) {
-                    Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
-                    levelSettings.updateResults(result);
-                    levelSettings.save();
+                public void run() {
+                    levelSettings.refreshResultsWithOwner();
                 }
             });
         }
     }
 
+    public static final ExecutorService es = Executors.newFixedThreadPool(4);
 }

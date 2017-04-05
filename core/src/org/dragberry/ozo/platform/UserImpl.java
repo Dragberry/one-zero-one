@@ -9,7 +9,7 @@ import org.dragberry.ozo.common.CommonConstants;
 public class UserImpl implements User {
 
     private String userId = CommonConstants.DEFAULT_USER_ID;
-    private String userName;
+    private String userName = CommonConstants.DEFAULT_USER_NAME;
 
     @Override
     public String getId() {

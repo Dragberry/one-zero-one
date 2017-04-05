@@ -1,5 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
+import org.dragberry.ozo.common.CommonConstants;
 import org.dragberry.ozo.common.levelresult.LevelResultName;
 import org.dragberry.ozo.common.levelresult.LevelSingleResult;
 import org.dragberry.ozo.game.Assets;
@@ -47,6 +48,8 @@ public class BestResultsPopup extends AbstractPopup {
 		popupWindow.clear();
 		resultTable.clear();
 
+		msgLbl.setText(levelSettings.name);
+
 		popupWindow.add(msgLbl).fillX().expandX();
 		popupWindow.row().expand().fill();
 
@@ -82,7 +85,9 @@ public class BestResultsPopup extends AbstractPopup {
 			resultTable.row();
 
 			lbl = new Label(Assets.instance.translation.get("ozo.owner") + StringConstants.SPACE
-					+ (value.getOwner() == null ? StringConstants.DASH : value.getOwner()), skin);
+					+ (value.getOwner() == null ? StringConstants.DASH
+						: CommonConstants.DEFAULT_USER_NAME.equalsIgnoreCase(value.getOwner())
+							? Assets.instance.translation.get("ozo.you") : value.getOwner()), skin);
 			lbl.setWrap(true);
 			lbl.setAlignment(Align.left);
 			resultTable.add(lbl).colspan(6).fill().expand().pad(0f, 20f, 0f, 10f);
@@ -97,7 +102,7 @@ public class BestResultsPopup extends AbstractPopup {
 		popupWindow.setWidth(viewportWidth * 0.75f);
 		popupWindow.setHeight(viewportHeight * 0.6f);
 
-		msgLbl = new Label(levelSettings.name, skin);
+		msgLbl = new Label(StringConstants.EMPTY, skin);
 		msgLbl.setWrap(true);
 		msgLbl.setAlignment(Align.center);
 
