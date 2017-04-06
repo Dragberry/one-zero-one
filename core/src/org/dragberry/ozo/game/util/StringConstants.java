@@ -15,4 +15,5 @@ public interface StringConstants {
     String USER_NAME = "userName";
 
 
+    String RATING_POPUP_SHOW_COUNTERS = "ratingPopupShowCounter";
 }

@@ -12,6 +12,12 @@
       font: menu-font-large,
       fontColor: white
     },
+    background-button: {
+      down: background-button-down,
+      up: background-button,
+      font: menu-font-large,
+      fontColor: white
+    },
     level-open: {
       down: default-level-opened-down,
       up: default-level-opened,

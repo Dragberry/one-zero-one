@@ -34,7 +34,7 @@ default-level-closed-down
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-level-opened-down
+background-button-down
   rotate: false
   xy: 54, 85
   size: 51, 51
@@ -42,7 +42,7 @@ default-level-opened-down
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-round-down
+default-level-opened-down
   rotate: false
   xy: 643, 386
   size: 51, 51
@@ -50,7 +50,7 @@ default-round-down
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-input-text
+background-button
   rotate: false
   xy: 696, 439
   size: 51, 51
@@ -58,7 +58,7 @@ default-input-text
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-level-closed
+default-round-down
   rotate: false
   xy: 54, 32
   size: 51, 51
@@ -66,7 +66,7 @@ default-level-closed
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-level-opened
+default-input-text
   rotate: false
   xy: 107, 85
   size: 51, 51
@@ -74,7 +74,7 @@ default-level-opened
   orig: 51, 51
   offset: 0, 0
   index: -1
-default-input-text-focused
+default-level-closed
   rotate: false
   xy: 643, 333
   size: 51, 51
@@ -82,9 +82,25 @@ default-input-text-focused
   orig: 51, 51
   offset: 0, 0
   index: -1
+default-level-opened
+  rotate: false
+  xy: 696, 386
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
+default-input-text-focused
+  rotate: false
+  xy: 749, 439
+  size: 51, 51
+  split: 25, 25, 25, 25
+  orig: 51, 51
+  offset: 0, 0
+  index: -1
 default-input-text-cursor
   rotate: false
-  xy: 696, 412
+  xy: 107, 58
   size: 3, 25
   orig: 3, 25
   offset: 0, 0

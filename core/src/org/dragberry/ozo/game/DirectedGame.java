@@ -43,7 +43,8 @@ import java.util.Map;
 
 public abstract class DirectedGame implements ApplicationListener {
 
-	private final static String TAG = DirectedGame.class.getName();
+	private static final String TAG = DirectedGame.class.getName();
+	public static final int RATING_POPUP_ALREADY_SHOWN = -1;
 
 	public static DirectedGame game;
 
@@ -52,6 +53,8 @@ public abstract class DirectedGame implements ApplicationListener {
 	public final Platform platform;
 
 	private boolean auditEnabled;
+
+	public int ratingPopupShowCounter;
 
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
@@ -108,12 +111,11 @@ public abstract class DirectedGame implements ApplicationListener {
 	/**
 	 * Loads game settings
 	 * If user id hasn't stored yet, send a POST request to create a new user
-	 * @param platform
      */
-	public void loadGameSettings(final Platform platform) {
-		Gdx.app.debug(TAG, "load game settings...");
+	public void loadGameSettings() {
+		Gdx.app.debug(TAG, "Load game settings...");
 
-		final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
+		Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
 		String userId = prefs.getString(StringConstants.USER_ID);
 		String userName = prefs.getString(StringConstants.USER_NAME);
 		if (userId.isEmpty()) {
@@ -126,13 +128,24 @@ public abstract class DirectedGame implements ApplicationListener {
 						MessageFormat.format("User was loaded: [id={0}][name={1}]", userId, userName));
 			}
 		}
+
+		ratingPopupShowCounter = prefs.getInteger(StringConstants.RATING_POPUP_SHOW_COUNTERS, 0);
+	}
+
+	public void saveGameSettings() {
+		Gdx.app.debug(TAG, "Save game settings...");
+		Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
+		prefs.putString(StringConstants.USER_ID, platform.getUser().getId());
+		prefs.putString(StringConstants.USER_NAME, platform.getUser().getName());
+		prefs.putInteger(StringConstants.RATING_POPUP_SHOW_COUNTERS, ratingPopupShowCounter);
+		prefs.flush();
 	}
 
     @Override
     public void create() {
 		Assets.instance.init(new AssetManager());
 
-		loadGameSettings(platform);
+		loadGameSettings();
 
 		logAuditEvent(createSimpleAuditRequest(AuditEventType.START_APPLICATION));
 
@@ -151,7 +164,9 @@ public abstract class DirectedGame implements ApplicationListener {
     }
 
 	public void exit() {
+		saveGameSettings();
 		logAuditEvent(createSimpleAuditRequest(AuditEventType.EXIT_APPLICATION));
+		Gdx.app.debug(TAG, "Exit from the application");
 		Gdx.app.exit();
 	}
 
