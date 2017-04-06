@@ -10,8 +10,6 @@ import com.badlogic.gdx.Gdx;
 
 public class OneZeroOneGame extends DirectedGame {
 	
-	private static final  String TAG = OneZeroOneGame.class.getName();
-
 	public OneZeroOneGame(Platform platform, boolean auditEnabled) {
 		super(platform, auditEnabled);
 	}
@@ -25,7 +23,6 @@ public class OneZeroOneGame extends DirectedGame {
 		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		setScreen(new MainMenuScreen(this));
-		Gdx.app.debug(TAG, "OneZeroOneGame has been created");
 	}
 
 }

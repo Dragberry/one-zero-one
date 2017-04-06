@@ -1,5 +1,6 @@
 package org.dragberry.ozo.http;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,9 @@ public abstract class GetHttpTask<R> extends HttpTask<Void, R> {
 
     @Override
     protected R doRequest() {
-        Gdx.app.debug(TAG, "do GET request: " + url);
+        if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug(TAG, "do GET request: " + url);
+        }
         return getRestTemplate().getForObject(url, resultClass);
     }
 

@@ -2,6 +2,7 @@ package org.dragberry.ozo.game;
 
 import org.dragberry.ozo.game.util.Constants;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
@@ -58,9 +59,13 @@ public class Assets implements Disposable, AssetErrorListener {
 		assetManager.load(Constants.TRANSLATION, I18NBundle.class);
 		assetManager.load(Constants.TEXTURE_ATLAS_SKIN, TextureAtlas.class);
 		assetManager.finishLoading();
-		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames().size);
+		}
 		for (String asset : assetManager.getAssetNames()) {
-			Gdx.app.debug(TAG, "asset: " + asset);
+			if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+				Gdx.app.debug(TAG, "asset: " + asset);
+			}
 		}
 		
 		TextureAtlas atlas = getTextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS);
@@ -163,7 +168,7 @@ public class Assets implements Disposable, AssetErrorListener {
 				case 1200:
 				case 1440:
 				case 1600:
-					return new AssetFonts(17, 18, 25, 27, 38, 42);
+					return new AssetFonts(17, 18, 25, 27, 34, 38);
 				default:
 					float factorGui = screenWidth /  Constants.VIEWPORT_GUI_WIDTH;
 					return new AssetFonts(

@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level.settings;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
@@ -65,7 +66,9 @@ public class LevelSettings {
 	protected void load(Preferences prefs) {
 		completed = prefs.getBoolean(COMPLETED, false);
 
-		Gdx.app.debug(TAG, "load results for " + levelId);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "Load results for " + levelId);
+		}
 		loadSingleResult(LevelResultName.TIME, prefs);
 		loadSingleResult(LevelResultName.STEPS, prefs);
 		loadSingleResult(LevelResultName.LOST_UNITS, prefs);
@@ -78,7 +81,9 @@ public class LevelSettings {
 		String worlds = prefs.getString(name.worlds());
 		result.setWorlds(worlds.isEmpty() ? null : Integer.valueOf(worlds));
 		result.setOwner(prefs.getString(name.owner()));
-		Gdx.app.debug(TAG, "loadSingleResult: " + name + "=" + result);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, MessageFormat.format("loadSingleResult: {0}={1}", name, result));
+		}
 		results.getResults().put(name, result);
 	}
 	
@@ -91,7 +96,9 @@ public class LevelSettings {
 	protected void update(Preferences prefs) {
 		prefs.putBoolean(COMPLETED, completed);
 
-		Gdx.app.debug(TAG, "update results for " + levelId);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "update results for " + levelId);
+		}
 		updateSingleResult(LevelResultName.TIME, prefs);
 		updateSingleResult(LevelResultName.STEPS, prefs);
 		updateSingleResult(LevelResultName.LOST_UNITS, prefs);
@@ -102,7 +109,9 @@ public class LevelSettings {
 		prefs.putString(name.personal(), result.getPersonal() == null ? StringConstants.EMPTY : result.getPersonal().toString());
 		prefs.putString(name.worlds(), result.getWorlds() == null ? StringConstants.EMPTY : result.getWorlds().toString());
 		prefs.putString(name.owner(), result.getOwner() == null ? StringConstants.EMPTY : result.getOwner());
-		Gdx.app.debug(TAG, "updateSingleResult: " + name + "=" + result);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, MessageFormat.format("updateSingleResult: {0}={1}", name, result));
+		}
 	}
 
 	protected Preferences loadPreferences() {
@@ -234,7 +243,9 @@ public class LevelSettings {
 	}
 
 	public Level<? extends LevelSettings> loadLevelState() {
-		Gdx.app.debug(TAG, "Trying load incomplete level: " + levelId);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "Trying load incomplete level: " + levelId);
+		}
 		Preferences prefs = loadLevelStatePrefs();
 		String stateStr = prefs.getString(STATE);
 		if (stateStr.isEmpty()) {

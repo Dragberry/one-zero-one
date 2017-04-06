@@ -26,7 +26,7 @@ public class WavesLevel extends ReachTheGoalLevel {
 
     @Override
     public void reset(boolean cleanState) {
-        super.reset(cleanState);
         generator.reset(width, height);
+        super.reset(cleanState);
     }
 }

@@ -2,6 +2,7 @@ package org.dragberry.ozo.game.level;
 
 import static org.dragberry.ozo.common.level.Levels.*;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,6 +24,7 @@ import org.dragberry.ozo.http.GetHttpTask;
 import org.dragberry.ozo.http.HttpClient;
 import org.dragberry.ozo.http.PostHttpTask;
 
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,8 +46,8 @@ public class LevelProvider {
 
 		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
         levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 25, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -11, 33, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 20, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -20, 30, JustReachGoal.Operator.MORE));
         levels.add(new ReachMultiGoalLevelSettings(L004_DOUBLE_5, -10, 5, 5));
         levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, L005_MUSHROOM_RAIN ,-10, 25));
         levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 10, 20));
@@ -109,13 +111,17 @@ public class LevelProvider {
             newResultsRequest.setUserId(DirectedGame.game.platform.getUser().getId());
             levelSettings.save();
             if (!newResultsRequest.getResults().isEmpty() &&  !DirectedGame.game.platform.getUser().isDefault()) {
-                Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results has changed offline");
+                if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                    Gdx.app.debug(TAG, MessageFormat.format("Level [{0}] results has changed offline", levelSettings.levelId));
+                }
                 DirectedGame.game.platform.getHttpClient().executeTask(new PostHttpTask<NewLevelResultsRequest, NewLevelResultsResponse>(
                         newResultsRequest, NewLevelResultsResponse.class, "/level/result/new") {
 
                     @Override
                     public void onComplete(NewLevelResultsResponse result) {
-                        Gdx.app.debug(TAG, "Level [" + levelSettings.levelId + "] results've updated after changing offline");
+                        if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                            Gdx.app.debug(TAG, MessageFormat.format("Level [{0}] results've updated after changing offline", levelSettings.levelId));
+                        }
                         levelSettings.updateResults(result);
                         levelSettings.save();
                     }

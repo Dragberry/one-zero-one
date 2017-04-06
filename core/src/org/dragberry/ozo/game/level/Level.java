@@ -121,6 +121,13 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     public void reset(boolean restore) {
+        if (!restore) {
+            time = 0;
+            steps = 0;
+            lostNumbers = 0;
+        }
+        started = false;
+
         selectedUnit = null;
         neighbors.clear();
         state = State.FIXED;
@@ -141,12 +148,6 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         updateStateForUnit();
         resolveStateDigits();
 
-        if (!restore) {
-            time = 0;
-            steps = 0;
-            lostNumbers = 0;
-        }
-        started = false;
         for (Goal goal : goalsToWin) {
             goal.reset(restore);
         }
@@ -303,7 +304,6 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (units[x][y].bounds.contains(xCoord, yCoord)) {
-                    Gdx.app.debug(TAG, "unitX=" + x + " unitY=" + y);
                     return units[x][y];
                 }
             }

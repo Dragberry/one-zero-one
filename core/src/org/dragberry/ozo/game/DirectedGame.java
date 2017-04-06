@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -32,6 +33,7 @@ import org.dragberry.ozo.screen.transitions.ScreenTransition;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
 
 import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +98,7 @@ public abstract class DirectedGame implements ApplicationListener {
 				screen = constructor.newInstance(this);
 				screensCache.put(screenClass, screen);
 			} catch (Exception exc) {
-				Gdx.app.debug(TAG, "An error has occured screen creation", exc);
+				Gdx.app.error(TAG, "An error has occured screen creation", exc);
 				Gdx.app.exit();
 			}
 		}
@@ -110,6 +112,7 @@ public abstract class DirectedGame implements ApplicationListener {
      */
 	public void loadGameSettings(final Platform platform) {
 		Gdx.app.debug(TAG, "load game settings...");
+
 		final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
 		String userId = prefs.getString(StringConstants.USER_ID);
 		String userName = prefs.getString(StringConstants.USER_NAME);
@@ -118,7 +121,10 @@ public abstract class DirectedGame implements ApplicationListener {
 		} else {
 			game.platform.getUser().setUserId(userId);
 			game.platform.getUser().setUserName(userName);
-			Gdx.app.debug(TAG, "User was loaded: [id=" + userId + "][name=" + userName + "]");
+			if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+				Gdx.app.debug(TAG,
+						MessageFormat.format("User was loaded: [id={0}][name={1}]", userId, userName));
+			}
 		}
 	}
 
@@ -392,10 +398,10 @@ public abstract class DirectedGame implements ApplicationListener {
 	    		Constructor<? extends AbstractGameScreen> constructor = callerScreen.getConstructor(DirectedGame.class);
 	    		constructor.newInstance(this);
 	    		setScreen(constructor.newInstance(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(TAG, "Navigate to " + callerScreen);
+				Gdx.app.debug(TAG, "Navigate to " + callerScreen);
 	    	} else {
 	    		setScreen(new MainMenuScreen(this), ScreenTransitionFade.init(), null);
-	    		Gdx.app.debug(TAG, "Navigate to " + MainMenuScreen.class);
+				Gdx.app.debug(TAG, "Navigate to " + MainMenuScreen.class);
 	    	}
 	    	callerScreen = null;
     	} catch (Exception exc) {
@@ -434,16 +440,22 @@ public abstract class DirectedGame implements ApplicationListener {
 				if (level != null) {
 					restore = true;
 					level.setSettings(currentLevelSettings);
-					Gdx.app.debug(TAG, "Incomplete level was loaded: " + currentLevelSettings.levelId);
+					if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+						Gdx.app.debug(TAG, "Incomplete level was loaded: " + currentLevelSettings.levelId);
+					}
 				} else {
-					Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
+					if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+						Gdx.app.debug(TAG, "New level was created: " + currentLevelSettings.levelId);
+					}
 					Constructor<? extends Level<LS>> constructor = (Constructor<? extends Level<LS>>) currentLevelSettings.clazz.getConstructor(currentLevelSettings.getClass());
 					level = constructor.newInstance(currentLevelSettings);
 				}
 				levelsCache.put(currentLevelSettings.levelId, level);
 			} else {
 				restore = level.savedState;
-				Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);
+				if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+					Gdx.app.debug(TAG, "Level was loaded from cache: " + currentLevelSettings.levelId);
+				}
 			}
             setScreen(getScreen(GameScreen.class).init(level, restore), ScreenTransitionFade.init(), callerClass);
         } catch (Exception exc) {
@@ -452,7 +464,9 @@ public abstract class DirectedGame implements ApplicationListener {
     }
 
 	public void logAuditEvent(final AuditEventRequest request) {
-		Gdx.app.debug(TAG, "Audit event is ready to log: " + request);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "Audit event is ready to log: " + request);
+		}
 		if (auditEnabled && !platform.getUser().isDefault()) {
 			platform.getHttpClient().executeTask(new PostHttpTask<AuditEventRequest, AuditEventResponse>(
 					request, AuditEventResponse.class, HttpClient.URL.NEW_AUDIT_EVENT + request.getUrl()) {
@@ -462,7 +476,9 @@ public abstract class DirectedGame implements ApplicationListener {
 					if (!CommonConstants.APP_VERSION.equals(result.getVersion())) {
 						DirectedGame.game.wrongAppVersion = true;
 					}
-					Gdx.app.debug(TAG, "Audit event was logged: " + request);
+					if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+						Gdx.app.debug(TAG, "Audit event was logged: " + request);
+					}
 				}
 			});
 		}

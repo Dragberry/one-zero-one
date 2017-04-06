@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level.settings;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
@@ -28,13 +29,17 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
 
     @Override
     protected void load(Preferences prefs) {
-        Gdx.app.debug(TAG, "load results for " + levelId);
+        if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug(TAG, "load results for " + levelId);
+        }
         loadSingleResult(LevelResultName.MAX_VALUE, prefs);
     }
 
     @Override
     protected void update(Preferences prefs) {
-        Gdx.app.debug(TAG, "update results for " + levelId);
+        if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug(TAG, "update results for " + levelId);
+        }
         updateSingleResult(LevelResultName.MAX_VALUE, prefs);
     }
 

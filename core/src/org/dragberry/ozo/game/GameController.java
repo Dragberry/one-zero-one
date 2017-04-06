@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -83,7 +84,9 @@ public class GameController extends InputAdapter {
 		NewLevelResultsRequest newResults = level.formNewResults();
 		newResults.setLevelId(level.settings.levelId);
 		newResults.setUserId(DirectedGame.game.platform.getUser().getId());
-		Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
+		if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+			Gdx.app.debug(TAG, "New results have formed:\n" + newResults);
+		}
 
 		NewLevelResultsResponse response = level.settings.checkLocalResults(newResults);
 		level.settings.completed = true;

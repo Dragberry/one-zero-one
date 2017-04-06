@@ -55,7 +55,6 @@ public class GameScreen extends AbstractGameScreen {
 
 	@Override
 	public void show() {
-		Gdx.app.debug(getClass().getName(), "Game screen is shown");
 		if (game.wrongAppVersion) {
 			DirectedGame.game.setPopup(DirectedGame.game.getScreen(WrongVersionPopup.class).init());
 		} else {
@@ -64,19 +63,15 @@ public class GameScreen extends AbstractGameScreen {
 	}
 
 	@Override
-	public void hide() {
-		Gdx.app.debug(getClass().getName(), "Game screen is hidden");
-	}
+	public void hide() {}
 
 	@Override
 	public void pause() {
-		Gdx.app.debug(getClass().getName(), "Game screen is paused");
 		paused = true;
 	}
 	
 	@Override
 	public void resume() {
-		Gdx.app.debug(getClass().getName(), "Game screen is resumed");
 		super.resume();
 		paused = false;
 	}

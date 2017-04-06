@@ -1,5 +1,6 @@
 package org.dragberry.ozo.screen.popup;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -106,7 +107,9 @@ public class NewUserPopup extends AbstractPopup {
 
                     @Override
                     public void onComplete(NewUserResponse result) {
-                        Gdx.app.debug(TAG, "New user has been created with id=" + result);
+                        if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                            Gdx.app.debug(TAG, "New user has been created with id=" + result);
+                        }
                         final Preferences prefs = Gdx.app.getPreferences(Constants.SETTINGS_PATH);
                         prefs.putString(StringConstants.USER_ID, result.getUserId());
                         prefs.putString(StringConstants.USER_NAME, result.getUserName());
@@ -138,6 +141,13 @@ public class NewUserPopup extends AbstractPopup {
                                 errorLbl.setText(Assets.instance.translation.get("ozo.err.serverError"));
                                 break;
                         }
+                    }
+
+                    @Override
+                    public void onFail() {
+                        Gdx.input.setInputProcessor(stage);
+                        errorLbl.setVisible(true);
+                        errorLbl.setText(Assets.instance.translation.get("ozo.err.serverError"));
                     }
                 });
             }

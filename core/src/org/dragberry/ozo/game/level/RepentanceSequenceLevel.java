@@ -36,9 +36,9 @@ public class RepentanceSequenceLevel extends SequenceOf2Level {
     @Override
     protected String getSequence() {
         StringBuilder seq = new StringBuilder();
-        int seqValue = sequenceValue;
+        int seqValue = sequenceValue + 1;
         int counter = 0;
-        while (counter < 5 && seqValue < 0) {
+        while (counter < 5 && seqValue <= 0) {
             if (counter != 0) {
                 seq.append(DELIMITER);
             }
