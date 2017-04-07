@@ -72,8 +72,11 @@ public class FreeplayLevel extends Level<FreeplayReachTheGoalLevelSettings> {
     @Override
     public NewLevelResultsRequest formNewResults() {
         NewLevelResultsRequest results = new NewLevelResultsRequest();
+        int maxValue = getMaxValue();
         results.getResults().put(LevelResultName.MAX_VALUE,
-                new NewLevelResultRequest<Integer>(getMaxValue()));
+                new NewLevelResultRequest<Integer>(maxValue));
+        results.getResults().put(LevelResultName.MAX_AND_LOST,
+                new NewLevelResultRequest<Integer>(maxValue - lostNumbers));
         Gdx.app.debug(TAG, "Form new results");
         return results;
     }

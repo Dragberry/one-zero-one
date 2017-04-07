@@ -33,6 +33,7 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
             Gdx.app.debug(TAG, "load results for " + levelId);
         }
         loadSingleResult(LevelResultName.MAX_VALUE, prefs);
+        loadSingleResult(LevelResultName.MAX_AND_LOST, prefs);
     }
 
     @Override
@@ -41,12 +42,14 @@ public class FreeplayReachTheGoalLevelSettings extends LevelSettings {
             Gdx.app.debug(TAG, "update results for " + levelId);
         }
         updateSingleResult(LevelResultName.MAX_VALUE, prefs);
+        updateSingleResult(LevelResultName.MAX_AND_LOST, prefs);
     }
 
     @Override
     public NewLevelResultsResponse checkLocalResults(NewLevelResultsRequest newResults) {
         NewLevelResultsResponse response = new NewLevelResultsResponse();
         checkSingleLocalResult(newResults, response, LevelResultName.MAX_VALUE);
+        checkSingleLocalResult(newResults, response, LevelResultName.MAX_AND_LOST);
         return response;
     }
 }
