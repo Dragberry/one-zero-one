@@ -12,14 +12,20 @@
       font: menu-font-large,
       fontColor: white
     },
+    background-button: {
+      down: background-button-down,
+      up: background-button,
+      font: menu-font-large,
+      fontColor: white
+    },
     level-open: {
-      down: default-level-opened,
-      up: default-level-opened-down,
+      down: default-level-opened-down,
+      up: default-level-opened,
       font: menu-font-large,
       fontColor: white
     },
     level-closed: {
-      down: default-level-closed,
+      down: default-level-closed-down,
       up: default-level-closed,
       font: menu-font-large,
       fontColor: white
@@ -45,7 +51,21 @@
     header: {
       font: menu-font-large,
       fontColor: white
+    },
+    error: {
+      font: menu-font-large,
+      fontColor: red
     }
   },
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+    default: {
+      selection: default-input-text-selection,
+      cursor: default-input-text-cursor,
+      background: default-input-text,
+      focusedBackground: default-input-text-focused,
+      font: menu-font-large,
+      fontColor: white
+    }
+  }
 }
 

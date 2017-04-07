@@ -8,13 +8,12 @@ public interface Constants {
 
     String ANDROID_PLAY_MARKET_URL = "https://play.google.com/store/apps/details?id=org.dragberry.ozo";
 
-    String TEXTURE_ATLAS_OBJECTS = "images/block_1/onezeroone.atlas";
+    String TEXTURE_ATLAS_OBJECTS = "images/default/onezeroone.atlas";
     String TRANSLATION = "i18n/translation";
     String FONTS = "fonts/UbuntuMono-BI.ttf";
-    String TEXTURE_ATLAS_SKIN = "skins/block_1/skin/uiskin.atlas";
-    String SKIN = "skins/block_1/skin/uiskin.json";
+    String TEXTURE_ATLAS_SKIN = "skins/default/skin/uiskin.atlas";
+    String SKIN = "skins/default/skin/uiskin.json";
 
-//    Color BACKGROUND = new Color(0xC3 / 255f, 0xD5 / 255f,  0xDB / 255f, 1);
     Color BACKGROUND = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
     Color BACKGROUND_GAME = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
 
