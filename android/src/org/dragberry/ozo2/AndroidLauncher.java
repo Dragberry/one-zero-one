@@ -1,4 +1,4 @@
-package org.dragberry.ozo;
+package org.dragberry.ozo2;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,8 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.dragberry.ozo.OneZeroOneGame;
+import org.dragberry.ozo2.R;
 import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.http.HttpClient;

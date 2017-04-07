@@ -68,6 +68,8 @@ public class RatingPopup extends AbstractPopup {
                             game.exit();
                         }
                     });
+                } else {
+                    game.exit();
                 }
             }
         });

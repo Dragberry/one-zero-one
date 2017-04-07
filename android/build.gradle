@@ -28,7 +28,7 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
     defaultConfig {
-        applicationId "org.dragberry.ozo"
+        applicationId "org.dragberry.ozo2"
         minSdkVersion 9
         targetSdkVersion 25
     }
@@ -81,7 +81,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'org.dragberry.ozo/org.dragberry.ozo.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'org.dragberry.ozo2/AndroidLauncher'
 }
 
 // sets up the Android Eclipse project, using the old Ant based build.

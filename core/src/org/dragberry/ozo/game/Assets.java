@@ -22,8 +22,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import java.util.Locale;
-
 public class Assets implements Disposable, AssetErrorListener {
 
 	private static final String TAG = Assets.class.getName();

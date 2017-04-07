@@ -1,9 +1,11 @@
 1. New game and menu design.
-2. The complexity of several levels was changed.
-3. 5 new levels were added.
-4. The concept of freeplay was changed: it's impossible to lose, goals are changed dynamically.
-5. Positive and negative numbers were balanced in level with random number's generation.
-6. World's record system was introduced.
-7. User can  register himself to take part in world's record system.
-8. Font's and label's issues were fixed.
+2. The complexity of several levels has been changed.
+3. 5 new levels have been added.
+4. The possibility to continue a saved game has been added.
+5. The possibility to restart a game has been added.
+6. The concept of freeplay was changed: it's impossible to lose, goals are changed dynamically.
+7. Positive and negative numbers were balanced in level with random number's generation.
+8. World's record system has been introduced.
+9. User can register himself to take part in world's record system.
+10. Font's and label's issues have been fixed.
 
