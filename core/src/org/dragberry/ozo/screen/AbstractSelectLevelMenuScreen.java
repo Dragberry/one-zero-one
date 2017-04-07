@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
@@ -26,9 +28,15 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     private Stage stage;
     private String screenTitle;
 
+    protected ArrayMap<LevelSettings, TextButton> levelButtons;
+
     public AbstractSelectLevelMenuScreen(org.dragberry.ozo.game.DirectedGame game, String titleKey) {
         super(game);
         this.screenTitle = Assets.instance.translation.get(titleKey);
+    }
+
+    public AbstractSelectLevelMenuScreen init() {
+        return this;
     }
 
     @Override
@@ -53,38 +61,34 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     @Override
     public void show() {
         game.platform.getAdsController().showBannerAd();
-        stage = new CustomStage(new ScalingViewport(Scaling.stretch,
-                Constants.VIEWPORT_GUI_WIDTH,
-                Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()),
-                new ActionExecutor() {
+        if (stage == null) {
+            levelButtons = new ArrayMap<LevelSettings, TextButton>();
 
-                    @Override
-                    public void execute() {
-                        game.back();
-                    }
-                });
+            stage = new CustomStage(new ScalingViewport(Scaling.stretch,
+                    Constants.VIEWPORT_GUI_WIDTH,
+                    Gdx.graphics.getHeight() * Constants.VIEWPORT_GUI_WIDTH / Gdx.graphics.getWidth()),
+                    new ActionExecutor() {
 
-        rebuildStage();
+                        @Override
+                        public void execute() {
+                            game.back();
+                        }
+                    });
+            buildStage();
+        } else {
+            rebuildStage();
+        }
     }
 
-    protected void addLevelsAtTop(Table scrollTable) {}
-
-    protected void addDefaultLevels(Table scrollTable) {
-        LevelState state = LevelState.COMPLETED;
+    protected void addLevels(Table scrollTable) {
         for (LevelSettings levelSettings : game.levelProvider.levels) {
-            if (state == LevelState.COMPLETED && !levelSettings.completed) {
-                state = LevelState.OPENED;
-            } else if (levelSettings.completed) {
-                state = LevelState.COMPLETED;
-            } else {
-                state = LevelState.OPENED;
-            }
-            scrollTable.add(createLevelBtn(state, levelSettings)).fillX().expand(true, false).pad(5, 10, 5, 10);
+            TextButton btn = createLevelBtn(levelSettings);
+            scrollTable.add(btn).fillX().expand(true, false).pad(5, 10, 5, 10);
             scrollTable.row();
         }
     }
 
-    private void rebuildStage() {
+    private void buildStage() {
         Table table = new Table();
         table.setFillParent(true);
 
@@ -95,8 +99,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
         Table scrollTable = new Table();
 
-        addLevelsAtTop(scrollTable);
-        addDefaultLevels(scrollTable);
+        addLevels(scrollTable);
 
         ScrollPane scroller = new ScrollPane(scrollTable);
         table.add(scroller).fill().expand();
@@ -104,6 +107,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
 
         TextButton backBtn = new TextButton(Assets.instance.translation.format("ozo.back"), Assets.instance.skin.skin);
         backBtn.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.back();
@@ -111,24 +115,47 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
         });
         table.add(backBtn).fill(0.5f, 1f).pad(30f, 0f, 30f, 5f);
         this.stage.addActor(table);
+
+        rebuildStage();
+    }
+
+    private void rebuildStage() {
+        LevelState state = LevelState.COMPLETED;
+        for (ObjectMap.Entry<LevelSettings, TextButton> entry : levelButtons.entries()) {
+            state = getLevelState(state, entry);
+            entry.value.setDisabled(isButtonDisabled(state));
+            entry.value.setStyle(Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
+        }
+    }
+
+    protected abstract boolean isButtonDisabled(LevelState state);
+
+    protected LevelState getLevelState(LevelState state, ObjectMap.Entry<LevelSettings, TextButton> entry) {
+        if (state == LevelState.COMPLETED && !entry.key.completed) {
+            state = LevelState.OPENED;
+        } else if (entry.key.completed) {
+            state = LevelState.COMPLETED;
+        } else {
+            state = LevelState.CLOSED;
+        }
+        return state;
     }
 
     @Override
-    public void hide() {
-        stage.dispose();
-    }
+    public void hide() {}
 
     @Override
     public void pause() {
     }
 
-    protected TextButton createLevelBtn(LevelState state, final LevelSettings levelSettings) {
-        TextButton btn = new TextButton(levelSettings.name, Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
-        addButtonListener(state, btn, levelSettings);
+    protected TextButton createLevelBtn(final LevelSettings levelSettings) {
+        TextButton btn = new TextButton(levelSettings.name, Assets.instance.skin.skin);
+        addButtonListener(btn, levelSettings);
+        levelButtons.put(levelSettings, btn);
         return btn;
     }
 
-    protected abstract void addButtonListener(LevelState state, TextButton btn, LevelSettings levelSettings);
+    protected abstract void addButtonListener(TextButton btn, LevelSettings levelSettings);
     
     protected enum LevelState {
         CLOSED("level-closed"), OPENED("level-open"), COMPLETED("default");

@@ -4,7 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ObjectMap;
 
+import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.level.settings.LevelSettings;
 import org.dragberry.ozo.screen.popup.BestResultsPopup;
 
@@ -18,7 +20,7 @@ public class BestResultScreen extends AbstractSelectLevelMenuScreen {
     }
 
     @Override
-    protected void addButtonListener(LevelState state, TextButton btn, final LevelSettings levelSettings) {
+    protected void addButtonListener(TextButton btn, final LevelSettings levelSettings) {
         btn.addListener(new ClickListener() {
 
             @Override
@@ -29,9 +31,23 @@ public class BestResultScreen extends AbstractSelectLevelMenuScreen {
     }
 
     @Override
-    protected void addLevelsAtTop(Table scrollTable) {
-        scrollTable.add(createLevelBtn(LevelState.COMPLETED, game.levelProvider.freeplayLevel))
+    protected void addLevels(Table scrollTable) {
+        scrollTable.add(createLevelBtn(game.levelProvider.freeplayLevel))
                 .fillX().expand(true, false).pad(5, 10, 5, 10);
         scrollTable.row();
+        super.addLevels(scrollTable);
+    }
+
+    @Override
+    protected LevelState getLevelState(LevelState state, ObjectMap.Entry<LevelSettings, TextButton> entry) {
+        if (entry.key == DirectedGame.game.levelProvider.freeplayLevel) {
+            return LevelState.COMPLETED;
+        }
+        return super.getLevelState(state, entry);
+    }
+
+    @Override
+    protected boolean isButtonDisabled(LevelState state) {
+        return false;
     }
 }

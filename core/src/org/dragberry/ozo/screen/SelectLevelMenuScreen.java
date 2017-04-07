@@ -16,18 +16,20 @@ public class SelectLevelMenuScreen extends AbstractSelectLevelMenuScreen {
     }
 
     @Override
-    protected void addButtonListener(LevelState state, TextButton btn, final LevelSettings levelSettings) {
-        if (state != LevelState.CLOSED) {
-            btn.addListener(new ClickListener() {
+    protected void addButtonListener(final TextButton btn, final LevelSettings levelSettings) {
+        btn.addListener(new ClickListener() {
 
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!btn.isDisabled()) {
                     game.playLevel(levelSettings, SelectLevelMenuScreen.this.getClass());
                 }
-            });
-        }
+            }
+
+        });
     }
 
-
-
+    protected boolean isButtonDisabled(LevelState state) {
+        return state == LevelState.CLOSED;
+    }
 }
