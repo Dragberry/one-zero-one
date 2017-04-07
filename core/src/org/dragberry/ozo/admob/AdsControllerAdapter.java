@@ -6,22 +6,19 @@ package org.dragberry.ozo.admob;
 public class AdsControllerAdapter implements AdsController {
 
     @Override
-    public void showBannerAd() {
-
-    }
+    public void showBannerAd() {}
 
     @Override
-    public void showBannerAdNew() {
-
-    }
+    public void showBannerAdNew() {}
 
     @Override
-    public void hideBannerAd() {
-
-    }
+    public void hideBannerAd() {}
 
     @Override
     public boolean isBannerShown() {
         return false;
     }
+
+    @Override
+    public void showInterstitialAd(Runnable then) {}
 }

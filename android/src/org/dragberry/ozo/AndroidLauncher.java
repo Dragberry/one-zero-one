@@ -13,11 +13,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
 import org.dragberry.ozo.admob.AdsController;
 import org.dragberry.ozo.game.util.Constants;
@@ -31,6 +34,9 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 
 	private AdView adView;
 	private View gameView;
+
+	private InterstitialAd interstitialAd;
+
 	private User user = new UserImpl();
 
 	@Override
@@ -72,6 +78,13 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 
 		setContentView(layout);
 		startAdvertising(admobView);
+
+		interstitialAd = new InterstitialAd(this);
+		interstitialAd.setAdUnitId(getString(R.string.on_exit_banner));
+
+		AdRequest.Builder builder = new AdRequest.Builder();
+		AdRequest ad = builder.build();
+		interstitialAd.loadAd(ad);
 	}
 
 	private AdView createAdView() {
@@ -168,6 +181,26 @@ public class AndroidLauncher extends AndroidApplication implements Platform, Ads
 		return false;
 	}
 
+	@Override
+	public void showInterstitialAd(final Runnable then) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (then != null) {
+					interstitialAd.setAdListener(new AdListener() {
+						@Override
+						public void onAdClosed() {
+							Gdx.app.postRunnable(then);
+							AdRequest.Builder builder = new AdRequest.Builder();
+							AdRequest ad = builder.build();
+							interstitialAd.loadAd(ad);
+						}
+					});
+				}
+				interstitialAd.show();
+			}
+		});
+	}
 
 	@Override
 	public boolean isConnected() {

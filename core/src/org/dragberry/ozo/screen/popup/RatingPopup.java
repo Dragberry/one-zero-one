@@ -58,9 +58,17 @@ public class RatingPopup extends AbstractPopup {
         TextButton btn = new TextButton(Assets.instance.translation.get("ozo.noThanks"),
                 Assets.instance.skin.skin.get("background-button", TextButton.TextButtonStyle.class));
         btn.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.exit();
+                if (game.platform.getHttpClient().isConnected()) {
+                    game.platform.getAdsController().showInterstitialAd(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.exit();
+                        }
+                    });
+                }
             }
         });
         return btn;

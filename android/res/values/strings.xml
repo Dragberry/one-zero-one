@@ -4,5 +4,5 @@
     <string name="app_name">One-Zero-One</string>
     <!-- AdMob ad unit IDs -->
     <string name="main_menu_banner">ca-app-pub-9509861371441851/4791437128</string>
-
+    <string name="on_exit_banner">ca-app-pub-9509861371441851/7646193923</string>
 </resources>

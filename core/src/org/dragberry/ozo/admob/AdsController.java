@@ -13,4 +13,6 @@ public interface AdsController {
     void hideBannerAd();
 
     boolean isBannerShown();
+
+    void showInterstitialAd(Runnable then);
 }

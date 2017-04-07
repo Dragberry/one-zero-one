@@ -16,4 +16,6 @@ public interface StringConstants {
 
 
     String RATING_POPUP_SHOW_COUNTERS = "ratingPopupShowCounter";
+    String AD_SHOW_COUNTER = "adShowCounter";
+
 }

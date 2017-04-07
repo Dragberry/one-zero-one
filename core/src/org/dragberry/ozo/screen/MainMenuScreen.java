@@ -163,17 +163,24 @@ public class MainMenuScreen extends AbstractGameScreen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				switch (Gdx.app.getType()) {
-				case iOS:
-					// TODO for IOS
-					break;
-				default:
-					if (DirectedGame.game.ratingPopupShowCounter != DirectedGame.RATING_POPUP_ALREADY_SHOWN
-							&& DirectedGame.game.ratingPopupShowCounter++ % 3 == 0) {
-						DirectedGame.game.setPopup(DirectedGame.game.getScreen(RatingPopup.class).init());
-					} else {
-						game.exit();
-					}
-					break;
+					case iOS:
+						// TODO for IOS
+						break;
+					default:
+						if (DirectedGame.game.ratingPopupShowCounter != DirectedGame.RATING_POPUP_ALREADY_SHOWN
+								&& DirectedGame.game.ratingPopupShowCounter++ % 2 == 0) {
+							DirectedGame.game.setPopup(DirectedGame.game.getScreen(RatingPopup.class).init());
+						} else if(game.platform.getHttpClient().isConnected() && DirectedGame.game.adShowCounter++ % 4 == 0) {
+							game.platform.getAdsController().showInterstitialAd(new Runnable() {
+								@Override
+								public void run() {
+									game.exit();
+								}
+							});
+						} else{
+							game.exit();
+						}
+						break;
 					
 				}
 			}

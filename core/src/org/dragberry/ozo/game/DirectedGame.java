@@ -55,6 +55,7 @@ public abstract class DirectedGame implements ApplicationListener {
 	private boolean auditEnabled;
 
 	public int ratingPopupShowCounter;
+	public int adShowCounter;
 
 	public LevelProvider levelProvider;
 	public final Map<String, Level<?>> levelsCache = new HashMap<String, Level<?>>();
@@ -130,6 +131,7 @@ public abstract class DirectedGame implements ApplicationListener {
 		}
 
 		ratingPopupShowCounter = prefs.getInteger(StringConstants.RATING_POPUP_SHOW_COUNTERS, 0);
+		adShowCounter = prefs.getInteger(StringConstants.AD_SHOW_COUNTER, 0);
 	}
 
 	public void saveGameSettings() {
@@ -138,6 +140,7 @@ public abstract class DirectedGame implements ApplicationListener {
 		prefs.putString(StringConstants.USER_ID, platform.getUser().getId());
 		prefs.putString(StringConstants.USER_NAME, platform.getUser().getName());
 		prefs.putInteger(StringConstants.RATING_POPUP_SHOW_COUNTERS, ratingPopupShowCounter);
+		prefs.putInteger(StringConstants.AD_SHOW_COUNTER, adShowCounter);
 		prefs.flush();
 	}
 
