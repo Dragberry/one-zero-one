@@ -6,7 +6,7 @@ public interface Constants {
 
     String SETTINGS_PATH = "ozo.settings";
 
-    String ANDROID_PLAY_MARKET_URL = "https://play.google.com/store/apps/details?id=org.dragberry.ozo";
+    String ANDROID_PLAY_MARKET_URL = "https://play.google.com/store/apps/details?id=org.dragberry.ozo2";
 
     String TEXTURE_ATLAS_OBJECTS = "images/default/onezeroone.atlas";
     String TRANSLATION = "i18n/translation";

@@ -1,10 +1,13 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -16,7 +19,9 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	protected int value;
 	protected transient boolean flipY;
 	protected transient Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
-	
+
+	private Pixmap canvas = new Pixmap((int) Constants.UNIT_SIZE, (int) Constants.UNIT_SIZE, Pixmap.Format.RGBA8888);
+	private Texture text = new Texture(canvas);
 	public AbstractUnit(int value) {
 		this.value = value;
 		DigitUtil.resolveDigits(value, valueDigits);
@@ -44,16 +49,21 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
 
-		batch.setColor(Color.WHITE);
-		batch.draw(sign.regBall.getTexture(),
+		if (sign == Sign.MINUS) {
+			DirectedGame.game.blackoutShader.pedantic = false;
+			batch.setShader(DirectedGame.game.blackoutShader);
+
+		}
+		batch.draw(text,
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
 				scale.x, scale.y,
 				rotation,
-				sign.regBall.getRegionX(), sign.regBall.getRegionY(),
-				sign.regBall.getRegionWidth(), sign.regBall.getRegionHeight(),
+				0, 0,
+				text.getWidth(), text.getHeight(),
 				false, flipY);
+
 
 		float zoomFactor;
 		switch (valueDigits.size) {
@@ -71,13 +81,17 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 			default:
 				zoomFactor = 0.4f;
 		}
+
+
 		DigitUtil.draw(batch, valueDigits,
 				position.x + dimension.x / 2, position.y + dimension.y / 2,
 				scale.x * zoomFactor ,
 				scale.y * zoomFactor,
 				rotation,
 				false, flipY);
-		
+		batch.setShader(null);
+
+
 	}
 	
 	protected enum Sign {

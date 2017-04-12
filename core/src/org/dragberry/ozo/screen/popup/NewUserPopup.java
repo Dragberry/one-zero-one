@@ -171,7 +171,16 @@ public class NewUserPopup extends AbstractPopup {
         btn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.exit();
+                if (game.platform.getHttpClient().isConnected()) {
+                    game.platform.getAdsController().showInterstitialAd(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.exit();
+                        }
+                    });
+                } else {
+                    game.exit();
+                }
             }
         });
         return btn;

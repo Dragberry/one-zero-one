@@ -84,7 +84,7 @@ public abstract class DirectedGame implements ApplicationListener {
     	SHOWN, SHOWING, HIDING, HIDDEN
     }
     
-    private ShaderProgram blackoutShader;
+    public ShaderProgram blackoutShader;
     
     private Class<? extends AbstractGameScreen> callerScreen;
 
@@ -160,7 +160,9 @@ public abstract class DirectedGame implements ApplicationListener {
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
      		Gdx.files.internal("shaders/blackout.frag"));
+
 		this.popupTransition = PopupTransition.init(blackoutShader);
+
 
 		Gdx.input.setCatchBackKey(true);
 

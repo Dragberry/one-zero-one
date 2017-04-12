@@ -70,8 +70,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 
 					@Override
 					public void execute() {
-						Gdx.app.debug(TAG, "Exit from the application");
-						game.exit();
+						onExit();
 					}
 				});
 
@@ -167,19 +166,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 						// TODO for IOS
 						break;
 					default:
-						if (DirectedGame.game.ratingPopupShowCounter != DirectedGame.RATING_POPUP_ALREADY_SHOWN
-								&& DirectedGame.game.ratingPopupShowCounter++ % 2 == 0) {
-							DirectedGame.game.setPopup(DirectedGame.game.getScreen(RatingPopup.class).init());
-						} else if(game.platform.getHttpClient().isConnected() && DirectedGame.game.adShowCounter++ % 4 == 0) {
-							game.platform.getAdsController().showInterstitialAd(new Runnable() {
-								@Override
-								public void run() {
-									game.exit();
-								}
-							});
-						} else{
-							game.exit();
-						}
+						onExit();
 						break;
 					
 				}
@@ -187,5 +174,22 @@ public class MainMenuScreen extends AbstractGameScreen {
 		});
 		return btn;
 	}
-	
+
+	private void onExit() {
+		if (DirectedGame.game.ratingPopupShowCounter != DirectedGame.RATING_POPUP_ALREADY_SHOWN
+                && DirectedGame.game.ratingPopupShowCounter++ % 2 == 0) {
+            DirectedGame.game.setPopup(DirectedGame.game.getScreen(RatingPopup.class).init());
+        } else if(game.platform.getHttpClient().isConnected() && DirectedGame.game.adShowCounter++ % 4 == 0) {
+            game.platform.getAdsController().showInterstitialAd(new Runnable() {
+                @Override
+                public void run() {
+                    game.exit();
+                }
+            });
+        } else{
+            game.exit();
+        }
+		return;
+	}
+
 }
