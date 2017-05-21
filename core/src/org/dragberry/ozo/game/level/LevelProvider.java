@@ -45,18 +45,18 @@ public class LevelProvider {
         freeplayLevel = new FreeplayReachTheGoalLevelSettings(FreeplayLevel.class, Levels.L999_FREEPLAY, 0.8f, 10);
 
 //		levels.add(new ReachTheGoalLevelSettings(L000_TEST, -10, 2, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -10, 10, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -15, 20, JustReachGoal.Operator.MORE));
-        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -20, 30, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L001_LETS_START, -12, 6, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L002_LITTLE_BIT_HARDER, -10, 10, JustReachGoal.Operator.MORE));
+        levels.add(new ReachTheGoalLevelSettings(L003_NEED_MORE, -15, 20, JustReachGoal.Operator.MORE));
         levels.add(new ReachMultiGoalLevelSettings(L004_DOUBLE_5, -10, 5, 5));
         levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, L005_MUSHROOM_RAIN ,-10, 25));
-        levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 10, 20));
+        levels.add(new NoAnnihilationLevelSettings(L006_SAVE_US, 15, 15));
         levels.add(new ReachMultiGoalLevelSettings(L007_ROULETTE, -7, 7, 7, 7));
-        levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, L008_QUEUES, -15, 50));
-        levels.add(new ReachMultiGoalLevelSettings(L009_STRAIGHT_FLASH, -15, 6, 7, 8, 9, 10));
-        levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, L010_CHESSBOARD, -20, 50));
+        levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, L008_QUEUES, -25, 50));
+        levels.add(new ReachMultiGoalLevelSettings(L009_STRAIGHT_FLASH, -25, 6, 7, 8, 9, 10));
+        levels.add(new ReachTheGoalLevelSettings(ChessboardLevel.class, L010_CHESSBOARD, -33, 50));
         levels.add(new ReachTheGoalLevelSettings(MushroomRainLevel.class, L011_MUSHROOM_SHOWER, -25, 75));
-        levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, L012_WAVES, -15, 50));
+        levels.add(new ReachTheGoalLevelSettings(WavesLevel.class, L012_WAVES, -25, 50));
         levels.add(new ReachMultiGoalLevelSettings(L013_CASINO_ROYALE, -99, 50, 50, 50));
         levels.add(new ReachTheGoalLevelSettings(QueueLevel.class, L014_REGULARITY, -33, 99));
         levels.add(new NoAnnihilationLevelSettings(L015_UNSAFE_PLACE, 9, 99));

@@ -113,11 +113,15 @@ public class Assets implements Disposable, AssetErrorListener {
 			public final AtlasRegion positive;
 			public final AtlasRegion neutral;
 			public final AtlasRegion negative;
+			public final AtlasRegion frame;
+			public final AtlasRegion body;
 
 			public AssetUnit(TextureAtlas atlas) {
 				neutral = atlas.findRegion("unit_neutral");
 				negative = atlas.findRegion("unit_neg");
 				positive = atlas.findRegion("unit_pos");
+				frame = atlas.findRegion("unit_frame");
+				body = atlas.findRegion("unit_body");
 			}
 		}
 

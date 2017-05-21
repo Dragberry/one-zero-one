@@ -1,13 +1,10 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.Assets;
-import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -20,8 +17,6 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	protected transient boolean flipY;
 	protected transient Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
 
-	private Pixmap canvas = new Pixmap((int) Constants.UNIT_SIZE, (int) Constants.UNIT_SIZE, Pixmap.Format.RGBA8888);
-	private Texture text = new Texture(canvas);
 	public AbstractUnit(int value) {
 		this.value = value;
 		DigitUtil.resolveDigits(value, valueDigits);
@@ -49,19 +44,26 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
 
-		if (sign == Sign.MINUS) {
-			DirectedGame.game.blackoutShader.pedantic = false;
-			batch.setShader(DirectedGame.game.blackoutShader);
+		batch.setColor(sign.color);
+		batch.draw(Assets.instance.level.unit.body.getTexture(),
+				position.x, position.y,
+				origin.x, origin.y,
+				dimension.x, dimension.y,
+				scale.x * 0.8f, scale.y * 0.8f,
+				rotation,
+				Assets.instance.level.unit.body.getRegionX(), Assets.instance.level.unit.body.getRegionY(),
+				Assets.instance.level.unit.body.getRegionWidth(), Assets.instance.level.unit.body.getRegionHeight(),
+				false, flipY);
 
-		}
-		batch.draw(text,
+		batch.setColor(Color.WHITE);
+		batch.draw(Assets.instance.level.unit.frame.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,
 				dimension.x, dimension.y,
 				scale.x, scale.y,
 				rotation,
-				0, 0,
-				text.getWidth(), text.getHeight(),
+				Assets.instance.level.unit.frame.getRegionX(), Assets.instance.level.unit.frame.getRegionY(),
+				Assets.instance.level.unit.frame.getRegionWidth(), Assets.instance.level.unit.frame.getRegionHeight(),
 				false, flipY);
 
 
@@ -82,30 +84,32 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 				zoomFactor = 0.4f;
 		}
 
-
+		batch.setColor(sign.numColor);
 		DigitUtil.draw(batch, valueDigits,
 				position.x + dimension.x / 2, position.y + dimension.y / 2,
 				scale.x * zoomFactor ,
 				scale.y * zoomFactor,
 				rotation,
 				false, flipY);
-		batch.setShader(null);
+		batch.setColor(Color.WHITE);
 
 
 	}
 	
 	protected enum Sign {
-		MINUS(Assets.instance.level.unit.negative, Constants.NEGATIVE, "-"),
-		ZERO(Assets.instance.level.unit.neutral, Constants.NEUTRAL, ""),
-		PLUS(Assets.instance.level.unit.positive, Constants.POSITIVE, "+");
+		MINUS(Assets.instance.level.unit.negative, Constants.NEGATIVE, Constants.NEGATIVE_TXT, "-"),
+		ZERO(Assets.instance.level.unit.neutral, Constants.NEUTRAL, Constants.NEUTRAL_TXT, ""),
+		PLUS(Assets.instance.level.unit.positive, Constants.POSITIVE, Constants.POSITIVE_TXT, "+");
 
 		public TextureRegion regBall;
 		public Color color;
+		public Color numColor;
 		public String sign;
 		
-		Sign(TextureRegion regBall, Color color, String sign) {
+		Sign(TextureRegion regBall, Color color, Color numColor, String sign) {
 			this.regBall = regBall;
 			this.color = color;
+			this.numColor = numColor;
 			this.sign = sign;
 		}
 	}

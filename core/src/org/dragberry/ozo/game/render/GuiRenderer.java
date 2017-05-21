@@ -32,6 +32,16 @@ public class GuiRenderer implements Renderer {
 	private int uiBottomPanelWidth;
 	private int uiBottomPanelHeight;
 	private float uiBottomPanelY;
+
+	private TextureRegion frame = Assets.instance.level.unit.frame;
+	private TextureRegion body = Assets.instance.level.unit.body;
+	private float stateOffset;
+	private float stateY;
+	private float stateNeutralX;
+	private float stateNegativeX;
+	private float statePositiveX;
+	private int stateFrameWidth;
+	private int stateFrameHeight;
 	
 	public GuiRenderer() {
 		init();
@@ -49,6 +59,14 @@ public class GuiRenderer implements Renderer {
 		uiBottomPanelWidth = Assets.instance.level.uiTop.getRegionWidth();
 		uiBottomPanelHeight = Assets.instance.level.uiTop.getRegionHeight();
 		uiBottomPanelY =  camera.viewportHeight - uiBottomPanelHeight * UI_PANELS_SCALE;
+
+		stateOffset = frame.getRegionHeight();
+		stateY = camera.viewportHeight - stateOffset;
+		stateNeutralX = camera.viewportWidth / 2 - frame.getRegionWidth() / 2;
+		stateNegativeX = camera.viewportWidth / 2 + frame.getRegionWidth() / 2;
+		statePositiveX = camera.viewportWidth / 2 - frame.getRegionWidth() * 1.5f;
+		stateFrameWidth = frame.getRegionWidth();
+		stateFrameHeight = frame.getRegionHeight();
 	}
 	
 	@Override
@@ -109,23 +127,34 @@ public class GuiRenderer implements Renderer {
 	}
 	
 	private void renderState(SpriteBatch batch) {
-		float offset = Assets.instance.level.unit.neutral.getRegionHeight();
-		TextureRegion ball;
+		// Blue frame
+		batch.setColor(Constants.NEUTRAL);
+		batch.draw(body.getTexture(),
+				stateNeutralX, stateY,
+				stateFrameWidth / 2, stateFrameHeight / 2,
+				stateFrameWidth, stateFrameHeight,
+				0.8f, 0.8f,
+				0,
+				body.getRegionX(), body.getRegionY(),
+				body.getRegionWidth(), body.getRegionHeight(),
+				false, true);
 
-		// Blue ball
-		ball = Assets.instance.level.unit.neutral;
-		batch.draw(ball.getTexture(),
-				camera.viewportWidth / 2 - ball.getRegionWidth() / 2, camera.viewportHeight - offset,
+		batch.setColor(Color.WHITE);
+		batch.draw(frame.getTexture(),
+				stateNeutralX, stateY,
 				0, 0,
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				stateFrameWidth, stateFrameHeight,
 				1, 1,
 				0,
-				ball.getRegionX(), ball.getRegionY(),
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				frame.getRegionX(), frame.getRegionY(),
+				stateFrameWidth, stateFrameHeight,
 				false, true);
+
 		float posX = camera.viewportWidth / 2;
-		float upY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 - 0.4f * Assets.instance.level.digits.minus.getRegionHeight();
-		float downY = camera.viewportHeight - offset + ball.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.level.digits.minus.getRegionHeight();
+		float upY = camera.viewportHeight - stateOffset + frame.getRegionHeight() / 2 - 0.4f * Assets.instance.level.digits.minus.getRegionHeight();
+		float downY = camera.viewportHeight - stateOffset + frame.getRegionHeight() / 2 + DIGIT_STATE_SCALE * Assets.instance.level.digits.minus.getRegionHeight();
+
+		batch.setColor(Constants.NEUTRAL_TXT);
 		DigitUtil.draw(batch, GameController.instance.level.zeroCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
@@ -136,20 +165,35 @@ public class GuiRenderer implements Renderer {
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
+		batch.setColor(Color.WHITE);
 		
 
-		// Green ball
-		ball = Assets.instance.level.unit.positive;
-		batch.draw(ball.getTexture(),
-				camera.viewportWidth / 2 - ball.getRegionWidth() * 1.5f, camera.viewportHeight - offset,
+		// Green frame
+		batch.setColor(Constants.POSITIVE);
+		batch.draw(body.getTexture(),
+				statePositiveX, stateY,
+				stateFrameWidth / 2, stateFrameHeight / 2,
+				stateFrameWidth, stateFrameHeight,
+				0.8f, 0.8f,
+				0,
+				body.getRegionX(), body.getRegionY(),
+				body.getRegionWidth(), body.getRegionHeight(),
+				false, true);
+
+		batch.setColor(Color.WHITE);
+
+		batch.draw(frame.getTexture(),
+				statePositiveX, stateY,
 				0, 0,
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				stateFrameWidth, stateFrameHeight,
 				1, 1,
 				0,
-				ball.getRegionX(), ball.getRegionY(),
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				frame.getRegionX(), frame.getRegionY(),
+				stateFrameWidth, stateFrameHeight,
 				false, true);
-		posX = camera.viewportWidth / 2 - ball.getRegionWidth();
+		posX = camera.viewportWidth / 2 - frame.getRegionWidth();
+
+		batch.setColor(Constants.POSITIVE_TXT);
 		DigitUtil.draw(batch, GameController.instance.level.posCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
@@ -160,21 +204,35 @@ public class GuiRenderer implements Renderer {
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
+		batch.setColor(Color.WHITE);
 
-		// Red ball
-		ball = Assets.instance.level.unit.negative;
-		batch.draw(ball.getTexture(),
-				camera.viewportWidth / 2 + ball.getRegionWidth() / 2, camera.viewportHeight - offset,
+		// Red frame
+		batch.setColor(Constants.NEGATIVE);
+		batch.draw(body.getTexture(),
+				stateNegativeX, stateY,
+				stateFrameWidth / 2, stateFrameHeight / 2,
+				stateFrameWidth, stateFrameHeight,
+				0.8f, 0.8f,
+				0,
+				body.getRegionX(), body.getRegionY(),
+				body.getRegionWidth(), body.getRegionHeight(),
+				false, true);
+
+		batch.setColor(Color.WHITE);
+
+		batch.draw(frame.getTexture(),
+				stateNegativeX, stateY,
 				0, 0,
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				stateFrameWidth, stateFrameHeight,
 				1, 1,
 				0,
-				ball.getRegionX(), ball.getRegionY(),
-				ball.getRegionWidth(), ball.getRegionHeight(),
+				frame.getRegionX(), frame.getRegionY(),
+				stateFrameWidth, stateFrameHeight,
 				false, true);
 		
-		posX = camera.viewportWidth / 2 + ball.getRegionWidth();
-		
+		posX = camera.viewportWidth / 2 + frame.getRegionWidth();
+
+		batch.setColor(Constants.NEGATIVE_TXT);
 		DigitUtil.draw(batch, GameController.instance.level.negCountDigits,
 				posX, upY,
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
@@ -185,6 +243,7 @@ public class GuiRenderer implements Renderer {
 				DIGIT_STATE_SCALE, DIGIT_STATE_SCALE,
 				0,
 				false, true);
+		batch.setColor(Color.WHITE);
 	}
 	
 	@Override

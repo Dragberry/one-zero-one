@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import org.dragberry.ozo.common.level.Levels;
 import org.dragberry.ozo.game.*;
 import org.dragberry.ozo.game.util.Constants;
-import org.dragberry.ozo.screen.popup.NewUserPopup;
 import org.dragberry.ozo.screen.popup.RatingPopup;
 import org.dragberry.ozo.screen.popup.WrongVersionPopup;
 import org.dragberry.ozo.screen.transitions.ScreenTransitionFade;
@@ -87,7 +86,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		if (game.wrongAppVersion) {
 			DirectedGame.game.setPopup(DirectedGame.game.getScreen(WrongVersionPopup.class).init());
 		} else if (game.platform.getUser().isDefault() && game.platform.getHttpClient().isConnected()) {
-			DirectedGame.game.setPopup(DirectedGame.game.getScreen(NewUserPopup.class).init());
+//			DirectedGame.game.setPopup(DirectedGame.game.getScreen(NewUserPopup.class).init());
 		}
 
 	}
@@ -179,7 +178,7 @@ public class MainMenuScreen extends AbstractGameScreen {
 		if (DirectedGame.game.ratingPopupShowCounter != DirectedGame.RATING_POPUP_ALREADY_SHOWN
                 && DirectedGame.game.ratingPopupShowCounter++ % 2 == 0) {
             DirectedGame.game.setPopup(DirectedGame.game.getScreen(RatingPopup.class).init());
-        } else if(game.platform.getHttpClient().isConnected() && DirectedGame.game.adShowCounter++ % 4 == 0) {
+        } else if(game.platform.getHttpClient().isConnected() && DirectedGame.game.adShowCounter++ % 2 == 0) {
             game.platform.getAdsController().showInterstitialAd(new Runnable() {
                 @Override
                 public void run() {

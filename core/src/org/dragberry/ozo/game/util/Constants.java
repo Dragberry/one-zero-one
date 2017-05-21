@@ -14,10 +14,10 @@ public interface Constants {
     String TEXTURE_ATLAS_SKIN = "skins/default/skin/uiskin.atlas";
     String SKIN = "skins/default/skin/uiskin.json";
 
-    Color BACKGROUND = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
-    Color BACKGROUND_GAME = new Color(0xCC / 255f, 0xCC / 255f,  0x9A / 255f, 1);
+    Color BACKGROUND = new Color(0xCCCC9AFF);
+    Color BACKGROUND_GAME = new Color(0xCCCC9AFF);
 
-    Color FONT_BLOCK_1 = new Color(70/ 255f, 44/ 255f, 5/ 255f, 1);
+    Color FONT_BLOCK_1 = new Color(0x462C05FF);
 
     float VIEWPORT_WIDTH = 1280.0f;
     float VIEWPORT_GUI_WIDTH = 720.0f;
@@ -26,7 +26,10 @@ public interface Constants {
     float UNIT_MOTION_TIME = 0.3f;
     float UNIT_SPEED = UNIT_SIZE / UNIT_MOTION_TIME;
 
-    Color POSITIVE = Color.GREEN;
-    Color NEGATIVE = new Color(0xFF / 255f, 0x45 / 255f, 0x00 / 255, 1);
-    Color NEUTRAL = new Color(0x1E / 255f, 0x90 / 255f, 0xFF / 255, 1);
+    Color POSITIVE = new Color(0x3FBD1EFF);
+    Color POSITIVE_TXT = new Color(0x003200FF);
+    Color NEGATIVE = new Color(0xD52805FF);
+    Color NEGATIVE_TXT = new Color(0xFFDC10FF);
+    Color NEUTRAL = new Color(0x7B7B7BFF);
+    Color NEUTRAL_TXT = Color.DARK_GRAY;
 }

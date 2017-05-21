@@ -10,14 +10,14 @@ background
   orig: 480, 800
   offset: 0, 0
   index: -1
-ui_bottom
+ui_top
   rotate: false
   xy: 1, 131
   size: 480, 85
   orig: 480, 85
   offset: 0, 0
   index: -1
-ui_top
+ui_bottom
   rotate: false
   xy: 483, 933
   size: 480, 85
@@ -31,77 +31,70 @@ unit_neg
   orig: 128, 128
   offset: 0, 0
   index: -1
-unit_neutral
+unit_pos
   rotate: false
   xy: 483, 803
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-unit_pos
+unit_neutral
   rotate: false
   xy: 131, 1
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-n+
+unit_frame
+  rotate: false
+  xy: 483, 673
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+n-
   rotate: false
   xy: 965, 995
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n-
-  rotate: false
-  xy: 483, 778
-  size: 17, 23
-  orig: 17, 23
-  offset: 0, 0
-  index: -1
-n0
+n3
   rotate: false
   xy: 613, 908
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n1
+n0
   rotate: false
   xy: 261, 106
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n2
+n6
+  rotate: false
+  xy: 483, 648
+  size: 17, 23
+  orig: 17, 23
+  offset: 0, 0
+  index: -1
+n+
   rotate: false
   xy: 965, 970
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n3
+n8
   rotate: false
   xy: 984, 995
   size: 17, 23
   orig: 17, 23
   offset: 0, 0
   index: -1
-n4
-  rotate: false
-  xy: 483, 753
-  size: 17, 23
-  orig: 17, 23
-  offset: 0, 0
-  index: -1
-n5
-  rotate: false
-  xy: 502, 778
-  size: 17, 23
-  orig: 17, 23
-  offset: 0, 0
-  index: -1
-n6
+n2
   rotate: false
   xy: 613, 883
   size: 17, 23
@@ -115,7 +108,7 @@ n7
   orig: 17, 23
   offset: 0, 0
   index: -1
-n8
+n4
   rotate: false
   xy: 261, 81
   size: 17, 23
@@ -127,5 +120,26 @@ n9
   xy: 280, 106
   size: 17, 23
   orig: 17, 23
+  offset: 0, 0
+  index: -1
+n1
+  rotate: false
+  xy: 483, 623
+  size: 17, 23
+  orig: 17, 23
+  offset: 0, 0
+  index: -1
+n5
+  rotate: false
+  xy: 502, 648
+  size: 17, 23
+  orig: 17, 23
+  offset: 0, 0
+  index: -1
+unit_body
+  rotate: false
+  xy: 965, 964
+  size: 4, 4
+  orig: 4, 4
   offset: 0, 0
   index: -1
