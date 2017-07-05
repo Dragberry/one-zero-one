@@ -263,11 +263,13 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
             }
         }
 
-        for (AbstractGoal goal : goalsToWin) {
-            goal.update(deltaTime);
-        }
-        for (AbstractGoal goal : goalsToLose) {
-            goal.update(deltaTime);
+        if (started) {
+            for (AbstractGoal goal : goalsToWin) {
+                goal.update(deltaTime);
+            }
+            for (AbstractGoal goal : goalsToLose) {
+                goal.update(deltaTime);
+            }
         }
     }
 
@@ -430,6 +432,8 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         }
         selectedUnit.unselect();
         selectedUnit = null;
+
+        markMaxValueUnits();
     }
 
     protected void updateGeneratorsAfterStep() {}
@@ -567,5 +571,43 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         DigitUtil.resolveDigits(lostNumbers, lostNumbersDigits, false);
         DigitUtil.resolveDigits(negCount, negCountDigits, false);
         DigitUtil.resolveDigits(negSum, negSumDigits);
+    }
+
+    protected int markMaxValueUnits() {
+        int maxValue = Integer.MIN_VALUE;
+        int minValue = Integer.MAX_VALUE;
+        for (Unit[] row : units) {
+            for (Unit unit : row) {
+                if (unit.getValue() > 1 && maxValue < unit.getValue()) {
+                    maxValue = unit.getValue();
+                }
+                if (unit.getValue() < -1 && minValue > unit.getValue()) {
+                    minValue = unit.getValue();
+                }
+            }
+        }
+
+        for (AbstractGoal goal : goalsToLose) {
+            goal.markAsAlmostReached(goal.isAlmostReached(minValue));
+        }
+
+        for (Unit[] row : units) {
+            for (Unit unit : row) {
+                unit.isPulsated = maxValue == unit.getValue() || minValue == unit.getValue();
+                            }
+        }
+        return maxValue;
+    }
+
+    protected int markMinValueUnits() {
+        int maxValue = Integer.MAX_VALUE;
+        for (Unit[] row : units) {
+            for (Unit unit : row) {
+                if (maxValue > unit.getValue()) {
+                    maxValue = unit.getValue();
+                }
+            }
+        }
+        return maxValue;
     }
 }

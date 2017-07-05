@@ -78,4 +78,18 @@ public class JustReachGoal extends AbstractGoal {
         unit.render(batch);
     }
 
+    @Override
+    public void update(float deltaTime) {
+        unit.update(deltaTime);
+    }
+
+    @Override
+    public boolean isAlmostReached(int minValue) {
+        return Math.abs(minValue - goal) < 3;
+    }
+
+    @Override
+    public void markAsAlmostReached(boolean flag) {
+        unit.isPulsated = flag;
+    }
 }

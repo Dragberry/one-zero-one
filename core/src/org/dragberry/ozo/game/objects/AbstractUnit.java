@@ -1,12 +1,15 @@
 package org.dragberry.ozo.game.objects;
 
 import org.dragberry.ozo.game.Assets;
+import org.dragberry.ozo.game.DirectedGame;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 
 import java.io.Serializable;
@@ -16,6 +19,9 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	protected int value;
 	protected transient boolean flipY;
 	protected transient Array<TextureRegion> valueDigits = new Array<TextureRegion>(4);
+
+	protected transient float time;
+	public transient boolean isPulsated;
 
 	public AbstractUnit(int value) {
 		this.value = value;
@@ -39,12 +45,24 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	public int getValue() {
 		return value;
 	}
-	
+
+	@Override
+	public void update(float deltaTime) {
+		this.time += deltaTime;
+	}
+
 	@Override
 	public void render(SpriteBatch batch) {
 		Sign sign = value < 0 ? Sign.MINUS : value == 0 ? Sign.ZERO : Sign.PLUS;
 
 		batch.setColor(sign.color);
+		if (isPulsated) {
+			sign.setPulsationShader(batch, time);
+		} else {
+			batch.setShader(null);
+		}
+
+
 		batch.draw(Assets.instance.level.unit.body.getTexture(),
 				position.x, position.y,
 				origin.x, origin.y,
@@ -54,6 +72,7 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 				Assets.instance.level.unit.body.getRegionX(), Assets.instance.level.unit.body.getRegionY(),
 				Assets.instance.level.unit.body.getRegionWidth(), Assets.instance.level.unit.body.getRegionHeight(),
 				false, flipY);
+		batch.setShader(null);
 
 		batch.setColor(Color.WHITE);
 		batch.draw(Assets.instance.level.unit.frame.getTexture(),
@@ -97,20 +116,32 @@ public abstract class AbstractUnit extends AbstractGameObject implements Seriali
 	}
 	
 	protected enum Sign {
-		MINUS(Assets.instance.level.unit.negative, Constants.NEGATIVE, Constants.NEGATIVE_TXT, "-"),
-		ZERO(Assets.instance.level.unit.neutral, Constants.NEUTRAL, Constants.NEUTRAL_TXT, ""),
-		PLUS(Assets.instance.level.unit.positive, Constants.POSITIVE, Constants.POSITIVE_TXT, "+");
+		MINUS(Assets.instance.level.unit.negative, Constants.NEGATIVE, Constants.NEGATIVE_TXT, "-", DirectedGame.game.pulsationNegShader),
+		ZERO(Assets.instance.level.unit.neutral, Constants.NEUTRAL, Constants.NEUTRAL_TXT, "", DirectedGame.game.pulsationNeuShader),
+		PLUS(Assets.instance.level.unit.positive, Constants.POSITIVE, Constants.POSITIVE_TXT, "+", DirectedGame.game.pulsationPosShader);
 
 		public TextureRegion regBall;
 		public Color color;
 		public Color numColor;
 		public String sign;
+		public ShaderProgram shader;
 		
-		Sign(TextureRegion regBall, Color color, Color numColor, String sign) {
+		Sign(TextureRegion regBall, Color color, Color numColor, String sign, ShaderProgram shader) {
 			this.regBall = regBall;
 			this.color = color;
 			this.numColor = numColor;
 			this.sign = sign;
+			this.shader = shader;
+			this.shader.pedantic = false;
+		}
+
+		public void setPulsationShader(SpriteBatch batch, float time) {
+			if (shader.isCompiled()) {
+				batch.setShader(shader);
+				shader.setUniformf("u_time", time);
+			} else {
+				Gdx.app.log("Shader", shader.getLog());
+			}
 		}
 	}
 }

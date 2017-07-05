@@ -11,6 +11,7 @@ public abstract class AbstractGoal implements Goal {
     public Vector2 dimension = new Vector2();
     
     protected String msg;
+    protected float time;
 
     @Override
     public String getMessage() {
@@ -24,6 +25,14 @@ public abstract class AbstractGoal implements Goal {
 
     @Override
     public void reset(boolean restore) {
+        // empty by default
+    }
+
+    public boolean isAlmostReached(int minValue) {
+        return false;
+    }
+
+    public void markAsAlmostReached(boolean flag) {
         // empty by default
     }
 }

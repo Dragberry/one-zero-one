@@ -58,6 +58,7 @@ public class Unit extends AbstractUnit {
 
 	@Override
 	public void update(float deltaTime) {
+		super.update(deltaTime);
 		if (isFluctuated) {
 			fluctuationsTime += deltaTime;
 			if (fluctuationsTime < FLUCTUATIONS_TIME) {
@@ -169,10 +170,6 @@ public class Unit extends AbstractUnit {
 		selected = false;
 		state = State.GROW_DOWN;
 		time = 0;
-	}
-
-	public boolean isSelectedNeighbor() {
-		return selectedNeighbor;
 	}
 
 	public void selectNeighbor() {

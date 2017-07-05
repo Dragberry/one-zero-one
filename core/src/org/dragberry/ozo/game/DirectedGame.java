@@ -85,7 +85,11 @@ public abstract class DirectedGame implements ApplicationListener {
     }
     
     public ShaderProgram blackoutShader;
-    
+	public ShaderProgram pulsationNegShader;
+	public ShaderProgram pulsationPosShader;
+	public ShaderProgram pulsationNeuShader;
+
+
     private Class<? extends AbstractGameScreen> callerScreen;
 
 	public DirectedGame(Platform platform, boolean auditEnabled) {
@@ -160,6 +164,18 @@ public abstract class DirectedGame implements ApplicationListener {
 		blackoutShader = new ShaderProgram(
      		Gdx.files.internal("shaders/blackout.vert"),
      		Gdx.files.internal("shaders/blackout.frag"));
+
+		pulsationNegShader = new ShaderProgram(
+				Gdx.files.internal("shaders/pulsation.vert"),
+				Gdx.files.internal("shaders/pulsation_negative.frag"));
+
+		pulsationPosShader = new ShaderProgram(
+				Gdx.files.internal("shaders/pulsation.vert"),
+				Gdx.files.internal("shaders/pulsation_positive.frag"));
+
+		pulsationNeuShader = new ShaderProgram(
+				Gdx.files.internal("shaders/pulsation.vert"),
+				Gdx.files.internal("shaders/pulsation_neutral.frag"));
 
 		this.popupTransition = PopupTransition.init(blackoutShader);
 
