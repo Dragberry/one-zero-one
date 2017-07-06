@@ -122,7 +122,7 @@ public abstract class AbstractSelectLevelMenuScreen extends AbstractGameScreen {
     private void rebuildStage() {
         LevelState state = LevelState.COMPLETED;
         for (ObjectMap.Entry<LevelSettings, TextButton> entry : levelButtons.entries()) {
-            state = getLevelState(state, entry);
+//            state = getLevelState(state, entry);
             entry.value.setDisabled(isButtonDisabled(state));
             entry.value.setStyle(Assets.instance.skin.skin.get(state.style, TextButton.TextButtonStyle.class));
         }

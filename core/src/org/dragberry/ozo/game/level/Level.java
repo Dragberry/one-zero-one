@@ -19,7 +19,6 @@ import org.dragberry.ozo.game.util.CameraHelper;
 import org.dragberry.ozo.game.util.Constants;
 import org.dragberry.ozo.game.util.DigitUtil;
 import org.dragberry.ozo.screen.popup.AbstractGameFinishedPopup;
-import org.dragberry.ozo.screen.popup.AbstractPopup;
 import org.dragberry.ozo.screen.popup.VictoryPopup;
 
 import java.io.Serializable;
@@ -155,6 +154,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
             goal.reset(restore);
         }
 
+        processPulsation();
     }
     
     protected void createGenerators() {
@@ -433,7 +433,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         selectedUnit.unselect();
         selectedUnit = null;
 
-        markMaxValueUnits();
+        processPulsation();
     }
 
     protected void updateGeneratorsAfterStep() {}
@@ -573,7 +573,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         DigitUtil.resolveDigits(negSum, negSumDigits);
     }
 
-    protected int markMaxValueUnits() {
+    protected int processPulsation() {
         int maxValue = Integer.MIN_VALUE;
         int minValue = Integer.MAX_VALUE;
         for (Unit[] row : units) {
@@ -591,23 +591,16 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
             goal.markAsAlmostReached(goal.isAlmostReached(minValue));
         }
 
+        for (AbstractGoal goal : goalsToWin) {
+            goal.markAsAlmostReached(goal.isAlmostReached(maxValue));
+        }
+
         for (Unit[] row : units) {
             for (Unit unit : row) {
                 unit.isPulsated = maxValue == unit.getValue() || minValue == unit.getValue();
-                            }
-        }
-        return maxValue;
-    }
-
-    protected int markMinValueUnits() {
-        int maxValue = Integer.MAX_VALUE;
-        for (Unit[] row : units) {
-            for (Unit unit : row) {
-                if (maxValue > unit.getValue()) {
-                    maxValue = unit.getValue();
-                }
             }
         }
         return maxValue;
     }
+
 }
