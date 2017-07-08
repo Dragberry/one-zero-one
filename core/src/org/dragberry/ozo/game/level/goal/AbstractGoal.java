@@ -28,7 +28,7 @@ public abstract class AbstractGoal implements Goal {
         // empty by default
     }
 
-    public boolean isAlmostReached(int minValue) {
+    public boolean isAlmostReached(int value) {
         return false;
     }
 

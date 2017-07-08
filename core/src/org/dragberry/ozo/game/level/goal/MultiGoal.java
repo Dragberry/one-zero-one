@@ -107,4 +107,29 @@ public class MultiGoal extends AbstractGoal {
 		 }
 	}
 
+    @Override
+    public void update(float deltaTime) {
+        for (SimpleGoal goal : goals) {
+            goal.renderUnit.update(deltaTime);
+        }
+    }
+
+    public void resetPulsation() {
+        for (SimpleGoal goal : goals) {
+            goal.renderUnit.isPulsated = false;
+        }
+    }
+
+    public void check(Unit unit) {
+        for (SimpleGoal goal : goals) {
+            if (!goal.renderUnit.isPulsated && goal.renderUnit.getValue() == unit.getValue()) {
+                goal.renderUnit.isPulsated = true;
+                unit.isPulsated = true;
+                break;
+            } else {
+                unit.isPulsated = false;
+            }
+        }
+    }
+
 }

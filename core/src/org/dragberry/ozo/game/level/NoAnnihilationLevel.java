@@ -16,7 +16,12 @@ public class NoAnnihilationLevel extends Level<NoAnnihilationLevelSettings> {
 	@Override
 	protected void addGoals(NoAnnihilationLevelSettings settings) {
 		addGoalToWin(new JustReachGoal(settings.goal, Operator.EQUALS));
-		addGoalToLose(new AnnihilationCounterGoal(settings.goalToLose - lostNumbers));
+		addGoalToLose(new AnnihilationCounterGoal(settings.goalToLose, lostNumbers));
 	}
 
+	@Override
+	protected void processPulsation() {
+		AnnihilationCounterGoal goal = (AnnihilationCounterGoal) goalsToLose.get(0);
+		goal.markAsAlmostReached(goal.isAlmostReached(3));
+	}
 }

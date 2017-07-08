@@ -573,7 +573,7 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
         DigitUtil.resolveDigits(negSum, negSumDigits);
     }
 
-    protected int processPulsation() {
+    protected void processPulsation() {
         int maxValue = Integer.MIN_VALUE;
         int minValue = Integer.MAX_VALUE;
         for (Unit[] row : units) {
@@ -587,20 +587,22 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
             }
         }
 
-        for (AbstractGoal goal : goalsToLose) {
-            goal.markAsAlmostReached(goal.isAlmostReached(minValue));
-        }
-
-        for (AbstractGoal goal : goalsToWin) {
-            goal.markAsAlmostReached(goal.isAlmostReached(maxValue));
-        }
+        processGoalPulsation(maxValue, minValue);
 
         for (Unit[] row : units) {
             for (Unit unit : row) {
-                unit.isPulsated = maxValue == unit.getValue() || minValue == unit.getValue();
+                unit.isPulsated = maxValue == unit.getValue();
             }
         }
-        return maxValue;
+    }
+
+    protected void processGoalPulsation(int maxValue, int minValue) {
+        for (AbstractGoal goal : goalsToLose) {
+            goal.markAsAlmostReached(goal.isAlmostReached(minValue));
+        }
+        for (AbstractGoal goal : goalsToWin) {
+            goal.markAsAlmostReached(goal.isAlmostReached(maxValue));
+        }
     }
 
 }

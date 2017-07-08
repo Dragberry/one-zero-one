@@ -84,8 +84,8 @@ public class JustReachGoal extends AbstractGoal {
     }
 
     @Override
-    public boolean isAlmostReached(int minValue) {
-        return Math.abs(minValue - goal) < 3;
+    public boolean isAlmostReached(int value) {
+        return Math.abs(value - goal) < 3;
     }
 
     @Override

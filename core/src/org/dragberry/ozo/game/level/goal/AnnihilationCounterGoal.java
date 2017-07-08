@@ -14,6 +14,7 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	
 	private int annihilationCounter;
 	private int goal;
+	private final int baseGoal;
 	
 	private GoalUnit posUnit;
 	private GoalUnit negUnit;
@@ -24,8 +25,9 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 	private float animationTime = 0;
 	private boolean animationAfter = false;
 
-	public AnnihilationCounterGoal(int goal) {
-		this.goal = goal;
+	public AnnihilationCounterGoal(int goal, int lostNumbers) {
+		this.baseGoal = goal;
+		this.goal = baseGoal - lostNumbers;
 		this.posUnit = new GoalUnit(goal);
 		this.negUnit = new GoalUnit(-goal);
 		this.zeroUnit = new GoalUnit(0);
@@ -36,6 +38,9 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 
 	@Override
 	public void update(float deltaTime) {
+		posUnit.update(deltaTime);
+		negUnit.update(deltaTime);
+		zeroUnit.update(deltaTime);
 		animationTime += deltaTime;
 		if (animationTime > 3) {
 			animationTime = 0;
@@ -95,8 +100,23 @@ public class AnnihilationCounterGoal extends AbstractGoal {
 
 	@Override
 	public void reset(boolean restore) {
+		if (!restore) {
+			this.annihilationCounter = 0;
+			this.goal = baseGoal;
+		}
 		this.posUnit.setValue(goal);
 		this.negUnit.setValue(-goal);
-		this.annihilationCounter = 0;
+	}
+
+	@Override
+	public void markAsAlmostReached(boolean flag) {
+		posUnit.isPulsated = flag;
+		negUnit.isPulsated = flag;
+		zeroUnit.isPulsated = flag;
+	}
+
+	@Override
+	public boolean isAlmostReached(int value) {
+		return goal - annihilationCounter < 3;
 	}
 }
