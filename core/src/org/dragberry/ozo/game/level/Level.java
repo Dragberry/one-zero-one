@@ -574,6 +574,21 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
     }
 
     protected void processPulsation() {
+        MinAndMax minMax = getMinAndMaxValues();
+        processGoalPulsation(minMax);
+        processUnitPulsation(minMax);
+    }
+
+    protected void processUnitPulsation(MinAndMax minMax) {
+        for (Unit[] row : units) {
+            for (Unit unit : row) {
+                unit.isPulsated =
+                        minMax.max == unit.getValue() || (minMax.minEnabled && minMax.min == unit.getValue());
+            }
+        }
+    }
+
+    protected MinAndMax getMinAndMaxValues() {
         int maxValue = Integer.MIN_VALUE;
         int minValue = Integer.MAX_VALUE;
         for (Unit[] row : units) {
@@ -586,22 +601,40 @@ public abstract class Level<LS extends LevelSettings> implements Serializable {
                 }
             }
         }
-
-        processGoalPulsation(maxValue, minValue);
-
-        for (Unit[] row : units) {
-            for (Unit unit : row) {
-                unit.isPulsated = maxValue == unit.getValue();
-            }
-        }
+        return MinAndMax.INSTANCE.update(minValue, maxValue);
     }
 
-    protected void processGoalPulsation(int maxValue, int minValue) {
+    protected static class MinAndMax {
+
+        public static MinAndMax INSTANCE = new MinAndMax();
+
+        public int min;
+        public int max;
+        public boolean minEnabled;
+
+        private MinAndMax() {}
+
+        public MinAndMax update(int min, boolean minEnabled, int max) {
+            this.min = min;
+            this.minEnabled = minEnabled;
+            this.max = max;
+            return this;
+        }
+
+        public MinAndMax update(int min, int max) {
+            return update(min, false, max);
+        }
+
+    }
+
+    protected void processGoalPulsation(MinAndMax minAndMax) {
         for (AbstractGoal goal : goalsToLose) {
-            goal.markAsAlmostReached(goal.isAlmostReached(minValue));
+            boolean flag = goal.isAlmostReached(minAndMax.min);
+            goal.markAsAlmostReached(flag);
+            minAndMax.minEnabled = flag;
         }
         for (AbstractGoal goal : goalsToWin) {
-            goal.markAsAlmostReached(goal.isAlmostReached(maxValue));
+            goal.markAsAlmostReached(goal.isAlmostReached(minAndMax.max));
         }
     }
 

@@ -1,5 +1,6 @@
 package org.dragberry.ozo.game.level;
 
+import org.dragberry.ozo.game.level.goal.AbstractGoal;
 import org.dragberry.ozo.game.level.goal.AnnihilationCounterGoal;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.goal.JustReachGoal.Operator;
@@ -20,8 +21,14 @@ public class NoAnnihilationLevel extends Level<NoAnnihilationLevelSettings> {
 	}
 
 	@Override
-	protected void processPulsation() {
-		AnnihilationCounterGoal goal = (AnnihilationCounterGoal) goalsToLose.get(0);
-		goal.markAsAlmostReached(goal.isAlmostReached(3));
+	protected void processGoalPulsation(MinAndMax minAndMax) {
+		AnnihilationCounterGoal acGoal = (AnnihilationCounterGoal) goalsToLose.get(0);
+		acGoal.markAsAlmostReached(acGoal.isAlmostReached(3));
+
+		for (AbstractGoal goal : goalsToWin) {
+			goal.markAsAlmostReached(goal.isAlmostReached(minAndMax.max));
+		}
 	}
 }
+
+

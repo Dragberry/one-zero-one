@@ -6,7 +6,6 @@ import org.dragberry.ozo.game.level.generator.WavesGenerator;
 import org.dragberry.ozo.game.level.goal.AnnihilationCounterGoal;
 import org.dragberry.ozo.game.level.goal.JustReachGoal;
 import org.dragberry.ozo.game.level.settings.NoAnnihilationLevelSettings;
-import org.dragberry.ozo.game.objects.Unit;
 
 public class NoAnnihilationWavesLevel extends NoAnnihilationLevel {
 
@@ -36,37 +35,15 @@ public class NoAnnihilationWavesLevel extends NoAnnihilationLevel {
 	}
 
 	@Override
-	protected void processPulsation() {
-		int maxValue = Integer.MIN_VALUE;
-		int minValue = Integer.MAX_VALUE;
-		for (Unit[] row : units) {
-			for (Unit unit : row) {
-				if (unit.getValue() > 1 && maxValue < unit.getValue()) {
-					maxValue = unit.getValue();
-				}
-				if (unit.getValue() < -1 && minValue > unit.getValue()) {
-					minValue = unit.getValue();
-				}
-			}
-		}
-
-		processGoalPulsation(maxValue, minValue);
-
-		for (Unit[] row : units) {
-			for (Unit unit : row) {
-				unit.isPulsated = maxValue == unit.getValue();
-			}
-		}
-	}
-
-	@Override
-	protected void processGoalPulsation(int maxValue, int minValue) {
-		super.processGoalPulsation(maxValue, minValue);
+	protected void processGoalPulsation(MinAndMax minAndMax) {
+		super.processGoalPulsation(minAndMax);
 		AnnihilationCounterGoal goal = (AnnihilationCounterGoal) goalsToLose.get(0);
 		JustReachGoal negGoal = (JustReachGoal) goalsToLose.get(1);
 		JustReachGoal posGoal = (JustReachGoal) goalsToWin.get(0);
 		goal.markAsAlmostReached(goal.isAlmostReached(3));
-		negGoal.markAsAlmostReached(negGoal.isAlmostReached(minValue));
-		posGoal.markAsAlmostReached(posGoal.isAlmostReached(maxValue));
+		boolean flag = negGoal.isAlmostReached(minAndMax.min);
+		negGoal.markAsAlmostReached(flag);
+		minAndMax.minEnabled = flag;
+		posGoal.markAsAlmostReached(posGoal.isAlmostReached(minAndMax.max));
 	}
 }

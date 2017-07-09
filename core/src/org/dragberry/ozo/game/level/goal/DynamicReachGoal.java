@@ -55,4 +55,19 @@ public class DynamicReachGoal extends AbstractGoal {
             unit.setValue(goal);
         }
     }
+
+    @Override
+    public void update(float deltaTime) {
+        unit.update(deltaTime);
+    }
+
+    @Override
+    public boolean isAlmostReached(int value) {
+        return Math.abs(value - goal) < 3;
+    }
+
+    @Override
+    public void markAsAlmostReached(boolean flag) {
+        unit.isPulsated = flag;
+    }
 }

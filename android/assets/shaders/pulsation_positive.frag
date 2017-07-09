@@ -18,6 +18,6 @@ const float B = 0.117647059;
 
 void main() {
     vec4 texColor = texture2D(u_texture, v_texCoord);
-    float val = 1 + 0.25 * sin(u_time * 4.0);
+    float val = 1.0 + 0.25 * sin(u_time * 4.0);
 	gl_FragColor = vec4(R * val, G * val, B * val, 1.0);
 }
